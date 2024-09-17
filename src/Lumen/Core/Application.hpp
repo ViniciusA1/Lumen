@@ -8,7 +8,7 @@ namespace Lumen
 
 struct ApplicationArgs
 {
-    WindowArgs WinProperty;
+    WindowArgs WinArgs;
 };
 
 class Application
