@@ -27,8 +27,23 @@ void Renderer::DrawQuad(const Vector2 &position, const Vector2 &size, const Colo
                      size.ToRaylib(), color.ToRaylib());
 }
 
+void Renderer::DrawQuad(const Vector2 &position, float rotation, const Vector2 &size,
+                        const Color &color)
+{
+    ::DrawRectanglePro(
+        {position.x - (size.x / 2), position.y - (size.y / 2), size.x, size.y}, {0, 0},
+        rotation, color.ToRaylib());
+}
+
 void Renderer::DrawQuad(const Matrix4 &transform, const Color &color)
 {
+    Vector3 position = transform.GetPosition();
+    Quaternion rotation = transform.GetRotation();
+    Vector3 size = transform.GetScale();
+    float floatRotation = 0;
+    Vector3 axis;
+    rotation.ToAngleAxis(floatRotation, axis);
+    Renderer::DrawQuad({position.x, position.y}, floatRotation, {size.x, size.y}, color);
 }
 
 void Renderer::DrawText(const std::string &text, const Vector2 &position, int fontSize,

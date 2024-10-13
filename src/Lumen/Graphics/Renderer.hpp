@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Lumen/Graphics/Color.hpp"
-#include "Lumen/Math/Matrix.hpp"
-#include "Lumen/Math/Vector.hpp"
+#include "Lumen/Math/Matrix4.hpp"
+#include "Lumen/Math/Vector2.hpp"
 #include <string>
 
 namespace Lumen
@@ -18,6 +18,8 @@ public:
     static void SetClearColor(const Color &color) { s_Color = color; }
 
     static void DrawQuad(const Vector2 &position, const Vector2 &size,
+                         const Color &color);
+    static void DrawQuad(const Vector2 &position, float rotation, const Vector2 &size,
                          const Color &color);
     static void DrawQuad(const Matrix4 &transform, const Color &color);
 
