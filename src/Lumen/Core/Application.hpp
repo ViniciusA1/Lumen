@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Lumen/Core/LayerStack.hpp"
 #include "Lumen/Core/Memory.hpp"
 #include "Lumen/Core/Window.hpp"
 
@@ -28,9 +29,13 @@ public:
 
     void Run();
 
+    void PushLayer(const Ref<Layer> &layer);
+    void PushOverlay(const Ref<Layer> &overlay);
+
 private:
     static Scope<Application> s_Instance;
     Window m_Window;
+    LayerStack m_LayerStack;
 };
 
 } // namespace Lumen

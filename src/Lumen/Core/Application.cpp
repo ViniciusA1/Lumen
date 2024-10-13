@@ -17,10 +17,26 @@ void Application::Run()
     {
         Renderer::Clear();
         Renderer::BeginDrawing();
-        Renderer::DrawFPS({0, 0}, 20, Color::Green);
-        Renderer::DrawQuad({200, 200}, {50, 50}, Color::White);
+        for (Ref<Layer> &layer : m_LayerStack)
+        {
+            if (layer->IsVisible())
+            {
+                layer->OnUpdate();
+                layer->OnDraw();
+            }
+        }
         Renderer::EndDrawing();
     }
+}
+
+void Application::PushLayer(const Ref<Layer> &layer)
+{
+    m_LayerStack.PushLayer(layer);
+}
+
+void Application::PushOverlay(const Ref<Layer> &overlay)
+{
+    m_LayerStack.PushOverlay(overlay);
 }
 
 } // namespace Lumen
