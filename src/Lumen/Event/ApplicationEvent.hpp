@@ -10,8 +10,8 @@ class WindowResizeEvent
 public:
     WindowResizeEvent(int width, int height);
 
-    [[nodiscard]] unsigned int GetWidth() const { return m_Width; }
-    [[nodiscard]] unsigned int GetHeight() const { return m_Height; }
+    [[nodiscard]] int GetWidth() const { return m_Width; }
+    [[nodiscard]] int GetHeight() const { return m_Height; }
     [[nodiscard]] std::string ToString() const
     {
         return "WindowResizeEvent: " + std::to_string(m_Width) + ", " +
@@ -19,7 +19,7 @@ public:
     }
 
 private:
-    unsigned int m_Width, m_Height;
+    int m_Width, m_Height;
 };
 
 class WindowCloseEvent
