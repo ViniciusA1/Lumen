@@ -3,7 +3,7 @@
 namespace Lumen
 {
 
-WindowResizeEvent::WindowResizeEvent(unsigned int width, unsigned int height)
+WindowResizeEvent::WindowResizeEvent(int width, int height)
     : m_Width(width), m_Height(height)
 {
 }

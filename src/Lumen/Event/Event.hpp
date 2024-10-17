@@ -1,6 +1,10 @@
 #pragma once
 
-#include <string>
+#include <variant>
+
+#include "Lumen/Event/ApplicationEvent.hpp"
+#include "Lumen/Event/KeyboardEvent.hpp"
+#include "Lumen/Event/MouseEvent.hpp"
 
 namespace Lumen
 {
@@ -9,8 +13,6 @@ enum class EventType
 {
     WindowClose = 0,
     WindowResize,
-    WindowFocus,
-    WindowLostFocus,
     KeyPressed,
     KeyReleased,
     MouseButtonPressed,
@@ -19,46 +21,29 @@ enum class EventType
     MouseScrolled
 };
 
-enum EventCategory
-{
-    EventCategoryApplication = 1 << 0,
-    EventCategoryInput = 1 << 1,
-    EventCategoryKeyboard = 1 << 2,
-    EventCategoryMouse = 1 << 3,
-    EventCategoryMouseButton = 1 << 4
-};
+class EventQueue;
 
 class Event
 {
 public:
+    using EventData =
+        std::variant<WindowCloseEvent, WindowResizeEvent, KeyPressedEvent,
+                     KeyReleasedEvent, MouseButtonPressedEvent, MouseButtonReleasedEvent,
+                     MouseMovedEvent, MouseScrolledEvent>;
+
+    static void PollEvents(EventQueue &queue);
+
+public:
     bool Handled = false;
 
-    virtual ~Event() = default;
+    Event(EventType type, const EventData &data);
 
-    [[nodiscard]] virtual EventType GetType() const = 0;
-    [[nodiscard]] virtual int GetCategoryFlags() const = 0;
-    [[nodiscard]] virtual std::string ToString() const = 0;
-
-    bool IsInCategory(EventCategory category) { return GetCategoryFlags() & category; }
-};
-
-class EventDispatcher
-{
-public:
-    EventDispatcher(Event &event);
-
-    template <typename T, typename F> bool Dispatch(const F &func)
-    {
-        if (m_Event.GetType() == T::GetStaticType())
-        {
-            m_Event.Handled = func(static_cast<T &>(m_Event));
-            return true;
-        }
-        return false;
-    }
+    [[nodiscard]] EventType GetType() const { return m_Type; };
+    template <typename T> T &GetData() { return std::get<T>(m_Data); }
 
 private:
-    Event &m_Event;
+    EventType m_Type;
+    EventData m_Data;
 };
 
 } // namespace Lumen

@@ -3,16 +3,16 @@
 namespace Lumen
 {
 
-KeyEvent::KeyEvent(int keycode) : m_KeyCode(keycode)
+KeyEvent::KeyEvent(KeyCode keycode) : m_KeyCode(keycode)
 {
 }
 
-KeyPressedEvent::KeyPressedEvent(int keycode, int repeatCount)
+KeyPressedEvent::KeyPressedEvent(KeyCode keycode, int repeatCount)
     : KeyEvent(keycode), m_RepeatCount(repeatCount)
 {
 }
 
-KeyReleasedEvent::KeyReleasedEvent(int keycode) : KeyEvent(keycode)
+KeyReleasedEvent::KeyReleasedEvent(KeyCode keycode) : KeyEvent(keycode)
 {
 }
 
