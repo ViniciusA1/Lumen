@@ -3,6 +3,8 @@
 #include "Lumen/Core/LayerStack.hpp"
 #include "Lumen/Core/Memory.hpp"
 #include "Lumen/Core/Window.hpp"
+#include "Lumen/Event/EventDispatcher.hpp"
+#include "Lumen/Event/EventQueue.hpp"
 
 namespace Lumen
 {
@@ -36,6 +38,8 @@ private:
     static Scope<Application> s_Instance;
     Window m_Window;
     LayerStack m_LayerStack;
+    EventQueue m_EventQueue;
+    EventDispatcher m_EventDispatcher;
 };
 
 } // namespace Lumen
