@@ -24,6 +24,10 @@ public:
     inline Vector2 operator-(const Vector2 &other) const;
     inline Vector2 operator*(float scalar) const;
     inline Vector2 operator/(float scalar) const;
+    inline Vector2 &operator+=(const Vector2 &other);
+    inline Vector2 &operator-=(const Vector2 &other);
+    inline Vector2 &operator*=(float scalar);
+    inline Vector2 &operator/=(float scalar);
     inline bool operator==(const Vector2 &other) const;
     inline bool operator!=(const Vector2 &other) const;
 
@@ -65,6 +69,34 @@ Vector2 Vector2::operator*(float scalar) const
 Vector2 Vector2::operator/(float scalar) const
 {
     return {x / scalar, y / scalar};
+}
+
+Vector2 &Vector2::operator+=(const Vector2 &other)
+{
+    x += other.x;
+    y += other.y;
+    return *this;
+}
+
+Vector2 &Vector2::operator-=(const Vector2 &other)
+{
+    x -= other.x;
+    y -= other.y;
+    return *this;
+}
+
+Vector2 &Vector2::operator*=(float scalar)
+{
+    x *= scalar;
+    y *= scalar;
+    return *this;
+}
+
+Vector2 &Vector2::operator/=(float scalar)
+{
+    x /= scalar;
+    y /= scalar;
+    return *this;
 }
 
 bool Vector2::operator==(const Vector2 &other) const

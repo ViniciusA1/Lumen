@@ -20,6 +20,10 @@ public:
     inline Vector4 operator-(const Vector4 &other) const;
     inline Vector4 operator*(float scalar) const;
     inline Vector4 operator/(float scalar) const;
+    inline Vector4 &operator+=(const Vector4 &other);
+    inline Vector4 &operator-=(const Vector4 &other);
+    inline Vector4 &operator*=(float scalar);
+    inline Vector4 &operator/=(float scalar);
     inline bool operator==(const Vector4 &other) const;
     inline bool operator!=(const Vector4 &other) const;
 
@@ -61,6 +65,42 @@ Vector4 Vector4::operator*(float scalar) const
 Vector4 Vector4::operator/(float scalar) const
 {
     return {x / scalar, y / scalar, z / scalar, w / scalar};
+}
+
+Vector4 &Vector4::operator+=(const Vector4 &other)
+{
+    x += other.x;
+    y += other.y;
+    z += other.z;
+    w += other.w;
+    return *this;
+}
+
+Vector4 &Vector4::operator-=(const Vector4 &other)
+{
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
+    w -= other.w;
+    return *this;
+}
+
+Vector4 &Vector4::operator*=(float scalar)
+{
+    x *= scalar;
+    y *= scalar;
+    z *= scalar;
+    w *= scalar;
+    return *this;
+}
+
+Vector4 &Vector4::operator/=(float scalar)
+{
+    x /= scalar;
+    y /= scalar;
+    z /= scalar;
+    w /= scalar;
+    return *this;
 }
 
 bool Vector4::operator==(const Vector4 &other) const

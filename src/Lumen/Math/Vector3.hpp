@@ -26,6 +26,10 @@ public:
     inline Vector3 operator-(const Vector3 &other) const;
     inline Vector3 operator*(float scalar) const;
     inline Vector3 operator/(float scalar) const;
+    inline Vector3 &operator+=(const Vector3 &other);
+    inline Vector3 &operator-=(const Vector3 &other);
+    inline Vector3 &operator*=(float scalar);
+    inline Vector3 &operator/=(float scalar);
     inline bool operator==(const Vector3 &other) const;
     inline bool operator!=(const Vector3 &other) const;
 
@@ -80,6 +84,38 @@ Vector3 Vector3::operator*(float scalar) const
 Vector3 Vector3::operator/(float scalar) const
 {
     return {x / scalar, y / scalar, z / scalar};
+}
+
+Vector3 &Vector3::operator+=(const Vector3 &other)
+{
+    x += other.x;
+    y += other.y;
+    z += other.z;
+    return *this;
+}
+
+Vector3 &Vector3::operator-=(const Vector3 &other)
+{
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
+    return *this;
+}
+
+Vector3 &Vector3::operator*=(float scalar)
+{
+    x *= scalar;
+    y *= scalar;
+    z *= scalar;
+    return *this;
+}
+
+Vector3 &Vector3::operator/=(float scalar)
+{
+    x /= scalar;
+    y /= scalar;
+    z /= scalar;
+    return *this;
 }
 
 bool Vector3::operator==(const Vector3 &other) const
