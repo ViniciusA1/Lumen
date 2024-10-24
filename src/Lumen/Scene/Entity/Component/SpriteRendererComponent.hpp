@@ -12,7 +12,11 @@ struct SpriteRendererComponent
     Ref<Texture2D> Texture;
 
     SpriteRendererComponent() = default;
-    SpriteRendererComponent(const class Color &color) : Color(color) {}
+    SpriteRendererComponent(const Ref<Texture2D> &texture,
+                            const class Color &color = Color::White)
+        : Texture(texture), Color(color)
+    {
+    }
 };
 
 } // namespace Lumen

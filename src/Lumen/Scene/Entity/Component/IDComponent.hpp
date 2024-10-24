@@ -10,6 +10,7 @@ struct IDComponent
     UUID ID;
 
     IDComponent() = default;
+    IDComponent(const UUID &uuid) : ID(uuid) {}
 };
 
 } // namespace Lumen
