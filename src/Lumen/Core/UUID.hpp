@@ -18,3 +18,15 @@ private:
 };
 
 } // namespace Lumen
+
+namespace std
+{
+
+template <typename T> struct hash;
+
+template <> struct hash<Lumen::UUID>
+{
+    size_t operator()(const Lumen::UUID &uuid) const { return (uint64_t)uuid; }
+};
+
+} // namespace std
