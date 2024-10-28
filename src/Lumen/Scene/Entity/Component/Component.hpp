@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Lumen/Scene/Entity/Component/CameraComponent.hpp"
-#include "Lumen/Scene/Entity/Component/IDComponent.hpp"
-#include "Lumen/Scene/Entity/Component/SpriteRendererComponent.hpp"
-#include "Lumen/Scene/Entity/Component/TagComponent.hpp"
-#include "Lumen/Scene/Entity/Component/TransformComponent.hpp"
-#include "Lumen/Scene/Entity/Component/VelocityComponent.hpp"
+#include "Lumen/Scene/Entity/Component/Core/IDComponent.hpp"
+#include "Lumen/Scene/Entity/Component/Core/TagComponent.hpp"
+#include "Lumen/Scene/Entity/Component/Core/TransformComponent.hpp"
+#include "Lumen/Scene/Entity/Component/Graphics/Camera2DComponent.hpp"
+#include "Lumen/Scene/Entity/Component/Graphics/Camera3DComponent.hpp"
+#include "Lumen/Scene/Entity/Component/Graphics/SpriteRendererComponent.hpp"
+#include "Lumen/Scene/Entity/Component/Physics/VelocityComponent.hpp"
 
 namespace Lumen
 {
@@ -14,7 +15,21 @@ template <typename... Component> struct ComponentGroup
 {
 };
 
+using CoreComponents = ComponentGroup<IDComponent, TagComponent, TransformComponent>;
+
+using GraphicsComponents =
+    ComponentGroup<Camera2DComponent, Camera3DComponent, SpriteRendererComponent>;
+
+using PhysicsComponents = ComponentGroup<VelocityComponent>;
+
+using UIComponents = ComponentGroup<>;
+
 using AllComponents =
-    ComponentGroup<TransformComponent, VelocityComponent, SpriteRendererComponent>;
+    ComponentGroup<IDComponent, TagComponent, TransformComponent, Camera2DComponent,
+                   Camera3DComponent, SpriteRendererComponent, VelocityComponent>;
+
+using CopyableComponents =
+    ComponentGroup<TagComponent, TransformComponent, Camera2DComponent, Camera3DComponent,
+                   SpriteRendererComponent, VelocityComponent>;
 
 } // namespace Lumen
