@@ -25,7 +25,7 @@ public:
     virtual ~Asset() = default;
 
     AssetMetadata &GetMetadata() { return m_Metadata; }
-    [[nodiscard]] virtual bool IsReady() const = 0;
+    [[nodiscard]] virtual bool IsValid() const = 0;
 
 private:
     AssetMetadata m_Metadata;

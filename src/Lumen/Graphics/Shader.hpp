@@ -11,11 +11,14 @@ namespace Lumen
 class Shader : public Asset
 {
 public:
-    Shader(const AssetMetadata &metadata, ::Shader shader);
+    Shader(const AssetMetadata &metadata, const ::Shader &shader);
     ~Shader() override;
 
+    [[nodiscard]] bool IsValid() const override;
+    operator ::Shader() const;
+
 private:
-    Scope<::Shader> m_Shader;
+    Scope<::Shader> m_Instance;
 };
 
 } // namespace Lumen

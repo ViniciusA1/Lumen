@@ -11,13 +11,14 @@ namespace Lumen
 class Texture2D : public Asset
 {
 public:
-    Texture2D(const AssetMetadata &metadata, ::Texture texture);
+    Texture2D(const AssetMetadata &metadata, const ::Texture &texture);
     ~Texture2D() override;
 
-    [[nodiscard]] bool IsReady() const override;
+    [[nodiscard]] bool IsValid() const override;
+    operator ::Texture() const;
 
 private:
-    Scope<::Texture> m_Texture;
+    Scope<::Texture> m_Instance;
 };
 
 } // namespace Lumen

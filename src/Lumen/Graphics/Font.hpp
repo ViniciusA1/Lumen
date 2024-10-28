@@ -11,11 +11,14 @@ namespace Lumen
 class Font : public Asset
 {
 public:
-    Font(const AssetMetadata &metadata, ::Font font);
+    Font(const AssetMetadata &metadata, const ::Font &font);
     ~Font() override;
 
+    [[nodiscard]] bool IsValid() const override;
+    operator ::Font() const;
+
 private:
-    Scope<::Font> m_Font;
+    Scope<::Font> m_Instance;
 };
 
 } // namespace Lumen
