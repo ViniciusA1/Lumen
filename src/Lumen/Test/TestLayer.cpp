@@ -1,4 +1,7 @@
 #include "Lumen/Test/TestLayer.hpp"
+#include "Lumen/Scene/Entity/System/MovementSystem.hpp"
+#include "Lumen/Scene/Entity/System/SpriteRendererSystem.hpp"
+#include "Lumen/Scene/SceneManager.hpp"
 #include <iostream>
 
 namespace Lumen
@@ -24,10 +27,21 @@ TestLayer::TestLayer() : Layer("TestLayer", true)
                                                          << ", " << y << ")\n";
                                            }});
     AddMouseListener(mouseListener);
+
+    m_TestScene = SceneManager::CreateScene("TestScene");
+    World &world = m_TestScene->GetWorld();
+    world.AddSystem<MovementSystem>();
+    world.AddSystem<SpriteRendererSystem>();
+    EntityManager &entityManager = world.GetEntityManager();
+    Entity entity = entityManager.CreateEntity();
+    entityManager.AddComponent<SpriteRendererComponent>(entity);
+    entityManager.AddComponent<VelocityComponent>(
+        entity, VelocityComponent({15.0f, 15.0f, 0.0f}));
 }
 
 void TestLayer::OnUpdate()
 {
+    m_TestScene->OnUpdate();
 }
 
 void TestLayer::OnDraw()
