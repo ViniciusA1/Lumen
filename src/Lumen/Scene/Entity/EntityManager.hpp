@@ -32,6 +32,7 @@ public:
     template <typename T> T &GetComponent(const Entity &entity);
     template <typename... T> [[nodiscard]] bool HasComponent(const Entity &entity) const;
     template <typename T> void RemoveComponent(Entity &entity);
+    template <typename Component> void ToggleComponent(const Entity &entity, bool enable);
 
 private:
     template <typename... Component> void CopyComponent(Entity dst, Entity src);
@@ -78,6 +79,15 @@ template <typename... T> bool EntityManager::HasComponent(const Entity &entity) 
 template <typename T> void EntityManager::RemoveComponent(Entity &entity)
 {
     m_Registry.remove<T>(entity);
+}
+
+template <typename Component>
+void EntityManager::ToggleComponent(const Entity &entity, bool enable)
+{
+    if (auto *component = m_Registry.try_get<Component>(entity))
+    {
+        component->IsEnabled = enable;
+    }
 }
 
 template <typename... Component> void EntityManager::CopyComponent(Entity dst, Entity src)

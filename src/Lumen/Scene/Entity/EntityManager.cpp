@@ -27,7 +27,7 @@ Entity EntityManager::CopyEntity(Entity &entity)
     Entity newEntity = m_Registry.create();
     AddComponent<IDComponent>(newEntity, UUID());
     AddComponent<TagComponent>(newEntity, GetComponent<TagComponent>(entity).Tag);
-    CopyComponent(AllComponents{}, newEntity, entity);
+    CopyComponent(CopyableComponents{}, newEntity, entity);
     return newEntity;
 }
 
