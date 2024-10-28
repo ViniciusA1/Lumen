@@ -42,7 +42,7 @@ public:
     Color(unsigned char red, unsigned char green, unsigned char blue,
           unsigned char alpha = 255);
 
-    [[nodiscard]] ::Color ToRaylib() const;
+    operator ::Color() const;
 };
 
 } // namespace Lumen

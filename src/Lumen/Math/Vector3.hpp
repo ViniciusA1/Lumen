@@ -32,6 +32,7 @@ public:
     inline Vector3 &operator/=(float scalar);
     inline bool operator==(const Vector3 &other) const;
     inline bool operator!=(const Vector3 &other) const;
+    operator ::Vector3() const;
 
     [[nodiscard]] float Magnitude() const;
     [[nodiscard]] float SqrMagnitude() const;
@@ -62,8 +63,6 @@ public:
     static Vector3 SmoothDamp(const Vector3 &current, const Vector3 &target,
                               Vector3 &currentVelocity, float smoothTime, float maxSpeed,
                               float deltaTime);
-
-    [[nodiscard]] ::Vector3 ToRaylib() const;
 };
 
 Vector3 Vector3::operator+(const Vector3 &other) const

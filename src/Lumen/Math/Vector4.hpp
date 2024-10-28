@@ -26,6 +26,7 @@ public:
     inline Vector4 &operator/=(float scalar);
     inline bool operator==(const Vector4 &other) const;
     inline bool operator!=(const Vector4 &other) const;
+    operator ::Vector4() const;
 
     [[nodiscard]] float Magnitude() const;
     [[nodiscard]] float SqrMagnitude() const;
@@ -43,8 +44,6 @@ public:
     static Vector4 Normalize(const Vector4 &vec);
     static Vector4 Project(const Vector4 &a, const Vector4 &b);
     static Vector4 Scale(const Vector4 &a, const Vector4 &b);
-
-    [[nodiscard]] ::Vector4 ToRaylib() const;
 };
 
 Vector4 Vector4::operator+(const Vector4 &other) const

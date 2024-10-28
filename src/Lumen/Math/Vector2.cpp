@@ -101,7 +101,7 @@ float Vector2::SignedAngle(const Vector2 &from, const Vector2 &to)
     return cross < 0 ? -angle : angle;
 }
 
-::Vector2 Vector2::ToRaylib() const
+Vector2::operator ::Vector2() const
 {
     return {x, y};
 }

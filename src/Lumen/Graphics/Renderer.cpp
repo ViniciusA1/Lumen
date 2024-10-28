@@ -18,13 +18,17 @@ void Renderer::EndDrawing()
 
 void Renderer::Clear()
 {
-    ::ClearBackground(s_Color.ToRaylib());
+    ::ClearBackground(s_Color);
+}
+
+void Renderer::Begin2DMode()
+{
+    //::BeginMode2D();
 }
 
 void Renderer::DrawQuad(const Vector2 &position, const Vector2 &size, const Color &color)
 {
-    ::DrawRectangleV({position.x - (size.x / 2), position.y - (size.y / 2)},
-                     size.ToRaylib(), color.ToRaylib());
+    ::DrawRectangleV({position.x - (size.x / 2), position.y - (size.y / 2)}, size, color);
 }
 
 void Renderer::DrawQuad(const Vector2 &position, float rotation, const Vector2 &size,
@@ -32,7 +36,7 @@ void Renderer::DrawQuad(const Vector2 &position, float rotation, const Vector2 &
 {
     ::DrawRectanglePro(
         {position.x - (size.x / 2), position.y - (size.y / 2), size.x, size.y}, {0, 0},
-        rotation, color.ToRaylib());
+        rotation, color);
 }
 
 void Renderer::DrawQuad(const Matrix4 &transform, const Color &color)
@@ -49,12 +53,17 @@ void Renderer::DrawQuad(const Matrix4 &transform, const Color &color)
 void Renderer::DrawText(const std::string &text, const Vector2 &position, int fontSize,
                         const Color &color)
 {
-    ::DrawText(text.c_str(), position.x, position.y, fontSize, color.ToRaylib());
+    ::DrawText(text.c_str(), position.x, position.y, fontSize, color);
 }
 
 void Renderer::DrawFPS(const Vector2 &position, int fontSize, const Color &color)
 {
     ::DrawFPS(position.x, position.y);
+}
+
+void Renderer::End2DMode()
+{
+    ::EndMode2D();
 }
 
 } // namespace Lumen

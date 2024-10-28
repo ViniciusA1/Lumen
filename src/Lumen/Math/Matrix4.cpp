@@ -134,7 +134,7 @@ Vector3 Matrix4::GetPosition() const
 Quaternion Matrix4::GetRotation() const
 {
     Quaternion result = {0};
-    ::Matrix mat = this->ToRaylib();
+    ::Matrix mat = *this;
 
     float fourWSquaredMinus1 = mat.m0 + mat.m5 + mat.m10;
     float fourXSquaredMinus1 = mat.m0 - mat.m5 - mat.m10;
@@ -362,7 +362,7 @@ Matrix4 Matrix4::Transform(const Vector3 &translation, const Quaternion &rotatio
     return result;
 }
 
-::Matrix Matrix4::ToRaylib() const
+Matrix4::operator ::Matrix() const
 {
     return {m_Data[0],  m_Data[1],  m_Data[2],  m_Data[3], m_Data[4],  m_Data[5],
             m_Data[6],  m_Data[7],  m_Data[8],  m_Data[9], m_Data[10], m_Data[11],

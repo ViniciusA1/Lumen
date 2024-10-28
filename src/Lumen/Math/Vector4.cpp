@@ -112,7 +112,7 @@ Vector4 Vector4::Scale(const Vector4 &a, const Vector4 &b)
     return {a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
 }
 
-::Vector4 Vector4::ToRaylib() const
+Vector4::operator ::Vector4() const
 {
     return {x, y, z, w};
 }

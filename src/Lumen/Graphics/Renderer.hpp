@@ -17,6 +17,7 @@ public:
     static void Clear();
     static void SetClearColor(const Color &color) { s_Color = color; }
 
+    static void Begin2DMode();
     static void DrawQuad(const Vector2 &position, const Vector2 &size,
                          const Color &color);
     static void DrawQuad(const Vector2 &position, float rotation, const Vector2 &size,
@@ -26,6 +27,7 @@ public:
     static void DrawText(const std::string &text, const Vector2 &position, int fontSize,
                          const Color &color);
     static void DrawFPS(const Vector2 &position, int fontSize, const Color &color);
+    static void End2DMode();
 
 private:
     static Color s_Color;

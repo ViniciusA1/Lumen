@@ -41,9 +41,9 @@ Color::Color(unsigned char red, unsigned char green, unsigned char blue,
 {
 }
 
-::Color Color::ToRaylib() const
+Color::operator ::Color() const
 {
-    return (::Color){r, g, b, a};
+    return {r, g, b, a};
 }
 
 } // namespace Lumen

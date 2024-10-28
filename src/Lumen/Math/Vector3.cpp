@@ -196,7 +196,7 @@ Vector3 Vector3::SmoothDamp(const Vector3 &current, const Vector3 &target,
     return output;
 }
 
-::Vector3 Vector3::ToRaylib() const
+Vector3::operator ::Vector3() const
 {
     return {x, y, z};
 }

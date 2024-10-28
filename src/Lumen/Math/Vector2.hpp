@@ -30,6 +30,7 @@ public:
     inline Vector2 &operator/=(float scalar);
     inline bool operator==(const Vector2 &other) const;
     inline bool operator!=(const Vector2 &other) const;
+    operator ::Vector2() const;
 
     [[nodiscard]] float Magnitude() const;
     [[nodiscard]] float SqrMagnitude() const;
@@ -47,8 +48,6 @@ public:
     static Vector2 Reflect(const Vector2 &direction, const Vector2 &normal);
     static Vector2 Scale(const Vector2 &v1, const Vector2 &v2);
     static float SignedAngle(const Vector2 &from, const Vector2 &to);
-
-    [[nodiscard]] ::Vector2 ToRaylib() const;
 };
 
 Vector2 Vector2::operator+(const Vector2 &other) const

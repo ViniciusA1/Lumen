@@ -24,6 +24,7 @@ public:
     inline float &operator()(int row, int col);
     inline const float &operator()(int row, int col) const;
     inline Matrix4 operator*(const Matrix4 &other) const;
+    operator ::Matrix() const;
 
     [[nodiscard]] float Determinant() const;
     [[nodiscard]] Matrix4 Inverse() const;
@@ -51,8 +52,6 @@ public:
     static Matrix4 Translate(const Vector3 &translation);
     static Matrix4 Transform(const Vector3 &translation, const Quaternion &rotation,
                              const Vector3 &scale);
-
-    [[nodiscard]] ::Matrix ToRaylib() const;
 
 private:
     std::array<float, 16> m_Data;
