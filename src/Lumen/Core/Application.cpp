@@ -1,6 +1,7 @@
 #include "Lumen/Core/Application.hpp"
+#include "Lumen/Editor/EditorLayer.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
-#include "Lumen/Test/TestLayer.hpp"
+#include "Lumen/UI/UI.hpp"
 
 namespace Lumen
 {
@@ -9,7 +10,13 @@ Scope<Application> Application::s_Instance = nullptr;
 
 Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
 {
-    PushLayer(CreateRef<TestLayer>());
+    UI::Init();
+    PushLayer(CreateRef<EditorLayer>());
+}
+
+Application::~Application()
+{
+    UI::Shutdown();
 }
 
 void Application::Run()
@@ -20,6 +27,7 @@ void Application::Run()
         Event::PollEvents(m_EventQueue);
         Renderer::Clear();
         Renderer::BeginDrawing();
+        UI::Begin();
 
         Renderer::DrawFPS({0, 0}, 20, Color::Green);
 
@@ -41,6 +49,8 @@ void Application::Run()
                 layer->OnDraw();
             }
         }
+
+        UI::End();
         Renderer::EndDrawing();
     }
 }

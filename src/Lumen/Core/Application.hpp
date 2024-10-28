@@ -24,7 +24,7 @@ public:
     }
 
     Application(const ApplicationArgs &args);
-    ~Application() = default;
+    ~Application();
 
     static Application &Get() { return *s_Instance; }
     Window &GetWindow() { return m_Window; }
