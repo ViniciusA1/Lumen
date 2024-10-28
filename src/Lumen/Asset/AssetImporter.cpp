@@ -16,7 +16,7 @@ static std::unordered_map<std::type_index,
 Ref<Asset> AssetImporter::ImportAsset(std::type_index type, const AssetMetadata &metadata)
 {
     Ref<Asset> assetLoaded = s_ImportFunc[type](metadata);
-    if (assetLoaded->IsReady() == false)
+    if (assetLoaded->IsValid() == false)
     {
         return nullptr;
     }
