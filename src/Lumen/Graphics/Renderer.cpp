@@ -1,10 +1,38 @@
 #include "Lumen/Graphics/Renderer.hpp"
+#include "Lumen/Core/Application.hpp"
 #include <raylib.h>
 
 namespace Lumen
 {
 
 Color Renderer::s_Color = Color::Black;
+static RenderTexture s_SceneRenderTexture;
+
+void Renderer::BeginRenderTexture()
+{
+    BeginTextureMode(s_SceneRenderTexture);
+}
+
+void Renderer::EndRenderTexture()
+{
+    EndTextureMode();
+}
+
+void Renderer::CreateRenderTexture()
+{
+    Window &window = Application::Get().GetWindow();
+    s_SceneRenderTexture = LoadRenderTexture(window.GetWidth(), window.GetHeight());
+}
+
+void Renderer::DestroyRenderTexture()
+{
+    UnloadRenderTexture(s_SceneRenderTexture);
+}
+
+RenderTexture &Renderer::GetRenderTexture()
+{
+    return s_SceneRenderTexture;
+}
 
 void Renderer::BeginDrawing()
 {
@@ -23,7 +51,7 @@ void Renderer::Clear()
 
 void Renderer::Begin2DMode()
 {
-    //::BeginMode2D();
+    ::BeginMode2D({});
 }
 
 void Renderer::DrawQuad(const Vector2 &position, const Vector2 &size, const Color &color)

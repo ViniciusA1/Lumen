@@ -5,12 +5,20 @@
 #include "Lumen/Math/Vector2.hpp"
 #include <string>
 
+struct RenderTexture;
+
 namespace Lumen
 {
 
 class Renderer
 {
 public:
+    static void BeginRenderTexture();
+    static void EndRenderTexture();
+    static void CreateRenderTexture();
+    static void DestroyRenderTexture();
+    static RenderTexture &GetRenderTexture();
+
     static void BeginDrawing();
     static void EndDrawing();
 
