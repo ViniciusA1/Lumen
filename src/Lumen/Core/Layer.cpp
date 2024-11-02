@@ -8,14 +8,4 @@ Layer::Layer(std::string name, bool visible)
 {
 }
 
-void Layer::AddKeyboardListener(const KeyboardListener &listener)
-{
-    m_KeyboardListener.push_back(listener);
-}
-
-void Layer::AddMouseListener(const MouseListener &listener)
-{
-    m_MouseListener.push_back(listener);
-}
-
 } // namespace Lumen
