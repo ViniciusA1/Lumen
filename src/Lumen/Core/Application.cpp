@@ -1,5 +1,8 @@
 #include "Lumen/Core/Application.hpp"
+#include "Lumen/Core/Input.hpp"
+#include "Lumen/Core/Log.hpp"
 #include "Lumen/Editor/EditorLayer.hpp"
+#include "Lumen/Event/EventBus.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
 #include "Lumen/UI/UI.hpp"
 
@@ -11,7 +14,10 @@ Scope<Application> Application::s_Instance = nullptr;
 Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
 {
     UI::Init();
+    EventBus::Subscribe<WindowResizeEvent>(BIND_EVENT(OnWindowResize));
+    EventBus::Subscribe<WindowCloseEvent>(BIND_EVENT(OnWindowClose));
     PushLayer(CreateRef<EditorLayer>());
+    Log::Init();
 }
 
 Application::~Application()
@@ -22,24 +28,15 @@ Application::~Application()
 void Application::Run()
 {
     Renderer::SetClearColor(Color::Black);
-    while (m_Window.IsRunning())
+    Renderer::CreateRenderTexture();
+    while (m_IsRunning)
     {
-        Event::PollEvents(m_EventQueue);
-        Renderer::Clear();
+        Input::PollEvents();
         Renderer::BeginDrawing();
         UI::Begin();
+        Renderer::Clear();
 
         Renderer::DrawFPS({0, 0}, 20, Color::Green);
-
-        for (Event &event : m_EventQueue)
-        {
-            for (Ref<Layer> &layer : m_LayerStack)
-            {
-                m_EventDispatcher.Dispatch(*layer, event);
-                if (event.Handled)
-                    break;
-            }
-        }
 
         for (Ref<Layer> &layer : m_LayerStack)
         {
@@ -63,6 +60,15 @@ void Application::PushLayer(const Ref<Layer> &layer)
 void Application::PushOverlay(const Ref<Layer> &overlay)
 {
     m_LayerStack.PushOverlay(overlay);
+}
+
+void Application::OnWindowResize(const WindowResizeEvent &event)
+{
+}
+
+void Application::OnWindowClose(const WindowCloseEvent &event)
+{
+    m_IsRunning = false;
 }
 
 } // namespace Lumen

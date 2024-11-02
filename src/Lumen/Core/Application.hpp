@@ -3,8 +3,7 @@
 #include "Lumen/Core/LayerStack.hpp"
 #include "Lumen/Core/Memory.hpp"
 #include "Lumen/Core/Window.hpp"
-#include "Lumen/Event/EventDispatcher.hpp"
-#include "Lumen/Event/EventQueue.hpp"
+#include "Lumen/Event/ApplicationEvent.hpp"
 
 namespace Lumen
 {
@@ -35,11 +34,14 @@ public:
     void PushOverlay(const Ref<Layer> &overlay);
 
 private:
+    void OnWindowResize(const WindowResizeEvent &event);
+    void OnWindowClose(const WindowCloseEvent &event);
+
+private:
     static Scope<Application> s_Instance;
+    bool m_IsRunning = true;
     Window m_Window;
     LayerStack m_LayerStack;
-    EventQueue m_EventQueue;
-    EventDispatcher m_EventDispatcher;
 };
 
 } // namespace Lumen

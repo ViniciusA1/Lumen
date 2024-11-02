@@ -19,6 +19,8 @@ public:
 
     static Vector2 GetMousePosition();
     static float GetMouseWheelMove();
+
+    static void PollEvents();
 };
 
 } // namespace Lumen
