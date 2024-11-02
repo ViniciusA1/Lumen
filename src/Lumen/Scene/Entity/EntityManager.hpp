@@ -18,12 +18,13 @@ public:
 
     inline entt::registry &GetRegistry();
     inline World &GetWorld();
+    inline std::unordered_map<UUID, Entity> &GetEntityMap();
 
     Entity CreateEntity();
-    Entity CreateEntity(UUID uuid);
+    Entity CreateEntity(UUID uuid, const std::string &name = "");
     Entity CopyEntity(Entity &entity);
-    void RemoveEntity(const UUID &uuid);
-    void RemoveEntity(Entity &entity);
+    void DestroyEntity(const UUID &uuid);
+    void DestroyEntity(Entity &entity);
     [[nodiscard]] Entity GetEntity(const UUID &uuid);
     template <typename... Components> auto GetAllEntitiesWith();
 
@@ -53,6 +54,11 @@ entt::registry &EntityManager::GetRegistry()
 World &EntityManager::GetWorld()
 {
     return m_ParentWorld;
+}
+
+std::unordered_map<UUID, Entity> &EntityManager::GetEntityMap()
+{
+    return m_EntityMap;
 }
 
 template <typename... Components> auto EntityManager::GetAllEntitiesWith()
