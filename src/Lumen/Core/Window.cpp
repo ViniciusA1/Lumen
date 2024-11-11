@@ -10,7 +10,7 @@ Window::Window(WindowArgs args) : m_WinData(std::move(args))
 {
     if (s_IsCreated == false)
     {
-        InitWindow(args.Width, args.Height, args.Title.c_str());
+        InitWindow(args.Width, args.Height, m_WinData.Title.c_str());
         s_IsCreated = true;
     }
 }
