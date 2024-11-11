@@ -1,7 +1,7 @@
 #include "Lumen/Core/Application.hpp"
 #include "Lumen/Core/Input.hpp"
 #include "Lumen/Core/Log.hpp"
-#include "Lumen/Editor/EditorLayer.hpp"
+#include "Lumen/Editor/Project/ProjectLayer.hpp"
 #include "Lumen/Event/EventBus.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
 #include "Lumen/UI/UI.hpp"
@@ -16,7 +16,7 @@ Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
     UI::Init();
     EventBus::Subscribe<WindowResizeEvent>(BIND_EVENT(OnWindowResize));
     EventBus::Subscribe<WindowCloseEvent>(BIND_EVENT(OnWindowClose));
-    PushLayer(CreateRef<EditorLayer>());
+    PushLayer(CreateRef<ProjectLayer>());
     Log::Init();
 }
 
@@ -29,6 +29,7 @@ void Application::Run()
 {
     Renderer::SetClearColor(Color::Black);
     Renderer::CreateRenderTexture();
+
     while (m_IsRunning)
     {
         Input::PollEvents();
