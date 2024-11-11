@@ -14,9 +14,11 @@ include_directories("src")
 add_subdirectory(lib/raylib)
 add_subdirectory(lib/imgui)
 add_subdirectory(lib/rlImGui)
+add_subdirectory(lib/ImGuiFileDialog)
 add_subdirectory(lib/entt)
+add_subdirectory(lib/yaml)
 
 file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/src/*.cpp")
 
 add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib imgui rlImGui EnTT)
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib imgui rlImGui ImGuiFileDialog EnTT yaml-cpp::yaml-cpp)
