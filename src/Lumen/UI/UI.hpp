@@ -11,6 +11,9 @@ public:
 
     static void Begin();
     static void End();
+
+private:
+    static void SetStyle();
 };
 
 } // namespace Lumen
