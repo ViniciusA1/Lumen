@@ -13,7 +13,7 @@ class ProjectListPanel
 public:
     ProjectListPanel(ProjectLayer &projectLayer);
 
-    void Draw();
+    void Draw(const std::array<char, 128> &searchFilter);
 
 private:
     void DrawRenameProjectOverlay(Project &project);
@@ -21,7 +21,7 @@ private:
 
 private:
     ProjectLayer &m_ParentLayer;
-    std::array<char, 128> m_RenameString;
+    std::array<char, 128> m_RenameString = {""};
 };
 
 } // namespace Lumen

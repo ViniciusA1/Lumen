@@ -1,5 +1,4 @@
 #include "Lumen/Editor/Project/ProjectLayer.hpp"
-#include "ImGuiFileDialog.h"
 #include "Lumen/Editor/Project/ProjectManager.hpp"
 #include "imgui.h"
 
@@ -26,32 +25,11 @@ void ProjectLayer::OnDraw()
     ImGui::Text("Projects:");
     ImGui::Separator();
 
-    m_ProjectListPanel.Draw();
+    m_ProjectListPanel.Draw(m_TopBarPanel.GetSearchFilter());
 
     DrawOverlay();
 
     ImGui::End();
-}
-
-std::string ProjectLayer::DrawFileDialog()
-{
-    std::string path = "";
-
-    if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
-    {
-        if (ImGuiFileDialog::Instance()->IsOk())
-        {
-            path = ImGuiFileDialog::Instance()->GetCurrentFileName();
-            if (path.empty())
-            {
-                path = ImGuiFileDialog::Instance()->GetCurrentPath();
-            }
-        }
-
-        ImGuiFileDialog::Instance()->Close();
-    }
-
-    return path;
 }
 
 } // namespace Lumen

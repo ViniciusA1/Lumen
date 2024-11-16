@@ -11,13 +11,11 @@ class ProjectSerializer
 public:
     ProjectSerializer() = default;
 
-    bool SerializeProject(Project &project, const std::filesystem::path &path);
-    bool DeserializeProject(Project &project, const std::filesystem::path &path);
+    bool SerializeProject(Project &project, const Path &path);
+    bool DeserializeProject(Project &project, const Path &path);
 
-    bool SerializeProjectList(std::vector<Project> &projectList,
-                              const std::filesystem::path &path);
-    bool DeserializeProjectList(std::vector<Project> &projectList,
-                                const std::filesystem::path &path);
+    bool SerializeProjectList(std::vector<Project> &projectList, const Path &path);
+    bool DeserializeProjectList(std::vector<Project> &projectList, const Path &path);
 };
 
 } // namespace Lumen

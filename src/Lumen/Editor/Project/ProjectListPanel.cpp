@@ -5,16 +5,21 @@
 
 namespace Lumen
 {
+
 ProjectListPanel::ProjectListPanel(ProjectLayer &projectLayer)
     : m_ParentLayer(projectLayer)
 {
 }
 
-void ProjectListPanel::Draw()
+void ProjectListPanel::Draw(const std::array<char, 128> &searchFilter)
 {
     for (auto &project : ProjectManager::GetProjectList())
     {
         ProjectConfig &config = project.GetConfig();
+        if (config.Name.find(searchFilter.data()) > 0)
+        {
+            continue;
+        }
 
         ImGui::PushID(config.Name.c_str());
 
@@ -22,24 +27,25 @@ void ProjectListPanel::Draw()
 
         ImGui::BeginGroup();
         ImGui::Text("%s", config.Name.c_str());
-        ImGui::Text("%s", config.RootDirectory.string().c_str());
+        ImGui::Text("%s", config.RootDirectory.ToString().c_str());
         ImGui::EndGroup();
 
         ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 200);
         if (ImGui::Button("Run"))
         {
+            ProjectManager::SetActiveProject(project);
         }
         ImGui::SameLine();
         if (ImGui::Button("Rename"))
         {
             m_ParentLayer.PushOverlay(
-                [this, &project = project]() { DrawRenameProjectOverlay(project); });
+                [this, &project]() { DrawRenameProjectOverlay(project); });
         }
         ImGui::SameLine();
         if (ImGui::Button("Delete"))
         {
             m_ParentLayer.PushOverlay(
-                [this, &project = project]() { DrawDeleteProjectOverlay(project); });
+                [this, &project]() { DrawDeleteProjectOverlay(project); });
         }
 
         ImGui::Separator();
@@ -49,12 +55,18 @@ void ProjectListPanel::Draw()
 
 void ProjectListPanel::DrawRenameProjectOverlay(Project &project)
 {
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(300, 100));
+
     ImGui::OpenPopup("Rename Project");
 
     if (ImGui::BeginPopupModal("Rename Project", nullptr,
                                ImGuiWindowFlags_AlwaysAutoResize))
     {
-        ImGui::InputText("New Name", m_RenameString.data(), m_RenameString.size());
+        ImGui::Text("Project Name");
+        ImGui::InputTextWithHint("##New Name", "New Name", m_RenameString.data(),
+                                 m_RenameString.size());
         if (ImGui::Button("OK"))
         {
             project.GetConfig().Name = m_RenameString.data();
@@ -76,6 +88,10 @@ void ProjectListPanel::DrawRenameProjectOverlay(Project &project)
 
 void ProjectListPanel::DrawDeleteProjectOverlay(Project &project)
 {
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(350, 80));
+
     ImGui::OpenPopup("Delete Project");
 
     if (ImGui::BeginPopupModal("Delete Project", nullptr,

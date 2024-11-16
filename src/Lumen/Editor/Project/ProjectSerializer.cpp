@@ -5,21 +5,20 @@
 namespace Lumen
 {
 
-bool ProjectSerializer::SerializeProject(Project &project,
-                                         const std::filesystem::path &path)
+bool ProjectSerializer::SerializeProject(Project &project, const Path &path)
 {
     ProjectConfig &config = project.GetConfig();
-    std::filesystem::path configPath = path / "ProjectConfig.lproj";
+    Path configPath = path / "ProjectConfig.lproj";
 
     try
     {
         YAML::Node configNode;
         configNode["Name"] = config.Name;
-        configNode["RootDirectory"] = config.RootDirectory.string();
-        configNode["AssetDirectory"] = config.AssetDirectory.string();
-        configNode["StartScene"] = config.StartScene.string();
+        configNode["RootDirectory"] = config.RootDirectory.ToString();
+        configNode["AssetDirectory"] = config.AssetDirectory.ToString();
+        configNode["StartScene"] = config.StartScene.ToString();
 
-        std::ofstream configFile(configPath);
+        std::ofstream configFile(configPath.ToString());
         configFile << configNode;
     }
     catch (const YAML::Exception &e)
@@ -30,15 +29,14 @@ bool ProjectSerializer::SerializeProject(Project &project,
     return true;
 }
 
-bool ProjectSerializer::DeserializeProject(Project &project,
-                                           const std::filesystem::path &path)
+bool ProjectSerializer::DeserializeProject(Project &project, const Path &path)
 {
     ProjectConfig &projectConfig = project.GetConfig();
-    std::filesystem::path configPath = path / "ProjectConfig.lproj";
+    Path configPath = path / "ProjectConfig.lproj";
 
     try
     {
-        YAML::Node config = YAML::LoadFile(configPath.string());
+        YAML::Node config = YAML::LoadFile(configPath.ToString());
 
         projectConfig.Name = config["Name"].as<std::string>();
         projectConfig.RootDirectory = path;
@@ -54,9 +52,9 @@ bool ProjectSerializer::DeserializeProject(Project &project,
 }
 
 bool ProjectSerializer::SerializeProjectList(std::vector<Project> &projectList,
-                                             const std::filesystem::path &path)
+                                             const Path &path)
 {
-    std::filesystem::path projectListPath = path / "ProjectList.lumen";
+    Path projectListPath = path / "ProjectList.lumen";
 
     try
     {
@@ -67,13 +65,13 @@ bool ProjectSerializer::SerializeProjectList(std::vector<Project> &projectList,
         {
             out << YAML::BeginMap;
             out << YAML::Key << "path" << YAML::Value
-                << project.GetConfig().RootDirectory.string();
+                << project.GetConfig().RootDirectory.ToString();
             out << YAML::EndMap;
         }
 
         out << YAML::EndSeq;
 
-        std::ofstream outFile(projectListPath);
+        std::ofstream outFile(projectListPath.ToString());
         if (outFile.is_open())
         {
             outFile << out.c_str();
@@ -89,13 +87,13 @@ bool ProjectSerializer::SerializeProjectList(std::vector<Project> &projectList,
 }
 
 bool ProjectSerializer::DeserializeProjectList(std::vector<Project> &projectList,
-                                               const std::filesystem::path &path)
+                                               const Path &path)
 {
-    std::filesystem::path projectListPath = path / "ProjectList.lumen";
+    Path projectListPath = path / "ProjectList.lumen";
 
     if (!std::filesystem::exists(projectListPath))
     {
-        std::ofstream outFile(projectListPath);
+        std::ofstream outFile(projectListPath.ToString());
         if (outFile.is_open())
         {
             YAML::Emitter out;
@@ -109,7 +107,7 @@ bool ProjectSerializer::DeserializeProjectList(std::vector<Project> &projectList
 
     try
     {
-        YAML::Node root = YAML::LoadFile(projectListPath.string());
+        YAML::Node root = YAML::LoadFile(projectListPath.ToString());
 
         projectList.clear();
 
@@ -120,7 +118,7 @@ bool ProjectSerializer::DeserializeProjectList(std::vector<Project> &projectList
                 auto pathString = projectNode["path"].as<std::string>();
                 Project loadedProject({});
                 ProjectSerializer serializer;
-                if (serializer.DeserializeProject(loadedProject, pathString))
+                if (serializer.DeserializeProject(loadedProject, {pathString}))
                 {
                     projectList.push_back(loadedProject);
                 }

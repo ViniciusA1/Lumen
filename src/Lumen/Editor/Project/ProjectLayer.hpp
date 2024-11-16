@@ -16,9 +16,6 @@ public:
     void OnDraw() override;
 
 private:
-    std::string DrawFileDialog();
-
-private:
     ProjectListPanel m_ProjectListPanel;
     ProjectTopBarPanel m_TopBarPanel;
 };

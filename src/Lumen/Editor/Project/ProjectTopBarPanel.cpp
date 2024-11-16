@@ -3,6 +3,7 @@
 #include "Lumen/Editor/Project/ProjectLayer.hpp"
 #include "Lumen/Editor/Project/ProjectManager.hpp"
 #include "imgui.h"
+#include <algorithm>
 
 namespace Lumen
 {
@@ -21,8 +22,7 @@ void ProjectTopBarPanel::Draw()
     ImGui::SameLine();
     if (ImGui::Button("Import"))
     {
-        ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File",
-                                                ".lproj", {"."});
+        m_ParentLayer.PushOverlay([this]() { DrawImportProjectOverlay(); });
     }
     ImGui::SameLine();
 
@@ -35,70 +35,136 @@ void ProjectTopBarPanel::Draw()
     ImGui::SameLine();
 
     ImGui::SetNextItemWidth(150);
+
+    int sortOption = m_CurrentSortOption;
     ImGui::Combo("##SortOrder", &m_CurrentSortOption, m_SortOption.data()->data(),
                  m_SortOption.size());
+    if (m_CurrentSortOption != sortOption)
+    {
+        ProjectManager::SortProjectList(static_cast<ProjectSortOption>(sortOption));
+    }
 }
 
 void ProjectTopBarPanel::DrawNewProjectOverlay()
 {
-    ImGui::Begin("New Project", nullptr, ImGuiWindowFlags_NoCollapse);
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(400, 150));
 
-    ImGui::Text("Project Name:");
-    ImGui::InputText("##ProjectName", m_NewProjectName.data(), m_NewProjectName.size());
+    ImGui::OpenPopup("New Project");
 
-    ImGui::Text("Project Path:");
-    ImGui::InputText("##ProjectPath", m_NewProjectPath.data(), m_NewProjectPath.size());
-
-    ImGui::SameLine();
-    if (ImGui::Button("Browse"))
+    if (ImGui::BeginPopupModal("New Project", nullptr, ImGuiWindowFlags_NoCollapse))
     {
-        ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File",
-                                                nullptr, {"."});
-    }
+        ImGui::Text("Project Name:");
+        ImGui::InputTextWithHint("##ProjectName", "Name", m_NewProjectName.data(),
+                                 m_NewProjectName.size());
 
-    std::string path = DrawFileDialog();
-    if (!path.empty())
-    {
-        m_NewProjectPath = {};
-        std::copy(path.begin(), path.end(), m_NewProjectPath.begin());
-    }
+        ImGui::Text("Project Path:");
+        ImGui::InputTextWithHint("##ProjectPath", "Path", m_NewProjectPath.data(),
+                                 m_NewProjectPath.size());
 
-    ImGui::Separator();
+        ImGui::SameLine();
+        if (ImGui::Button("Browse"))
+        {
+            ImGuiFileDialog::Instance()->OpenDialog("NewProject", "Choose File", nullptr,
+                                                    {"."});
+        }
 
-    if (ImGui::Button("Create"))
-    {
-        ProjectManager::New(m_NewProjectPath.data());
-        ProjectManager::SaveProjectList();
-        m_ParentLayer.PopOverlay();
-    }
-    ImGui::SameLine();
-    if (ImGui::Button("Cancel"))
-    {
-        m_ParentLayer.PopOverlay();
-    }
+        DrawFileDialog("NewProject", m_NewProjectPath);
 
-    ImGui::End();
+        ImGui::Separator();
+
+        if (ImGui::Button("Create"))
+        {
+            ProjectManager::New({m_NewProjectPath.data()}, m_NewProjectName.data());
+            ProjectManager::SaveProjectList();
+            m_NewProjectPath = {};
+            m_NewProjectName = {};
+            ImGui::CloseCurrentPopup();
+            m_ParentLayer.PopOverlay();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel"))
+        {
+            ImGui::CloseCurrentPopup();
+            m_ParentLayer.PopOverlay();
+        }
+
+        ImGui::EndPopup();
+    }
 }
 
-std::string ProjectTopBarPanel::DrawFileDialog()
+void ProjectTopBarPanel::DrawImportProjectOverlay()
 {
-    std::string path = "";
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(400, 100));
 
-    if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
+    ImGui::OpenPopup("Import Project");
+
+    if (ImGui::BeginPopupModal("Import Project", nullptr,
+                               ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
+    {
+        ImGui::Text("Project Path:");
+        ImGui::SetNextItemWidth(300);
+        ImGui::InputText("##ImportProjectPath", m_ImportProjectPath.data(),
+                         m_ImportProjectPath.size());
+
+        ImGui::SameLine();
+        if (ImGui::Button("Browse"))
+        {
+            ImGuiFileDialog::Instance()->OpenDialog(
+                "ImportProject", "Choose Project File", ".lproj", {"."});
+        }
+
+        DrawFileDialog("ImportProject", m_ImportProjectPath);
+
+        ImGui::Separator();
+        if (ImGui::Button("Import"))
+        {
+            if (!m_ImportProjectPath.empty())
+            {
+                ProjectManager::Load({m_ImportProjectPath.data()});
+                m_ImportProjectPath = {};
+                ImGui::CloseCurrentPopup();
+                m_ParentLayer.PopOverlay();
+            }
+        }
+
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel"))
+        {
+            m_ImportProjectPath = {};
+            ImGui::CloseCurrentPopup();
+            m_ParentLayer.PopOverlay();
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
+void ProjectTopBarPanel::DrawFileDialog(const std::string &key,
+                                        std::array<char, 256> &pathBuffer)
+{
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(600, 400));
+
+    if (ImGuiFileDialog::Instance()->Display(key))
     {
         if (ImGuiFileDialog::Instance()->IsOk())
         {
-            path = ImGuiFileDialog::Instance()->GetCurrentFileName();
-            if (path.empty())
+            std::string tmpPath = ImGuiFileDialog::Instance()->GetCurrentFileName();
+            if (tmpPath.empty())
             {
-                path = ImGuiFileDialog::Instance()->GetCurrentPath();
+                tmpPath = ImGuiFileDialog::Instance()->GetCurrentPath();
             }
+            pathBuffer = {};
+            std::copy(tmpPath.begin(), tmpPath.end(), pathBuffer.begin());
         }
 
         ImGuiFileDialog::Instance()->Close();
     }
-
-    return path;
 }
 
 } // namespace Lumen
