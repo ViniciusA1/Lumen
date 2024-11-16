@@ -16,10 +16,11 @@ struct ApplicationArgs
 class Application
 {
 public:
-    template <typename T> static T &Create(const ApplicationArgs &args)
+    template <typename T> static Ref<T> Create(const ApplicationArgs &args)
     {
-        s_Instance = Scope<T>(new T(args));
-        return *s_Instance;
+        Ref<T> instance = CreateRef<T>(args);
+        s_Instance = std::static_pointer_cast<Application>(instance);
+        return instance;
     }
 
     Application(const ApplicationArgs &args);
@@ -38,7 +39,7 @@ private:
     void OnWindowClose(const WindowCloseEvent &event);
 
 private:
-    static Scope<Application> s_Instance;
+    static Ref<Application> s_Instance;
     bool m_IsRunning = true;
     Window m_Window;
     LayerStack m_LayerStack;
