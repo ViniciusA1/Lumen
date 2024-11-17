@@ -1,4 +1,4 @@
-#include "Lumen/Event/ApplicationEvent.hpp"
+#include "Lumen/Event/WindowEvent.hpp"
 
 namespace Lumen
 {
