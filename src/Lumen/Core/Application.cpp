@@ -12,9 +12,11 @@ Ref<Application> Application::s_Instance = nullptr;
 
 Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
 {
-    UI::Init();
     EventBus::Subscribe<WindowResizeEvent>(BIND_EVENT(OnWindowResize));
     EventBus::Subscribe<WindowCloseEvent>(BIND_EVENT(OnWindowClose));
+    EventBus::Subscribe<LayerPushEvent>(BIND_EVENT(OnLayerPush));
+    EventBus::Subscribe<LayerPopEvent>(BIND_EVENT(OnLayerPop));
+    UI::Init();
     Log::Init();
 }
 
@@ -37,7 +39,9 @@ void Application::Run()
 
         Renderer::DrawFPS({0, 0}, 20, Color::Green);
 
-        for (Ref<Layer> &layer : m_LayerStack)
+        EventBus::ProcessEvents();
+
+        for (auto &[layerName, layer] : m_LayerStack)
         {
             if (layer->IsVisible())
             {
@@ -51,16 +55,6 @@ void Application::Run()
     }
 }
 
-void Application::PushLayer(const Ref<Layer> &layer)
-{
-    m_LayerStack.PushLayer(layer);
-}
-
-void Application::PushOverlay(const Ref<Layer> &overlay)
-{
-    m_LayerStack.PushOverlay(overlay);
-}
-
 void Application::OnWindowResize(const WindowResizeEvent &event)
 {
 }
@@ -68,6 +62,16 @@ void Application::OnWindowResize(const WindowResizeEvent &event)
 void Application::OnWindowClose(const WindowCloseEvent &event)
 {
     m_IsRunning = false;
+}
+
+void Application::OnLayerPush(const LayerPushEvent &event)
+{
+    m_LayerStack.PushLayer(event.GetLayer());
+}
+
+void Application::OnLayerPop(const LayerPopEvent &event)
+{
+    m_LayerStack.PopLayer(event.GetLayerName());
 }
 
 } // namespace Lumen

@@ -3,7 +3,8 @@
 #include "Lumen/Core/LayerStack.hpp"
 #include "Lumen/Core/Memory.hpp"
 #include "Lumen/Core/Window.hpp"
-#include "Lumen/Event/ApplicationEvent.hpp"
+#include "Lumen/Event/LayerEvent.hpp"
+#include "Lumen/Event/WindowEvent.hpp"
 
 namespace Lumen
 {
@@ -31,14 +32,12 @@ public:
 
     void Run();
 
-    void PushLayer(const Ref<Layer> &layer);
-    void PushOverlay(const Ref<Layer> &overlay);
-
-private:
+protected:
     void OnWindowResize(const WindowResizeEvent &event);
     void OnWindowClose(const WindowCloseEvent &event);
+    void OnLayerPush(const LayerPushEvent &event);
+    void OnLayerPop(const LayerPopEvent &event);
 
-private:
     static Ref<Application> s_Instance;
     bool m_IsRunning = true;
     Window m_Window;

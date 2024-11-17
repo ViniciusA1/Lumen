@@ -2,7 +2,7 @@
 
 #include "Lumen/Core/Layer.hpp"
 #include "Lumen/Core/Memory.hpp"
-#include <vector>
+#include <unordered_map>
 
 namespace Lumen
 {
@@ -13,17 +13,14 @@ public:
     LayerStack() = default;
     ~LayerStack();
 
-    void PushLayer(Ref<Layer> layer);
-    void PushOverlay(Ref<Layer> overlay);
-    void PopLayer(const Ref<Layer> &layer);
-    void PopOverlay(const Ref<Layer> &overlay);
+    void PushLayer(const Ref<Layer> &layer);
+    void PopLayer(const std::string &name);
 
-    std::vector<Ref<Layer>>::iterator begin() { return m_Layers.begin(); }
-    std::vector<Ref<Layer>>::iterator end() { return m_Layers.end(); }
+    auto begin() { return m_LayerMap.begin(); }
+    auto end() { return m_LayerMap.end(); }
 
 private:
-    std::vector<Ref<Layer>> m_Layers;
-    unsigned int m_LayerInsertIndex = 0;
+    std::unordered_map<std::string, Ref<Layer>> m_LayerMap;
 };
 
 } // namespace Lumen
