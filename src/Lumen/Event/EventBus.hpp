@@ -2,6 +2,7 @@
 
 #include <any>
 #include <functional>
+#include <queue>
 #include <typeindex>
 
 #define BIND_EVENT(fn)                                                                   \
@@ -17,12 +18,15 @@ class EventBus
 public:
     template <typename EventType>
     static void Subscribe(std::function<void(const EventType &)> callback);
-
     template <typename EventType> static void Publish(const EventType &event);
+
+    static void ProcessEvents();
 
 private:
     static std::unordered_map<std::type_index, std::vector<EventCallbackFunction>>
         m_Subscribers;
+
+    static std::queue<std::pair<std::type_index, std::any>> m_EventQueue;
 };
 
 template <typename EventType>
@@ -36,14 +40,7 @@ void EventBus::Subscribe(std::function<void(const EventType &)> callback)
 
 template <typename EventType> void EventBus::Publish(const EventType &event)
 {
-    auto it = m_Subscribers.find(typeid(EventType));
-    if (it != m_Subscribers.end())
-    {
-        for (auto &subscriber : it->second)
-        {
-            subscriber(event);
-        }
-    }
+    m_EventQueue.emplace(typeid(EventType), event);
 }
 
 } // namespace Lumen
