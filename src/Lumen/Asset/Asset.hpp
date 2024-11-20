@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Lumen/Core/UUID.hpp"
+#include "Lumen/File/Path.hpp"
 #include <string>
 
 namespace Lumen
@@ -10,9 +11,9 @@ struct AssetMetadata
 {
     UUID ID;
     std::string Name;
-    std::string Path;
+    Path Path;
 
-    AssetMetadata(UUID id, std::string name, std::string path)
+    AssetMetadata(UUID id, std::string name, class Path path)
         : ID(id), Name(std::move(name)), Path(std::move(path))
     {
     }
