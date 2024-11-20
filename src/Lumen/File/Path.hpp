@@ -17,15 +17,15 @@ public:
     void ReplaceExtension(const std::string &extension);
     void Swap(Path &other);
 
-    [[nodiscard]] Path GetRootName() const;
-    [[nodiscard]] Path GetRootDirectory() const;
-    [[nodiscard]] Path GetRootPath() const;
-    [[nodiscard]] Path GetRelativePath() const;
-    [[nodiscard]] Path GetParentPath() const;
-    [[nodiscard]] Path GetFilename() const;
-    [[nodiscard]] Path GetStem() const;
-    [[nodiscard]] Path GetExtension() const;
-    [[nodiscard]] std::string ToString() const;
+    [[nodiscard]] Path RootName() const;
+    [[nodiscard]] Path RootDirectory() const;
+    [[nodiscard]] Path RootPath() const;
+    [[nodiscard]] Path RelativePath() const;
+    [[nodiscard]] Path ParentPath() const;
+    [[nodiscard]] Path Filename() const;
+    [[nodiscard]] Path Stem() const;
+    [[nodiscard]] Path Extension() const;
+    [[nodiscard]] std::string String() const;
 
     [[nodiscard]] bool IsEmpty() const;
     [[nodiscard]] bool HasRootPath() const;

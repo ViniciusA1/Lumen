@@ -36,47 +36,47 @@ void Path::Swap(Path &other)
     m_Path.swap(other.m_Path);
 }
 
-Path Path::GetRootName() const
+Path Path::RootName() const
 {
     return {m_Path.root_name()};
 }
 
-Path Path::GetRootDirectory() const
+Path Path::RootDirectory() const
 {
     return {m_Path.root_directory()};
 }
 
-Path Path::GetRootPath() const
+Path Path::RootPath() const
 {
     return {m_Path.root_path()};
 }
 
-Path Path::GetRelativePath() const
+Path Path::RelativePath() const
 {
     return {m_Path.relative_path()};
 }
 
-Path Path::GetParentPath() const
+Path Path::ParentPath() const
 {
     return {m_Path.parent_path()};
 }
 
-Path Path::GetFilename() const
+Path Path::Filename() const
 {
     return {m_Path.filename()};
 }
 
-Path Path::GetStem() const
+Path Path::Stem() const
 {
     return {m_Path.stem()};
 }
 
-Path Path::GetExtension() const
+Path Path::Extension() const
 {
     return {m_Path.extension()};
 }
 
-std::string Path::ToString() const
+std::string Path::String() const
 {
     return m_Path.string();
 }
@@ -140,7 +140,6 @@ Path::operator std::filesystem::path() const
 {
     return m_Path;
 }
-
 Path &Path::operator=(const std::string &path)
 {
     m_Path = path;
