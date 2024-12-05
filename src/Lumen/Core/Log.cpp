@@ -5,21 +5,21 @@
 namespace Lumen
 {
 
-std::vector<LogMessage> Log::s_Logs;
+std::unordered_map<LogLevel, std::vector<std::string>> Log::s_Logs;
 
 void Log::Init()
 {
     SetTraceLogCallback(LogCallback);
 }
 
+std::unordered_map<LogLevel, std::vector<std::string>> &Log::GetLogs()
+{
+    return s_Logs;
+}
+
 void Log::Clear()
 {
     s_Logs.clear();
-}
-
-std::vector<LogMessage> &Log::GetLogs()
-{
-    return s_Logs;
 }
 
 void Log::LogCallback(int logType, const char *text, va_list args)
@@ -44,7 +44,7 @@ void Log::LogCallback(int logType, const char *text, va_list args)
         break;
     }
 
-    s_Logs.emplace_back(level, buffer.data());
+    s_Logs[level].emplace_back(buffer.data());
 }
 
 } // namespace Lumen
