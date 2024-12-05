@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Lumen/Math/Vector3.hpp"
-
 struct Vector4;
 
 namespace Lumen
 {
+
+class Vector3;
+class Matrix4;
 
 class Quaternion
 {
@@ -17,48 +18,37 @@ public:
 
     Quaternion(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f);
 
-    inline Quaternion operator*(const Quaternion &rhs) const;
-    inline bool operator==(const Quaternion &rhs) const;
-
-    [[nodiscard]] Vector3 EulerAngles() const;
+    [[nodiscard]] Quaternion Inverted() const;
+    [[nodiscard]] float Length() const;
     [[nodiscard]] Quaternion Normalized() const;
+    [[nodiscard]] Matrix4 ToMatrix() const;
+    [[nodiscard]] Vector3 ToEuler() const;
+    void ToAxisAngle(Vector3 &outAxis, float &outAngle);
+    [[nodiscard]] Quaternion Transformed(const Matrix4 &mat) const;
 
-    void Set(float newX, float newY, float newZ, float newW);
-    void SetFromToRotation(const Vector3 &fromDirection, const Vector3 &toDirection);
-    void SetLookRotation(const Vector3 &forward, const Vector3 &upwards = Vector3::Up);
-    void ToAngleAxis(float &angle, Vector3 &axis) const;
+    static Quaternion FromAxisAngle(const Vector3 &axis, float angle);
+    static Quaternion FromEuler(float pitch, float yaw, float roll);
+    static Quaternion FromMatrix(const Matrix4 &mat);
+    static Quaternion FromVector3ToVector3(const Vector3 &from, const Vector3 &to);
+    static Quaternion Lerp(const Quaternion &q1, const Quaternion &q2, float amount);
+    static Quaternion Nlerp(const Quaternion &q1, const Quaternion &q2, float amount);
+    static Quaternion Slerp(const Quaternion &q1, const Quaternion &q2, float amount);
 
-    static float Angle(const Quaternion &a, const Quaternion &b);
-    static Quaternion AngleAxis(float angle, const Vector3 &axis);
-    static float Dot(const Quaternion &a, const Quaternion &b);
-    static Quaternion Euler(float x, float y, float z);
-    static Quaternion FromToRotation(const Vector3 &fromDirection,
-                                     const Vector3 &toDirection);
-    static Quaternion Inverse(const Quaternion &rotation);
-    static Quaternion Lerp(const Quaternion &a, const Quaternion &b, float t);
-    static Quaternion LerpUnclamped(const Quaternion &a, const Quaternion &b, float t);
-    static Quaternion LookRotation(const Vector3 &forward,
-                                   const Vector3 &upwards = Vector3(0, 1, 0));
-    static Quaternion Normalize(const Quaternion &q);
-    static Quaternion RotateTowards(const Quaternion &from, const Quaternion &to,
-                                    float maxAngle);
-    static Quaternion Slerp(const Quaternion &a, const Quaternion &b, float t);
-    static Quaternion SlerpUnclamped(const Quaternion &a, const Quaternion &b, float t);
-
-    [[nodiscard]] ::Vector4 ToRaylib() const;
+    friend Quaternion operator+(const Quaternion &lhs, const Quaternion &rhs);
+    friend Quaternion operator+(const Quaternion &lhs, float value);
+    friend Quaternion operator-(const Quaternion &lhs, const Quaternion &rhs);
+    friend Quaternion operator-(const Quaternion &lhs, float value);
+    friend Quaternion operator*(const Quaternion &lhs, const Quaternion &rhs);
+    friend Quaternion operator*(const Quaternion &lhs, float scalar);
+    friend Quaternion operator*(float scalar, const Quaternion &rhs);
+    friend Quaternion operator/(const Quaternion &lhs, const Quaternion &rhs);
+    friend Quaternion &operator+=(Quaternion &lhs, const Quaternion &rhs);
+    friend Quaternion &operator-=(Quaternion &lhs, const Quaternion &rhs);
+    friend Quaternion &operator*=(Quaternion &lhs, float scalar);
+    friend Quaternion &operator/=(Quaternion &lhs, float scalar);
+    friend bool operator==(const Quaternion &lhs, const Quaternion &rhs);
+    friend bool operator!=(const Quaternion &lhs, const Quaternion &rhs);
+    operator ::Vector4() const;
 };
-
-Quaternion Quaternion::operator*(const Quaternion &rhs) const
-{
-    return {w * rhs.x + x * rhs.w + y * rhs.z - z * rhs.y,
-            w * rhs.y + y * rhs.w + z * rhs.x - x * rhs.z,
-            w * rhs.z + z * rhs.w + x * rhs.y - y * rhs.x,
-            w * rhs.w - x * rhs.x - y * rhs.y - z * rhs.z};
-}
-
-bool Quaternion::operator==(const Quaternion &rhs) const
-{
-    return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w;
-}
 
 } // namespace Lumen
