@@ -17,6 +17,7 @@ public:
     static bool GetMouseButtonDown(MouseCode button);
     static bool GetMouseButtonUp(MouseCode button);
 
+    static Vector2 GetMouseDelta();
     static Vector2 GetMousePosition();
     static float GetMouseWheelMove();
 

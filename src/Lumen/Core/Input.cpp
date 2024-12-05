@@ -38,6 +38,12 @@ bool Input::GetMouseButtonUp(MouseCode button)
     return ::IsMouseButtonUp(static_cast<int>(button));
 }
 
+Vector2 Input::GetMouseDelta()
+{
+    ::Vector2 delta = ::GetMouseDelta();
+    return {delta.x, delta.y};
+}
+
 Vector2 Input::GetMousePosition()
 {
     ::Vector2 pos = ::GetMousePosition();
