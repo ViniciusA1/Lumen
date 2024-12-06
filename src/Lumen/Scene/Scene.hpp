@@ -6,35 +6,31 @@
 namespace Lumen
 {
 
+enum class SceneState
+{
+    Edit,
+    Play,
+    Pause
+};
+
 class Scene
 {
 public:
     Scene() = default;
 
-    inline World &GetWorld();
-    [[nodiscard]] inline bool IsRunning() const;
-    inline void SetRunning(bool running);
+    CameraComponent &GetMainCamera();
+    [[nodiscard]] SceneState GetState() const;
+    World &GetWorld();
+
+    void SetMainCamera(Entity camera);
+    void SetState(SceneState state);
 
     void OnUpdate();
 
 private:
+    SceneState m_State;
     World m_World;
-    bool m_IsRunning = false;
+    Entity m_MainCamera;
 };
-
-World &Scene::GetWorld()
-{
-    return m_World;
-}
-
-bool Scene::IsRunning() const
-{
-    return m_IsRunning;
-}
-
-void Scene::SetRunning(bool running)
-{
-    m_IsRunning = running;
-}
 
 } // namespace Lumen
