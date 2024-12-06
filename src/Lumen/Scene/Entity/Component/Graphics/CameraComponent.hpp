@@ -14,16 +14,16 @@ enum class ProjectionType
 
 struct CameraComponent : public ComponentBase
 {
-    Vector3 Position;
-    Vector3 Target;
-    Vector3 Up;
-    float Fov;
-    ProjectionType Projection;
+    Vector3 Position = {10.0f, 10.0f, 10.0f};
+    Vector3 Target = {0.0f, 0.0f, 0.0f};
+    Vector3 Up = {0.0f, 1.0f, 0.0f};
+    float Fov = 60.0f;
+    ProjectionType Projection = ProjectionType::Perspective;
 
     CameraComponent() = default;
-    CameraComponent(const Vector3 &positon, const Vector3 &target, const Vector3 &up,
+    CameraComponent(const Vector3 &position, const Vector3 &target, const Vector3 &up,
                     float fov, ProjectionType type)
-        : Position(positon), Target(target), Up(up), Fov(fov), Projection(type)
+        : Position(position), Target(target), Up(up), Fov(fov), Projection(type)
     {
     }
 };
