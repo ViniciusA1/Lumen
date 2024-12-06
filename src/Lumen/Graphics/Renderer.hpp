@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Lumen/Graphics/Color.hpp"
-#include "Lumen/Graphics/RenderTexture.hpp"
 #include "Lumen/Math/Vector2.hpp"
 #include "Lumen/Scene/Entity/Component/Graphics/CameraComponent.hpp"
 #include <string>
+
+struct RenderTexture;
 
 namespace Lumen
 {
@@ -16,7 +17,7 @@ public:
     static void EndRenderTexture();
     static void CreateRenderTexture();
     static void DestroyRenderTexture();
-    static RenderTexture &GetRenderTexture();
+    static ::RenderTexture &GetRenderTexture();
     static void ResizeRenderTexture(int width, int height);
 
     static void BeginDrawing();

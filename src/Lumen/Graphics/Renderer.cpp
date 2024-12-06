@@ -6,7 +6,7 @@ namespace Lumen
 {
 
 Color Renderer::s_Color = Color::Black;
-static RenderTexture s_SceneRenderTexture;
+static ::RenderTexture s_SceneRenderTexture;
 
 void Renderer::BeginRenderTexture()
 {
@@ -29,14 +29,14 @@ void Renderer::DestroyRenderTexture()
     UnloadRenderTexture(s_SceneRenderTexture);
 }
 
-RenderTexture &Renderer::GetRenderTexture()
+::RenderTexture &Renderer::GetRenderTexture()
 {
     return s_SceneRenderTexture;
 }
 
 void Renderer::ResizeRenderTexture(int width, int height)
 {
-    ::Texture texture = s_SceneRenderTexture.GetColorTexture();
+    ::Texture texture = s_SceneRenderTexture.texture;
 
     if (texture.width != width || texture.height != height)
     {
