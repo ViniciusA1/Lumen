@@ -55,6 +55,11 @@ float Input::GetMouseWheelMove()
     return ::GetMouseWheelMove();
 }
 
+void Input::SetMousePosition(int x, int y)
+{
+    ::SetMousePosition(x, y);
+}
+
 void Input::PollEvents()
 {
     if (WindowShouldClose())

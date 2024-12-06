@@ -21,6 +21,8 @@ public:
     static Vector2 GetMousePosition();
     static float GetMouseWheelMove();
 
+    static void SetMousePosition(int x, int y);
+
     static void PollEvents();
 };
 
