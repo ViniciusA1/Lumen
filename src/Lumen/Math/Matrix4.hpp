@@ -18,7 +18,8 @@ public:
 public:
     Matrix4();
     Matrix4(float diagonal);
-    Matrix4(const std::array<float, 16> &data);
+    Matrix4(std::initializer_list<float> list);
+    Matrix4(const ::Matrix &matrix);
 
     [[nodiscard]] float Determinant() const;
     [[nodiscard]] Matrix4 Inverse() const;
@@ -46,6 +47,7 @@ public:
     Matrix4 operator-(const Matrix4 &other) const;
     Matrix4 operator*(const Matrix4 &other) const;
     Matrix4 operator*(float scalar) const;
+    operator ::Matrix() const;
 
 private:
     std::array<float, 16> m;

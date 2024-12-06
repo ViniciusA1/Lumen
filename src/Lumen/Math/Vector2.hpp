@@ -17,6 +17,7 @@ public:
     float x, y;
 
     Vector2(float x = 0.0f, float y = 0.0f);
+    Vector2(const ::Vector2 &vec);
 
     friend Vector2 operator+(const Vector2 &lhs, const Vector2 &rhs);
     friend Vector2 operator-(const Vector2 &lhs, const Vector2 &rhs);

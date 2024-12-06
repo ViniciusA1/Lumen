@@ -14,6 +14,11 @@ Quaternion::Quaternion(float x, float y, float z, float w) : x(x), y(y), z(z), w
 {
 }
 
+Quaternion::Quaternion(const ::Vector4 &quaternion)
+    : x(quaternion.x), y(quaternion.y), z(quaternion.z), w(quaternion.w)
+{
+}
+
 Quaternion Quaternion::Inverted() const
 {
     float lenSqr = x * x + y * y + z * z + w * w;

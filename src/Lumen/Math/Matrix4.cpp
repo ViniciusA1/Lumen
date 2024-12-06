@@ -23,7 +23,22 @@ Matrix4::Matrix4(float diagonal)
     m[15] = diagonal;
 }
 
-Matrix4::Matrix4(const std::array<float, 16> &data) : m(data)
+Matrix4::Matrix4(std::initializer_list<float> list)
+{
+    if (list.size() == 16)
+    {
+        std::copy(list.begin(), list.end(), m.begin());
+    }
+    else
+    {
+        m.fill(0.0f);
+    }
+}
+
+Matrix4::Matrix4(const ::Matrix &matrix)
+    : m({matrix.m0, matrix.m4, matrix.m8, matrix.m12, matrix.m1, matrix.m5, matrix.m9,
+         matrix.m13, matrix.m2, matrix.m6, matrix.m10, matrix.m14, matrix.m3, matrix.m7,
+         matrix.m11, matrix.m15})
 {
 }
 
@@ -389,6 +404,12 @@ Matrix4 Matrix4::operator*(float scalar) const
         result[i] = m[i] * scalar;
 
     return result;
+}
+
+Matrix4::operator ::Matrix() const
+{
+    return {m[0], m[1], m[2],  m[3],  m[4],  m[5],  m[6],  m[7],
+            m[8], m[9], m[10], m[11], m[12], m[13], m[14], m[15]};
 }
 
 } // namespace Lumen

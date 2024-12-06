@@ -17,6 +17,7 @@ public:
     float x, y, z, w;
 
     Quaternion(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f);
+    Quaternion(const ::Vector4 &quaternion);
 
     [[nodiscard]] Quaternion Inverted() const;
     [[nodiscard]] float Length() const;

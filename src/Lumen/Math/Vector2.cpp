@@ -14,6 +14,10 @@ Vector2::Vector2(float x, float y) : x(x), y(y)
 {
 }
 
+Vector2::Vector2(const ::Vector2 &vec) : x(vec.x), y(vec.y)
+{
+}
+
 Vector2 operator+(const Vector2 &lhs, const Vector2 &rhs)
 {
     return {lhs.x + rhs.x, lhs.y + rhs.y};

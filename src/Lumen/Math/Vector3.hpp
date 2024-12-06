@@ -18,6 +18,7 @@ public:
     float x, y, z;
 
     Vector3(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+    Vector3(const ::Vector3 &vec);
 
     friend Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs);
     friend Vector3 operator-(const Vector3 &lhs, const Vector3 &rhs);

@@ -13,6 +13,10 @@ Vector4::Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w)
 {
 }
 
+Vector4::Vector4(const ::Vector4 &vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w)
+{
+}
+
 Vector4 operator+(const Vector4 &lhs, const Vector4 &rhs)
 {
     return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w};

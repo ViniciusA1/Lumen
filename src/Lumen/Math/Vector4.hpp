@@ -15,6 +15,7 @@ public:
     float x, y, z, w;
 
     Vector4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f);
+    Vector4(const ::Vector4 &vec);
 
     friend Vector4 operator+(const Vector4 &lhs, const Vector4 &rhs);
     friend Vector4 operator-(const Vector4 &lhs, const Vector4 &rhs);
