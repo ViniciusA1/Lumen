@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Lumen/Asset/Asset.hpp"
-#include "Lumen/Core/Memory.hpp"
 
 struct Shader;
 
@@ -12,13 +11,18 @@ class Shader : public Asset
 {
 public:
     Shader(const AssetMetadata &metadata, const ::Shader &shader);
-    ~Shader() override;
+    Shader(const ::Shader &shader);
 
     [[nodiscard]] bool IsValid() const override;
+
+    [[nodiscard]] int *GetLocations() const;
+    [[nodiscard]] unsigned int GetRendererID() const;
+
     operator ::Shader() const;
 
 private:
-    Scope<::Shader> m_Instance;
+    unsigned int m_RendererID;
+    int *m_Locs;
 };
 
 } // namespace Lumen

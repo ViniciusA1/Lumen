@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Lumen/Asset/Asset.hpp"
-#include "Lumen/Core/Memory.hpp"
 
 struct Texture;
 
@@ -12,13 +11,24 @@ class Texture2D : public Asset
 {
 public:
     Texture2D(const AssetMetadata &metadata, const ::Texture &texture);
-    ~Texture2D() override;
+    Texture2D(const ::Texture &texture);
 
     [[nodiscard]] bool IsValid() const override;
+
+    [[nodiscard]] int GetFormat() const;
+    [[nodiscard]] int GetHeight() const;
+    [[nodiscard]] int GetMipmap() const;
+    [[nodiscard]] unsigned int GetRendererID() const;
+    [[nodiscard]] int GetWidth() const;
+
     operator ::Texture() const;
 
 private:
-    Scope<::Texture> m_Instance;
+    unsigned int m_RendererID;
+    int m_Width;
+    int m_Height;
+    int m_Mipmaps;
+    int m_Format;
 };
 
 } // namespace Lumen

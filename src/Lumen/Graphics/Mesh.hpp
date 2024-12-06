@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Lumen/Asset/Asset.hpp"
-#include "Lumen/Core/Memory.hpp"
 
 struct Mesh;
 
@@ -12,13 +11,31 @@ class Mesh : public Asset
 {
 public:
     Mesh(const AssetMetadata &metadata, const ::Mesh &mesh);
-    ~Mesh() override;
+    Mesh(const ::Mesh &mesh);
 
     [[nodiscard]] bool IsValid() const override;
     operator ::Mesh() const;
 
 private:
-    Scope<::Mesh> m_Instance;
+    int m_VertexCount;
+    int m_TriangleCount;
+
+    float *m_Vertices;
+    float *m_Texcoords;
+    float *m_Texcoords2;
+    float *m_Normals;
+    float *m_Tangents;
+    unsigned char *m_Colors;
+    unsigned short *m_Indices;
+
+    float *m_AnimVertices;
+    float *m_AnimNormals;
+    unsigned char *m_BoneIds;
+
+    float *m_BoneWeights;
+
+    unsigned int m_VaoID;
+    unsigned int *m_VboID;
 };
 
 } // namespace Lumen

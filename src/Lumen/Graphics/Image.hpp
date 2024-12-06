@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Lumen/Asset/Asset.hpp"
-#include "Lumen/Core/Memory.hpp"
 
 struct Image;
 
@@ -12,13 +11,24 @@ class Image : public Asset
 {
 public:
     Image(const AssetMetadata &metadata, const ::Image &image);
-    ~Image() override;
+    Image(const ::Image &image);
 
     [[nodiscard]] bool IsValid() const override;
+
+    [[nodiscard]] void *GetData() const;
+    [[nodiscard]] int GetFormat() const;
+    [[nodiscard]] int GetHeight() const;
+    [[nodiscard]] int GetMipmap() const;
+    [[nodiscard]] int GetWidth() const;
+
     operator ::Image() const;
 
 private:
-    Scope<::Image> m_Instance;
+    void *m_Data;
+    int m_Width;
+    int m_Height;
+    int m_Mipmaps;
+    int m_Format;
 };
 
 } // namespace Lumen

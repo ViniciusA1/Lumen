@@ -5,23 +5,32 @@ namespace Lumen
 {
 
 Shader::Shader(const AssetMetadata &metadata, const ::Shader &shader)
-    : Asset(metadata), m_Instance(CreateScope<::Shader>(shader))
+    : Asset(metadata), m_RendererID(shader.id), m_Locs(shader.locs)
 {
 }
 
-Shader::~Shader()
+Shader::Shader(const ::Shader &shader) : Shader({UUID(), "", {""}}, shader)
 {
-    UnloadShader(*m_Instance);
 }
 
 bool Shader::IsValid() const
 {
-    return ::IsShaderReady(*m_Instance);
+    return ::IsShaderReady(*this);
+}
+
+int *Shader::GetLocations() const
+{
+    return m_Locs;
+}
+
+unsigned int Shader::GetRendererID() const
+{
+    return m_RendererID;
 }
 
 Shader::operator ::Shader() const
 {
-    return *m_Instance;
+    return {m_RendererID, m_Locs};
 }
 
 } // namespace Lumen
