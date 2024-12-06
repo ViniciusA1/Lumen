@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Lumen/Graphics/Color.hpp"
-#include "Lumen/Math/Matrix4.hpp"
+#include "Lumen/Graphics/RenderTexture.hpp"
 #include "Lumen/Math/Vector2.hpp"
+#include "Lumen/Scene/Entity/Component/Graphics/CameraComponent.hpp"
 #include <string>
-
-struct RenderTexture;
 
 namespace Lumen
 {
@@ -18,6 +17,7 @@ public:
     static void CreateRenderTexture();
     static void DestroyRenderTexture();
     static RenderTexture &GetRenderTexture();
+    static void ResizeRenderTexture(int width, int height);
 
     static void BeginDrawing();
     static void EndDrawing();
@@ -30,12 +30,14 @@ public:
                          const Color &color);
     static void DrawQuad(const Vector2 &position, float rotation, const Vector2 &size,
                          const Color &color);
-    static void DrawQuad(const Matrix4 &transform, const Color &color);
 
     static void DrawText(const std::string &text, const Vector2 &position, int fontSize,
                          const Color &color);
     static void DrawFPS(const Vector2 &position, int fontSize, const Color &color);
     static void End2DMode();
+
+    static void BeginMode3D(const CameraComponent &camera);
+    static void EndMode3D();
 
 private:
     static Color s_Color;

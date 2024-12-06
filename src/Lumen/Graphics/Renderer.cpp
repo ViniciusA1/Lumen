@@ -20,8 +20,8 @@ void Renderer::EndRenderTexture()
 
 void Renderer::CreateRenderTexture()
 {
-    Window &window = Application::Get().GetWindow();
-    s_SceneRenderTexture = LoadRenderTexture(window.GetWidth(), window.GetHeight());
+    Vector2 winSize = Application::Get().GetWindow().GetSize();
+    s_SceneRenderTexture = LoadRenderTexture(winSize.x, winSize.y);
 }
 
 void Renderer::DestroyRenderTexture()
@@ -32,6 +32,17 @@ void Renderer::DestroyRenderTexture()
 RenderTexture &Renderer::GetRenderTexture()
 {
     return s_SceneRenderTexture;
+}
+
+void Renderer::ResizeRenderTexture(int width, int height)
+{
+    ::Texture texture = s_SceneRenderTexture.GetColorTexture();
+
+    if (texture.width != width || texture.height != height)
+    {
+        UnloadRenderTexture(s_SceneRenderTexture);
+        s_SceneRenderTexture = LoadRenderTexture(width, height);
+    }
 }
 
 void Renderer::BeginDrawing()
@@ -67,17 +78,6 @@ void Renderer::DrawQuad(const Vector2 &position, float rotation, const Vector2 &
         rotation, color);
 }
 
-void Renderer::DrawQuad(const Matrix4 &transform, const Color &color)
-{
-    Vector3 position = transform.GetPosition();
-    Quaternion rotation = transform.GetRotation();
-    Vector3 size = transform.GetScale();
-    float floatRotation = 0;
-    Vector3 axis;
-    rotation.ToAngleAxis(floatRotation, axis);
-    Renderer::DrawQuad({position.x, position.y}, floatRotation, {size.x, size.y}, color);
-}
-
 void Renderer::DrawText(const std::string &text, const Vector2 &position, int fontSize,
                         const Color &color)
 {
@@ -92,6 +92,17 @@ void Renderer::DrawFPS(const Vector2 &position, int fontSize, const Color &color
 void Renderer::End2DMode()
 {
     ::EndMode2D();
+}
+
+void Renderer::BeginMode3D(const CameraComponent &camera)
+{
+    ::BeginMode3D({camera.Position, camera.Target, camera.Up, camera.Fov,
+                   static_cast<int>(camera.Projection)});
+}
+
+void Renderer::EndMode3D()
+{
+    ::EndMode3D();
 }
 
 } // namespace Lumen
