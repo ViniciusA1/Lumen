@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Lumen/UI/Style/Style.hpp"
+
 namespace Lumen
 {
 
@@ -12,8 +14,10 @@ public:
     static void Begin();
     static void End();
 
+    static void SetStyle(const Style &style);
+
 private:
-    static void SetStyle();
+    static Style m_Style;
 };
 
 } // namespace Lumen
