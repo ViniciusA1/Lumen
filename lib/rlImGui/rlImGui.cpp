@@ -256,6 +256,7 @@ void SetupFontAwesome(void)
     icons_config.RasterizerMultiply = 1.0f;
     icons_config.OversampleH = 2;
     icons_config.OversampleV = 1;
+    icons_config.GlyphOffset.y += 2;
 
     icons_config.GlyphRanges = icons_ranges;
 
@@ -263,7 +264,7 @@ void SetupFontAwesome(void)
 
     io.Fonts->AddFontFromMemoryCompressedTTF(
         (void *)fa_solid_900_compressed_data, fa_solid_900_compressed_size,
-        FONT_AWESOME_ICON_SIZE, &icons_config, icons_ranges);
+        FONT_AWESOME_ICON_SIZE * 2.0f / 3.0f, &icons_config, icons_ranges);
 #endif
 }
 
