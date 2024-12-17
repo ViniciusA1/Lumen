@@ -5,14 +5,14 @@
 namespace Lumen
 {
 
-std::unordered_map<LogLevel, std::vector<std::string>> Log::s_Logs;
+std::map<LogLevel, std::map<std::string, unsigned long>> Log::s_Logs;
 
 void Log::Init()
 {
     SetTraceLogCallback(LogCallback);
 }
 
-std::unordered_map<LogLevel, std::vector<std::string>> &Log::GetLogs()
+std::map<LogLevel, std::map<std::string, unsigned long>> &Log::GetLogs()
 {
     return s_Logs;
 }
@@ -44,7 +44,16 @@ void Log::LogCallback(int logType, const char *text, va_list args)
         break;
     }
 
-    s_Logs[level].emplace_back(buffer.data());
+    auto &stringMap = s_Logs[level];
+    auto it = stringMap.find(buffer.data());
+    if (it != stringMap.end())
+    {
+        it->second++;
+    }
+    else
+    {
+        stringMap[buffer.data()] = 1;
+    }
 }
 
 } // namespace Lumen
