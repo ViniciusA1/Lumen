@@ -8,6 +8,9 @@ namespace Lumen
 class Path
 {
 public:
+    static const char PreferredSeparator = std::filesystem::path::preferred_separator;
+
+public:
     Path();
     Path(std::filesystem::path path);
 
@@ -55,3 +58,16 @@ private:
 };
 
 } // namespace Lumen
+
+namespace std
+{
+
+template <> struct hash<Lumen::Path>
+{
+    size_t operator()(const Lumen::Path &path) const
+    {
+        return std::hash<std::string>{}(path.String());
+    }
+};
+
+} // namespace std

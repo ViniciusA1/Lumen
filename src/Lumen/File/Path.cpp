@@ -3,7 +3,7 @@
 namespace Lumen
 {
 
-Path::Path() : m_Path(".")
+Path::Path() : m_Path("")
 {
 }
 
