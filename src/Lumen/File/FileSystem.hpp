@@ -30,6 +30,8 @@ public:
     static std::filesystem::space_info GetSpace(const Path &path);
     static bool IsDirectory(const Path &path);
     static bool IsFile(const Path &path);
+    static std::string LastDateModified(const Path &path);
+    static std::filesystem::file_time_type LastWriteTime(const Path &path);
     static void SetCurrentPath(const Path &path);
     static void SetPermissions(const Path &path, std::filesystem::perms permissions);
 };

@@ -94,6 +94,24 @@ bool FileSystem::IsFile(const Path &path)
     return std::filesystem::is_regular_file(path);
 }
 
+std::string FileSystem::LastDateModified(const Path &path)
+{
+    auto fileTime = std::filesystem::last_write_time(path);
+    auto timePoint = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+        fileTime - std::filesystem::file_time_type::clock::now() +
+        std::chrono::system_clock::now());
+
+    std::time_t cftime = std::chrono::system_clock::to_time_t(timePoint);
+    std::stringstream timeStream;
+    timeStream << std::put_time(std::localtime(&cftime), "%d/%m/%Y %H:%M:%S");
+    return timeStream.str();
+}
+
+std::filesystem::file_time_type FileSystem::LastWriteTime(const Path &path)
+{
+    return std::filesystem::last_write_time(path);
+}
+
 void FileSystem::SetCurrentPath(const Path &path)
 {
     std::filesystem::current_path(path);
