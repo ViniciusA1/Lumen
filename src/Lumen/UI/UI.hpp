@@ -2,22 +2,17 @@
 
 #include "Lumen/UI/Style/Style.hpp"
 
-namespace Lumen
+namespace UI = ImGui;
+
+namespace ImGui
 {
 
-class UI
-{
-public:
-    static void Init();
-    static void Shutdown();
+void Init();
+void Shutdown();
 
-    static void Begin();
-    static void End();
+void BeginUI();
+void EndUI();
 
-    static void SetStyle(const Style &style);
+void SetStyle(const Lumen::Style &style);
 
-private:
-    static Style m_Style;
-};
-
-} // namespace Lumen
+} // namespace ImGui

@@ -4,42 +4,42 @@
 #include "imgui.h"
 #include "rlImGui.h"
 
-namespace Lumen
+namespace ImGui
 {
 
-Style UI::m_Style;
+static Lumen::Style s_Style;
 
-void UI::Init()
+void Init()
 {
     rlImGuiSetup(true);
-    StyleSerializer serializer;
-    if (serializer.Deserialize({"assets/UI/Style/Dark.json"}, m_Style))
+    Lumen::StyleSerializer serializer;
+    if (serializer.Deserialize({"assets/UI/Style/Dark.json"}, s_Style))
     {
-        SetStyle(m_Style);
+        SetStyle(s_Style);
     }
 }
 
-void UI::Shutdown()
+void Shutdown()
 {
     rlImGuiShutdown();
 }
 
-void UI::Begin()
+void BeginUI()
 {
     rlImGuiBegin();
-    Renderer::BeginRenderTexture();
+    Lumen::Renderer::BeginRenderTexture();
 }
 
-void UI::End()
+void EndUI()
 {
-    Renderer::EndRenderTexture();
+    Lumen::Renderer::EndRenderTexture();
     rlImGuiEnd();
 }
 
-void UI::SetStyle(const Style &style)
+void SetStyle(const Lumen::Style &style)
 {
     ImGui::GetStyle() = style.GetImGuiStyle();
-    m_Style = style;
+    s_Style = style;
 }
 
-} // namespace Lumen
+} // namespace ImGui

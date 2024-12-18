@@ -34,7 +34,7 @@ void Application::Run()
     {
         Input::PollEvents();
         Renderer::BeginDrawing();
-        UI::Begin();
+        UI::BeginUI();
         Renderer::Clear();
 
         Renderer::DrawFPS({0, 0}, 20, Color::Green);
@@ -50,7 +50,7 @@ void Application::Run()
             }
         }
 
-        UI::End();
+        UI::EndUI();
         Renderer::EndDrawing();
     }
 }
