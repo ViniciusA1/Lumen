@@ -17,6 +17,11 @@ struct AssetMetadata
         : ID(id), Name(std::move(name)), Path(std::move(path))
     {
     }
+
+    AssetMetadata(std::string name, class Path path)
+        : AssetMetadata(UUID(), std::move(name), std::move(path))
+    {
+    }
 };
 
 class Asset
