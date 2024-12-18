@@ -112,8 +112,8 @@ void Window::SetFocused()
 
 void Window::SetIcon(Ref<Image> image)
 {
-    m_WinData.Icon = std::move(image);
     ::SetWindowIcon(*image);
+    m_WinData.Icon = std::move(image);
 }
 
 void Window::SetMaxSize(int width, int height)
