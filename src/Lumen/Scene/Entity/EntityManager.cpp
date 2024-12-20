@@ -1,4 +1,5 @@
 #include "Lumen/Scene/Entity/EntityManager.hpp"
+#include "entt/entity/entity.hpp"
 
 namespace Lumen
 {
@@ -27,7 +28,7 @@ Entity EntityManager::CopyEntity(Entity &entity)
     Entity newEntity = m_Registry.create();
     AddComponent<IDComponent>(newEntity, UUID());
     AddComponent<TagComponent>(newEntity, GetComponent<TagComponent>(entity).Tag);
-    CopyComponent(CopyableComponents{}, newEntity, entity);
+    CopyComponent(CopyableComponentGroup{}, newEntity, entity);
     return newEntity;
 }
 
@@ -51,6 +52,19 @@ Entity EntityManager::GetEntity(const UUID &uuid)
     if (m_EntityMap.find(uuid) != m_EntityMap.end())
     {
         return m_EntityMap[uuid];
+    }
+    return {};
+}
+
+Entity EntityManager::GetEntity(entt::entity entity)
+{
+    if (entity != entt::null)
+    {
+        UUID uuid = m_Registry.get<IDComponent>(entity).ID;
+        if (m_EntityMap.find(uuid) != m_EntityMap.end())
+        {
+            return m_EntityMap[uuid];
+        }
     }
     return {};
 }

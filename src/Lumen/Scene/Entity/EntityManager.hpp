@@ -25,7 +25,8 @@ public:
     Entity CopyEntity(Entity &entity);
     void DestroyEntity(const UUID &uuid);
     void DestroyEntity(Entity &entity);
-    [[nodiscard]] Entity GetEntity(const UUID &uuid);
+    Entity GetEntity(const UUID &uuid);
+    Entity GetEntity(entt::entity entity);
     template <typename... Components> auto GetAllEntitiesWith();
 
     template <typename T, typename... Args>
