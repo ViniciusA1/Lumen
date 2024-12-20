@@ -12,22 +12,48 @@ namespace Lumen
 
 template <typename... Component> struct ComponentGroup
 {
+    template <typename Callback> static void ForEachComponent(Callback callback)
+    {
+        ([&]() { callback.template operator()<Component>(); }(), ...);
+    }
 };
 
-using CoreComponents = ComponentGroup<IDComponent, TagComponent, TransformComponent>;
+using CoreComponentGroup = ComponentGroup<IDComponent, TagComponent, TransformComponent>;
 
-using GraphicsComponents = ComponentGroup<CameraComponent, SpriteRendererComponent>;
+using GraphicsComponentGroup = ComponentGroup<CameraComponent, SpriteRendererComponent>;
 
-using PhysicsComponents = ComponentGroup<VelocityComponent>;
+using PhysicsComponentGroup = ComponentGroup<VelocityComponent>;
 
-using UIComponents = ComponentGroup<>;
+using UIComponentGroup = ComponentGroup<>;
 
-using AllComponents =
+using AllComponentGroup =
     ComponentGroup<IDComponent, TagComponent, TransformComponent, CameraComponent,
                    SpriteRendererComponent, VelocityComponent>;
 
-using CopyableComponents =
+using CopyableComponentGroup =
     ComponentGroup<TagComponent, TransformComponent, CameraComponent,
                    SpriteRendererComponent, VelocityComponent>;
+
+template <typename... Group> struct ComponentGroupCollection
+{
+    template <typename Callback> static void ForEachGroupAndComponent(Callback callback)
+    {
+        ([&]() { Group::ForEachComponent(callback); }(), ...);
+    }
+
+    template <typename GroupCallback>
+    static void ForEachGroup(GroupCallback groupCallback)
+    {
+        ([&]() { groupCallback.template operator()<Group>(); }(), ...);
+    }
+};
+
+using AllGroupCollection =
+    ComponentGroupCollection<CoreComponentGroup, GraphicsComponentGroup,
+                             PhysicsComponentGroup, UIComponentGroup>;
+
+using IterableGroupCollection =
+    ComponentGroupCollection<GraphicsComponentGroup, PhysicsComponentGroup,
+                             UIComponentGroup>;
 
 } // namespace Lumen
