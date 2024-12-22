@@ -60,11 +60,6 @@ void Renderer::Clear()
     ::ClearBackground(s_Color);
 }
 
-void Renderer::Begin2DMode()
-{
-    ::BeginMode2D({});
-}
-
 void Renderer::DrawQuad(const Vector2 &position, const Vector2 &size, const Color &color)
 {
     ::DrawRectangleV({position.x - (size.x / 2), position.y - (size.y / 2)}, size, color);
@@ -89,18 +84,13 @@ void Renderer::DrawFPS(const Vector2 &position, int fontSize, const Color &color
     ::DrawFPS(position.x, position.y);
 }
 
-void Renderer::End2DMode()
-{
-    ::EndMode2D();
-}
-
-void Renderer::BeginMode3D(const CameraComponent &camera)
+void Renderer::BeginCameraMode(const CameraComponent &camera)
 {
     ::BeginMode3D({camera.Position, camera.Target, camera.Up, camera.Fov,
                    static_cast<int>(camera.Projection)});
 }
 
-void Renderer::EndMode3D()
+void Renderer::EndCameraMode()
 {
     ::EndMode3D();
 }
