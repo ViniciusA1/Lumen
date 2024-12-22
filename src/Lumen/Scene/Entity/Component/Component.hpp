@@ -34,6 +34,9 @@ using CopyableComponentGroup =
     ComponentGroup<TagComponent, TransformComponent, CameraComponent,
                    SpriteRendererComponent, VelocityComponent>;
 
+using DrawableComponentGroup = ComponentGroup<TransformComponent, CameraComponent,
+                                              SpriteRendererComponent, VelocityComponent>;
+
 template <typename... Group> struct ComponentGroupCollection
 {
     template <typename Callback> static void ForEachGroupAndComponent(Callback callback)
