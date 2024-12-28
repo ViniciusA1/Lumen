@@ -8,7 +8,7 @@ namespace Lumen
 Ref<Asset> FontImporter::ImportFont(const AssetMetadata &metadata)
 {
     Ref<Font> font = CreateRef<Font>(metadata, LoadFont(metadata.Path.String().c_str()));
-    return nullptr;
+    return std::static_pointer_cast<Asset>(font);
 }
 
 } // namespace Lumen
