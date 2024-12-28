@@ -1,4 +1,5 @@
 #include "Lumen/Graphics/Color.hpp"
+#include "Lumen/Math/Math.hpp"
 #include <raylib.h>
 
 namespace Lumen
@@ -39,6 +40,103 @@ Color::Color(unsigned char red, unsigned char green, unsigned char blue,
              unsigned char alpha)
     : r(red), g(green), b(blue), a(alpha)
 {
+}
+
+Color::Color(const ::Color &color) : r(color.r), g(color.g), b(color.b), a(color.a)
+{
+}
+
+Vector4 Color::Normalize() const
+{
+    return Vector4{r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f};
+}
+
+Vector3 Color::ToHSV() const
+{
+    return ::ColorToHSV(*this);
+}
+
+int Color::ToInt() const
+{
+    return (r << 24) | (g << 16) | (b << 8) | a;
+}
+
+Color Color::Alpha(const Color &color, float alpha)
+{
+    alpha = Math::Clamp01(alpha);
+    return {color.r, color.g, color.b, static_cast<unsigned char>(alpha * 255)};
+}
+
+Color Color::AlphaBlend(const Color &dst, const Color &src, const Color &tint)
+{
+    return ::ColorAlphaBlend(dst, src, tint);
+}
+
+Color Color::Brightness(const Color &color, float factor)
+{
+    return {static_cast<unsigned char>(Math::Clamp(color.r * factor, 0.0f, 255.0f)),
+            static_cast<unsigned char>(Math::Clamp(color.g * factor, 0.0f, 255.0f)),
+            static_cast<unsigned char>(Math::Clamp(color.b * factor, 0.0f, 255.0f)),
+            color.a};
+}
+
+Color Color::Contrast(const Color &color, float contrast)
+{
+    return ::ColorContrast(color, contrast);
+}
+
+Color Color::Fade(const Color &color, float alpha)
+{
+    alpha = Math::Clamp01(alpha);
+    return {color.r, color.g, color.b, static_cast<unsigned char>(alpha * 255)};
+}
+
+Color Color::FromHexa(unsigned int hexValue)
+{
+    return {static_cast<unsigned char>((hexValue >> 24) & 0xFF),
+            static_cast<unsigned char>((hexValue >> 16) & 0xFF),
+            static_cast<unsigned char>((hexValue >> 8) & 0xFF),
+            static_cast<unsigned char>(hexValue & 0xFF)};
+}
+
+Color Color::FromHSV(float hue, float saturation, float value)
+{
+    return ::ColorFromHSV(hue, saturation, value);
+}
+
+Color Color::FromNormalized(const Vector4 &normalized)
+{
+    return {static_cast<unsigned char>(normalized.x * 255),
+            static_cast<unsigned char>(normalized.y * 255),
+            static_cast<unsigned char>(normalized.z * 255),
+            static_cast<unsigned char>(normalized.w * 255)};
+}
+
+Color Color::Lerp(const Color &color1, const Color &color2, float factor)
+{
+    factor = Math::Clamp01(factor);
+    return {static_cast<unsigned char>(color1.r + factor * (color2.r - color1.r)),
+            static_cast<unsigned char>(color1.g + factor * (color2.g - color1.g)),
+            static_cast<unsigned char>(color1.b + factor * (color2.b - color1.b)),
+            static_cast<unsigned char>(color1.a + factor * (color2.a - color1.a))};
+}
+
+Color Color::Tint(const Color &color, const Color &tint)
+{
+    return {static_cast<unsigned char>((color.r * tint.r) / 255),
+            static_cast<unsigned char>((color.g * tint.g) / 255),
+            static_cast<unsigned char>((color.b * tint.b) / 255),
+            static_cast<unsigned char>((color.a * tint.a) / 255)};
+}
+
+bool Color::operator==(const Color &other) const
+{
+    return r == other.r && g == other.g && b == other.b && a == other.a;
+}
+
+bool Color::operator!=(const Color &other) const
+{
+    return !(*this == other);
 }
 
 Color::operator ::Color() const

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Lumen/Math/Vector3.hpp"
+#include "Lumen/Math/Vector4.hpp"
+
 struct Color;
 
 namespace Lumen
@@ -41,7 +44,25 @@ public:
     Color();
     Color(unsigned char red, unsigned char green, unsigned char blue,
           unsigned char alpha = 255);
+    Color(const ::Color &color);
 
+    [[nodiscard]] Vector4 Normalize() const;
+    [[nodiscard]] Vector3 ToHSV() const;
+    [[nodiscard]] int ToInt() const;
+
+    static Color Alpha(const Color &color, float alpha);
+    static Color AlphaBlend(const Color &dst, const Color &src, const Color &tint);
+    static Color Brightness(const Color &color, float factor);
+    static Color Contrast(const Color &color, float contrast);
+    static Color Fade(const Color &color, float alpha);
+    static Color FromHexa(unsigned int hexValue);
+    static Color FromHSV(float hue, float saturation, float value);
+    static Color FromNormalized(const Vector4 &normalized);
+    static Color Lerp(const Color &color1, const Color &color2, float factor);
+    static Color Tint(const Color &color, const Color &tint);
+
+    bool operator==(const Color &other) const;
+    bool operator!=(const Color &other) const;
     operator ::Color() const;
 };
 
