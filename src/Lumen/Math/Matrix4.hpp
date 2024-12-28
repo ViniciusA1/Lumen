@@ -23,9 +23,14 @@ public:
 
     [[nodiscard]] float Determinant() const;
     [[nodiscard]] Matrix4 Inverse() const;
+    std::array<float, 16> &ToFloat16();
     [[nodiscard]] float Trace() const;
     [[nodiscard]] Matrix4 Transpose() const;
 
+    static void DecomposeTransform(const Matrix4 &transform, Vector3 &translation,
+                                   Vector3 &rotation, Vector3 &scale);
+    static void DecomposeView(const Matrix4 &view, Vector3 &translation, Vector3 &target,
+                              Vector3 &up);
     static Matrix4 Frustum(float left, float right, float bottom, float top, float near,
                            float far);
     static Matrix4 LookAt(const Vector3 &eye, const Vector3 &target, const Vector3 &up);
@@ -39,6 +44,8 @@ public:
     static Matrix4 RotateXYZ(const Vector3 &angle);
     static Matrix4 RotateZYX(const Vector3 &angle);
     static Matrix4 Scale(float x, float y, float z);
+    static Matrix4 Transform(const Vector3 &translation, const Vector3 &rotation,
+                             const Vector3 &scale);
     static Matrix4 Translate(float x, float y, float z);
 
     float &operator[](std::size_t index);

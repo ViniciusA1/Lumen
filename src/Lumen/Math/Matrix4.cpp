@@ -1,4 +1,5 @@
 #include "Lumen/Math/Matrix4.hpp"
+#include "Lumen/Math/Quaternion.hpp"
 #include "Lumen/Math/Vector3.hpp"
 #include <cmath>
 #include <raymath.h>
@@ -36,9 +37,10 @@ Matrix4::Matrix4(std::initializer_list<float> list)
 }
 
 Matrix4::Matrix4(const ::Matrix &matrix)
-    : m({matrix.m0, matrix.m4, matrix.m8, matrix.m12, matrix.m1, matrix.m5, matrix.m9,
-         matrix.m13, matrix.m2, matrix.m6, matrix.m10, matrix.m14, matrix.m3, matrix.m7,
-         matrix.m11, matrix.m15})
+    : m({matrix.m0, matrix.m1, matrix.m2, matrix.m3, matrix.m4, matrix.m5, matrix.m6,
+         matrix.m7, matrix.m8, matrix.m9, matrix.m10, matrix.m11, matrix.m12, matrix.m13,
+         matrix.m14, matrix.m15})
+
 {
 }
 
@@ -104,6 +106,11 @@ Matrix4 Matrix4::Inverse() const
     return inverse;
 }
 
+std::array<float, 16> &Matrix4::ToFloat16()
+{
+    return m;
+}
+
 float Matrix4::Trace() const
 {
     return m[0] + m[5] + m[10] + m[15];
@@ -133,6 +140,64 @@ Matrix4 Matrix4::Transpose() const
     return transpose;
 }
 
+void Matrix4::DecomposeTransform(const Matrix4 &transform, Vector3 &translation,
+                                 Vector3 &rotation, Vector3 &scale)
+{
+    translation.x = transform.m[12];
+    translation.y = transform.m[13];
+    translation.z = transform.m[14];
+
+    const float a = transform.m[0];
+    const float b = transform.m[4];
+    const float c = transform.m[8];
+    const float d = transform.m[1];
+    const float e = transform.m[5];
+    const float f = transform.m[9];
+    const float g = transform.m[2];
+    const float h = transform.m[6];
+    const float i = transform.m[10];
+    const float A = e * i - f * h;
+    const float B = f * g - d * i;
+    const float C = d * h - e * g;
+
+    const float det = a * A + b * B + c * C;
+    Vector3 abc = {a, b, c};
+    Vector3 def = {d, e, f};
+    Vector3 ghi = {g, h, i};
+
+    float scalex = abc.Length();
+    float scaley = def.Length();
+    float scalez = ghi.Length();
+    Vector3 s = {scalex, scaley, scalez};
+
+    if (det < 0)
+        s *= -1;
+
+    scale = s;
+
+    Matrix4 clone = transform;
+    if (det != 0.0f)
+    {
+        clone.m[0] /= s.x;
+        clone.m[5] /= s.y;
+        clone.m[10] /= s.z;
+
+        rotation = Quaternion::FromMatrix(clone).ToEuler();
+    }
+    else
+    {
+        rotation = Quaternion::Identity.ToEuler();
+    }
+}
+
+void Matrix4::DecomposeView(const Matrix4 &view, Vector3 &translation, Vector3 &target,
+                            Vector3 &up)
+{
+    Matrix4 inverse = view.Inverse();
+    translation = Vector3{inverse.m[12], inverse.m[13], inverse.m[14]};
+    target = Vector3{inverse.m[8], inverse.m[9], inverse.m[10]}.Normalized();
+}
+
 Matrix4 Matrix4::Frustum(float left, float right, float bottom, float top, float near,
                          float far)
 {
@@ -155,28 +220,24 @@ Matrix4 Matrix4::Frustum(float left, float right, float bottom, float top, float
 
 Matrix4 Matrix4::LookAt(const Vector3 &eye, const Vector3 &target, const Vector3 &up)
 {
-    Matrix4 result;
-
-    float length = 0.0f;
-    float ilength = 0.0f;
-
     Vector3 vz = (eye - target).Normalized();
     Vector3 vx = Vector3::Cross(up, vz).Normalized();
     Vector3 vy = Vector3::Cross(vz, vx);
 
-    result[0] = vx.x;
-    result[1] = vy.x;
-    result[2] = vz.x;
-    result[4] = vx.y;
-    result[5] = vy.y;
-    result[6] = vz.y;
-    result[8] = vx.z;
-    result[9] = vy.z;
-    result[10] = vz.z;
-    result[12] = Vector3::Dot(vx, eye);
-    result[13] = Vector3::Dot(vy, eye);
-    result[14] = Vector3::Dot(vz, eye);
-    result[15] = 1.0f;
+    Matrix4 result;
+    result.m[0] = vx.x;
+    result.m[1] = vy.x;
+    result.m[2] = vz.x;
+    result.m[4] = vx.y;
+    result.m[5] = vy.y;
+    result.m[6] = vz.y;
+    result.m[8] = vx.z;
+    result.m[9] = vy.z;
+    result.m[10] = vz.z;
+    result.m[12] = -Vector3::Dot(vx, eye);
+    result.m[13] = -Vector3::Dot(vy, eye);
+    result.m[14] = -Vector3::Dot(vz, eye);
+    result.m[15] = 1.0f;
 
     return result;
 }
@@ -342,10 +403,19 @@ Matrix4 Matrix4::Scale(float x, float y, float z)
                     0.0f, 0.0f, 1.0f});
 }
 
+Matrix4 Matrix4::Transform(const Vector3 &position, const Vector3 &rotation,
+                           const Vector3 &scale)
+{
+    Matrix4 translationMatrix = Translate(position.x, position.y, position.z);
+    Matrix4 rotationMatrix = RotateXYZ(rotation);
+    Matrix4 scaleMatrix = Scale(scale.x, scale.y, scale.z);
+    return translationMatrix * rotationMatrix * scaleMatrix;
+}
+
 Matrix4 Matrix4::Translate(float x, float y, float z)
 {
-    return Matrix4({1.0f, 0.0f, 0.0f, x, 0.0f, 1.0f, 0.0f, y, 0.0f, 0.0f, 1.0f, z, 0.0f,
-                    0.0f, 0.0f, 1.0f});
+    return {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f, x,    y,    z,    1.0f};
 }
 
 float &Matrix4::operator[](std::size_t index)
