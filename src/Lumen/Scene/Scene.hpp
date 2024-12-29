@@ -19,6 +19,7 @@ public:
     Scene() = default;
 
     CameraComponent &GetMainCamera();
+    Entity GetMainCameraEntity();
     [[nodiscard]] SceneState GetState() const;
     World &GetWorld();
 

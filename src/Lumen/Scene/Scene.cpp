@@ -8,6 +8,11 @@ CameraComponent &Scene::GetMainCamera()
     return m_World.GetEntityManager().GetComponent<CameraComponent>(m_MainCamera);
 }
 
+Entity Scene::GetMainCameraEntity()
+{
+    return m_MainCamera;
+}
+
 World &Scene::GetWorld()
 {
     return m_World;
