@@ -15,8 +15,7 @@ void SpriteRendererSystem::OnUpdate()
 
     for (const auto &[entity, transform, sprite] : query.Each())
     {
-        Renderer::DrawQuad({transform.Position.x, transform.Position.y}, {100, 100},
-                           sprite.Color);
+        Renderer::DrawQuad(transform, sprite.Color);
     }
 }
 
