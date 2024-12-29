@@ -27,17 +27,14 @@ Application::~Application()
 
 void Application::Run()
 {
-    Renderer::SetClearColor(Color::Black);
-    Renderer::CreateRenderTexture();
+    Renderer::CreateDefaultRenderTexture();
 
     while (m_IsRunning)
     {
         Input::PollEvents();
         Renderer::BeginDrawing();
         UI::BeginUI();
-        Renderer::Clear();
-
-        Renderer::DrawFPS({0, 0}, 20, Color::Green);
+        Renderer::ClearBackground(Color::Black);
 
         EventBus::ProcessEvents();
 
@@ -49,6 +46,8 @@ void Application::Run()
                 layer->OnDraw();
             }
         }
+
+        Renderer::DrawFPS({0, 0}, 20, Color::Green);
 
         UI::EndUI();
         Renderer::EndDrawing();
