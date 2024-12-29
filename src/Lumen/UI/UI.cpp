@@ -1,4 +1,5 @@
 #include "Lumen/UI/UI.hpp"
+#include "ImGuizmo.h"
 #include "Lumen/Graphics/Renderer.hpp"
 #include "Lumen/UI/Style/StyleSerializer.hpp"
 #include "imgui.h"
@@ -27,12 +28,13 @@ void Shutdown()
 void BeginUI()
 {
     rlImGuiBegin();
-    Lumen::Renderer::BeginRenderTexture();
+    ImGuizmo::BeginFrame();
+    Lumen::Renderer::BeginTextureMode();
 }
 
 void EndUI()
 {
-    Lumen::Renderer::EndRenderTexture();
+    Lumen::Renderer::EndTextureMode();
     rlImGuiEnd();
 }
 
@@ -40,6 +42,12 @@ void SetStyle(const Lumen::Style &style)
 {
     ImGui::GetStyle() = style.GetImGuiStyle();
     s_Style = style;
+}
+
+void SearchBar(char *buffer, std::size_t size)
+{
+    ImGui::InputTextWithHint("##Search", ICON_FA_MAGNIFYING_GLASS " Search...", buffer,
+                             size);
 }
 
 } // namespace ImGui
