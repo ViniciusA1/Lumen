@@ -27,7 +27,7 @@ void Renderer::BeginDrawing()
 
 void Renderer::BeginScissorMode(const Rectangle &region)
 {
-    ::BeginScissorMode(region.X, region.Y, region.Width, region.Height);
+    ::BeginScissorMode(region.x, region.y, region.Width, region.Height);
 }
 
 void Renderer::BeginShaderMode(const Ref<Shader> &shader)

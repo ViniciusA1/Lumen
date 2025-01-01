@@ -34,7 +34,7 @@ void Gizmo::DrawTransform(TransformComponent &transform, const CameraComponent &
         Matrix4::Transform(transform.Position, transform.Rotation, transform.Scale);
 
     ImGuizmo::SetOrthographic(camera.Projection == ProjectionType::Orthographic);
-    ImGuizmo::SetRect(viewport.X, viewport.Y, viewport.Width, viewport.Height);
+    ImGuizmo::SetRect(viewport.x, viewport.y, viewport.Width, viewport.Height);
     ImGuizmo::SetDrawlist();
 
     ImGuizmo::Manipulate(view.ToFloat16().data(), projection.ToFloat16().data(),
