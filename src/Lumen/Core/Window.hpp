@@ -2,6 +2,7 @@
 
 #include "Lumen/Core/Memory.hpp"
 #include "Lumen/Graphics/Image.hpp"
+#include "Lumen/Graphics/Texture.hpp"
 #include "Lumen/Math/Vector2.hpp"
 #include <string>
 
@@ -33,7 +34,7 @@ struct WindowArgs
     std::string Title;
     int Width;
     int Height;
-    Ref<Image> Icon;
+    Ref<Texture2D> Icon;
 
     WindowArgs(std::string title, int width, int height)
         : Title(std::move(title)), Width(width), Height(height)
@@ -59,14 +60,14 @@ public:
     [[nodiscard]] bool IsRunning() const;
     [[nodiscard]] bool IsStateEnabled(WindowFlag flag) const;
 
-    [[nodiscard]] Ref<Image> GetIcon() const;
+    [[nodiscard]] Ref<Texture2D> GetIcon() const;
     [[nodiscard]] std::string GetClipboardText() const;
     [[nodiscard]] Vector2 GetPosition() const;
     [[nodiscard]] Vector2 GetSize() const;
     [[nodiscard]] std::string GetTitle() const;
 
     void SetFocused();
-    void SetIcon(Ref<Image> image);
+    void SetIcon(const Ref<Texture2D> &icon);
     void SetMaxSize(int width, int height);
     void SetMinSize(int width, int height);
     void SetOpacity(float opacity);

@@ -79,7 +79,7 @@ bool Window::IsStateEnabled(WindowFlag flag) const
     return ::IsWindowState(static_cast<unsigned>(flag));
 }
 
-Ref<Image> Window::GetIcon() const
+Ref<Texture2D> Window::GetIcon() const
 {
     return m_WinData.Icon;
 }
@@ -110,10 +110,11 @@ void Window::SetFocused()
     ::SetWindowFocused();
 }
 
-void Window::SetIcon(Ref<Image> image)
+void Window::SetIcon(const Ref<Texture2D> &icon)
 {
-    ::SetWindowIcon(*image);
-    m_WinData.Icon = std::move(image);
+    Ref<Image> iconImage = CreateRef<Image>(::LoadImageFromTexture(*icon));
+    ::SetWindowIcon(*iconImage);
+    m_WinData.Icon = icon;
 }
 
 void Window::SetMaxSize(int width, int height)
