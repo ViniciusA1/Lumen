@@ -57,7 +57,7 @@ static void DeserializeColor(const nlohmann::json &json, ImGuiStyle &style)
             if (json["Colors"].contains(name))
             {
                 const auto &colorArray = json["Colors"][name];
-                style.Colors[field] =
+                style.Colors[static_cast<int>(field)] =
                     ImVec4(colorArray[0].get<float>(), colorArray[1].get<float>(),
                            colorArray[2].get<float>(), colorArray[3].get<float>());
             }
@@ -124,8 +124,10 @@ static void SerializeColor(nlohmann::json &json, const ImGuiStyle &style)
 {
     for (const auto &[name, field] : Style::ColorMap)
     {
-        json["Colors"][name] = {style.Colors[field].x, style.Colors[field].y,
-                                style.Colors[field].z, style.Colors[field].w};
+        json["Colors"][name] = {style.Colors[static_cast<int>(field)].x,
+                                style.Colors[static_cast<int>(field)].y,
+                                style.Colors[static_cast<int>(field)].z,
+                                style.Colors[static_cast<int>(field)].w};
     }
 }
 

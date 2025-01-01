@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Lumen/UI/UIStructures.hpp"
+
 #include "imgui.h"
 #include <map>
 #include <string>
@@ -10,8 +12,8 @@ namespace Lumen
 class Style
 {
 public:
-    static const std::map<std::string, ImGuiStyleVar_> VarMap;
-    static const std::map<std::string, ImGuiCol_> ColorMap;
+    static const std::map<std::string, UI::StyleFlags> StyleMap;
+    static const std::map<std::string, UI::ColorFlags> ColorMap;
 
 public:
     Style() = default;
