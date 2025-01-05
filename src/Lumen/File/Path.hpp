@@ -13,6 +13,7 @@ public:
 public:
     Path();
     Path(std::filesystem::path path);
+    Path(const char *path);
 
     void Clear();
     void RemoveFilename();
@@ -47,7 +48,6 @@ public:
     Path &operator=(const std::filesystem::path &path);
     bool operator==(const Path &other) const;
     bool operator!=(const Path &other) const;
-    Path operator/(const std::string &other) const;
     Path operator/(const Path &other) const;
     Path &operator/=(const std::string &other);
     Path &operator/=(const Path &other);

@@ -11,6 +11,10 @@ Path::Path(std::filesystem::path path) : m_Path(std::move(path))
 {
 }
 
+Path::Path(const char *path) : m_Path(path)
+{
+}
+
 void Path::Clear()
 {
     m_Path.clear();
@@ -160,11 +164,6 @@ bool Path::operator==(const Path &other) const
 bool Path::operator!=(const Path &other) const
 {
     return m_Path != other.m_Path;
-}
-
-Path Path::operator/(const std::string &other) const
-{
-    return {m_Path / other};
 }
 
 Path Path::operator/(const Path &other) const
