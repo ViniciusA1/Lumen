@@ -57,5 +57,6 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 
-build
+build/*
+!Build
 .cache
