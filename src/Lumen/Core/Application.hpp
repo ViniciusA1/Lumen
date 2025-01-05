@@ -5,6 +5,7 @@
 #include "Lumen/Core/Window.hpp"
 #include "Lumen/Event/LayerEvent.hpp"
 #include "Lumen/Event/WindowEvent.hpp"
+#include "Lumen/Project/Project.hpp"
 
 namespace Lumen
 {
@@ -17,17 +18,11 @@ struct ApplicationArgs
 class Application
 {
 public:
-    template <typename T> static Ref<T> Create(const ApplicationArgs &args)
-    {
-        Ref<T> instance = CreateRef<T>(args);
-        s_Instance = std::static_pointer_cast<Application>(instance);
-        return instance;
-    }
-
     Application(const ApplicationArgs &args);
     ~Application();
 
     static Application &Get() { return *s_Instance; }
+    const Project &GetProject() { return m_Project; }
     Window &GetWindow() { return m_Window; }
 
     void Run();
@@ -38,10 +33,15 @@ protected:
     void OnLayerPush(const LayerPushEvent &event);
     void OnLayerPop(const LayerPopEvent &event);
 
+protected:
     static Ref<Application> s_Instance;
+
     bool m_IsRunning = true;
+    const Project m_Project;
     Window m_Window;
     LayerStack m_LayerStack;
 };
+
+Ref<Application> CreateApplication();
 
 } // namespace Lumen

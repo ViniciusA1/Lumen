@@ -12,10 +12,13 @@ Ref<Application> Application::s_Instance = nullptr;
 
 Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
 {
+    s_Instance = Ref<Application>(this);
+
     EventBus::Subscribe<WindowResizeEvent>(BIND_EVENT(OnWindowResize));
     EventBus::Subscribe<WindowCloseEvent>(BIND_EVENT(OnWindowClose));
     EventBus::Subscribe<LayerPushEvent>(BIND_EVENT(OnLayerPush));
     EventBus::Subscribe<LayerPopEvent>(BIND_EVENT(OnLayerPop));
+
     UI::Init();
     Log::Init();
 }
