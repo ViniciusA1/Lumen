@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Lumen/Scene/World.hpp"
+
 #include <entt/entity/registry.hpp>
 
 namespace Lumen
@@ -17,9 +18,13 @@ class Scene
 {
 public:
     Scene() = default;
+    Scene(Path path, UUID uuid, std::string name);
 
+    [[nodiscard]] UUID GetID() const;
     CameraComponent &GetMainCamera();
-    Entity GetMainCameraEntity();
+    [[nodiscard]] Entity GetMainCameraEntity() const;
+    [[nodiscard]] std::string GetName() const;
+    [[nodiscard]] Path GetPath() const;
     [[nodiscard]] SceneState GetState() const;
     World &GetWorld();
 
@@ -29,9 +34,15 @@ public:
     void OnUpdate();
 
 private:
+    Path m_Path;
+    UUID m_ID;
+    std::string m_Name;
     SceneState m_State;
-    World m_World;
     Entity m_MainCamera;
+
+    World m_World;
+
+    friend class SceneSerializer;
 };
 
 } // namespace Lumen

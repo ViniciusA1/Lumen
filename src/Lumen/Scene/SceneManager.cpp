@@ -1,53 +1,77 @@
 #include "Lumen/Scene/SceneManager.hpp"
+#include "Lumen/Scene/Serializer/SceneSerializer.hpp"
+
 #include <iterator>
 
 namespace Lumen
 {
 
-Ref<Scene> SceneManager::m_ActiveScene;
-std::unordered_map<std::string, Ref<Scene>> SceneManager::m_LoadedScene;
+Ref<Scene> SceneManager::s_ActiveScene;
+std::unordered_map<UUID, Ref<Scene>> SceneManager::s_LoadedScene;
 
-Ref<Scene> SceneManager::CreateScene(const std::string &name)
+void SceneManager::CreateScene(const Path &path, const std::string &name)
 {
-    auto it = m_LoadedScene.find(name);
-
-    if (it != m_LoadedScene.end())
-    {
-        return nullptr;
-    }
-
-    Ref<Scene> newScene = CreateRef<Scene>();
-    m_LoadedScene[name] = newScene;
-    return newScene;
+    UUID uuid = UUID();
+    Ref<Scene> newScene = CreateRef<Scene>(path, uuid, name);
+    SaveScene(newScene);
 }
 
-void SceneManager::LoadScene(const std::string &name)
+void SceneManager::LoadScene(const Path &path)
 {
+    Ref<Scene> loadedScene;
+    SceneSerializer serializer(loadedScene);
+    if (serializer.Deserialize(path))
+    {
+        s_LoadedScene[loadedScene->GetID()] = std::move(loadedScene);
+    }
+}
+
+void SceneManager::SaveScene(const Ref<Scene> &scene)
+{
+    if (scene == nullptr)
+        return;
+
+    SceneSerializer serializer(scene);
+    if (serializer.Serialize(scene->GetPath()))
+    {
+    }
 }
 
 void SceneManager::UnloadScene(const std::string &name)
 {
 }
 
+void SceneManager::SetActiveScene(UUID uuid)
+{
+    auto it = s_LoadedScene.find(uuid);
+    if (it != s_LoadedScene.end())
+    {
+        s_ActiveScene = it->second;
+    }
+}
+
 void SceneManager::SetActiveScene(const std::string &name)
 {
-    auto it = m_LoadedScene.find(name);
-    if (it != m_LoadedScene.end())
+    for (const auto &[uuid, scene] : s_LoadedScene)
     {
-        m_ActiveScene = it->second;
+        if (scene->GetName() == name)
+        {
+            SetActiveScene(uuid);
+            break;
+        }
     }
 }
 
 Ref<Scene> SceneManager::GetActiveScene()
 {
-    return m_ActiveScene;
+    return s_ActiveScene;
 }
 
-Ref<Scene> SceneManager::GetScene(const std::string &name)
+Ref<Scene> SceneManager::GetScene(UUID uuid)
 {
-    auto it = m_LoadedScene.find(name);
+    auto it = s_LoadedScene.find(uuid);
 
-    if (it != m_LoadedScene.end())
+    if (it != s_LoadedScene.end())
     {
         return it->second;
     }
@@ -55,14 +79,27 @@ Ref<Scene> SceneManager::GetScene(const std::string &name)
     return nullptr;
 }
 
+Ref<Scene> SceneManager::GetScene(const std::string &name)
+{
+    for (const auto &[uuid, scene] : s_LoadedScene)
+    {
+        if (scene->GetName() == name)
+        {
+            return scene;
+        }
+    }
+
+    return nullptr;
+}
+
 Ref<Scene> SceneManager::GetSceneAt(int index)
 {
-    if (index >= m_LoadedScene.size())
+    if (index >= s_LoadedScene.size())
     {
         return nullptr;
     }
 
-    auto it = m_LoadedScene.begin();
+    auto it = s_LoadedScene.begin();
     std::advance(it, index);
     return it->second;
 }

@@ -3,14 +3,35 @@
 namespace Lumen
 {
 
+Scene::Scene(Path path, UUID uuid, std::string name)
+    : m_Path(std::move(path)), m_ID(uuid), m_Name(std::move(name)),
+      m_State(SceneState::Edit)
+{
+}
+
+UUID Scene::GetID() const
+{
+    return m_ID;
+}
+
 CameraComponent &Scene::GetMainCamera()
 {
     return m_World.GetEntityManager().GetComponent<CameraComponent>(m_MainCamera);
 }
 
-Entity Scene::GetMainCameraEntity()
+Entity Scene::GetMainCameraEntity() const
 {
     return m_MainCamera;
+}
+
+std::string Scene::GetName() const
+{
+    return m_Name;
+}
+
+Path Scene::GetPath() const
+{
+    return m_Path;
 }
 
 World &Scene::GetWorld()
