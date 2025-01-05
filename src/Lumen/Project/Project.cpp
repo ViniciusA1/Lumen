@@ -1,0 +1,19 @@
+#include "Lumen/Project/Project.hpp"
+
+namespace Lumen
+{
+
+Project::Project(std::string name, std::string lastModified, Path rootDirectory,
+                 Path assetDirectory, Path startScene)
+    : Name(std::move(name)), LastModified(std::move(lastModified)),
+      RootDirectory(std::move(rootDirectory)), AssetDirectory(std::move(assetDirectory)),
+      StartScene(std::move(startScene))
+{
+}
+
+bool Project::operator==(const Project &other) const
+{
+    return Name == other.Name && RootDirectory == other.RootDirectory;
+}
+
+} // namespace Lumen
