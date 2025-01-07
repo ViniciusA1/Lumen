@@ -62,6 +62,9 @@ void PopStyleColor(int count = 1);
 
 void SetConfigFlags(ConfigFlags flags);
 
+void Columns(int count = 1, const char *id = nullptr, bool borders = true);
+void NextColumn();
+void NewLine();
 void SameLine(float offsetX = 0.0f, float spacing = -1.0f);
 void Separator();
 void Spacing();
@@ -133,6 +136,7 @@ void TableSetColumnIndex(int column);
 void TableSetupScrollFreeze(int cols, int rows);
 
 void Text(const std::string &text);
+void TextWrapped(const std::string &text);
 
 bool TreeNode(const std::string &label, TreeNodeFlags flags = TreeNodeFlags::None);
 void TreePop();

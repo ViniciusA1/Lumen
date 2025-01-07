@@ -174,6 +174,21 @@ void SetConfigFlags(ConfigFlags flags)
     ImGui::GetIO().ConfigFlags |= static_cast<int>(flags);
 }
 
+void Columns(int count, const char *id, bool borders)
+{
+    ImGui::Columns(count, id, borders);
+}
+
+void NextColumn()
+{
+    ImGui::NextColumn();
+}
+
+void NewLine()
+{
+    ImGui::NewLine();
+}
+
 void SameLine(float offsetX, float spacing)
 {
     ImGui::SameLine(offsetX, spacing);
@@ -392,6 +407,11 @@ void TableSetupScrollFreeze(int cols, int rows)
 void Text(const std::string &text)
 {
     ImGui::Text("%s", text.c_str());
+}
+
+void TextWrapped(const std::string &text)
+{
+    ImGui::TextWrapped("%s", text.c_str());
 }
 
 bool TreeNode(const std::string &label, TreeNodeFlags flags)
