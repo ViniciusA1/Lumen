@@ -29,6 +29,30 @@ bool FileSystem::CopyFile(const Path &source, const Path &destination)
     return std::filesystem::copy_file(source, destination);
 }
 
+bool FileSystem::CopyFolder(const Path &source, const Path &destination)
+{
+    bool result = true;
+
+    for (const auto &entry : std::filesystem::recursive_directory_iterator(source))
+    {
+        const auto &path = entry.path();
+        auto relativePath = std::filesystem::relative(path, source);
+        auto destinationPath = (std::filesystem::path)destination / relativePath;
+
+        if (std::filesystem::is_directory(path))
+        {
+            result &= std::filesystem::create_directories(destinationPath);
+        }
+        else if (std::filesystem::is_regular_file(path))
+        {
+            result &= std::filesystem::copy_file(
+                path, destinationPath, std::filesystem::copy_options::overwrite_existing);
+        }
+    }
+
+    return result;
+}
+
 bool FileSystem::CreateDirectory(const Path &path)
 {
     return std::filesystem::create_directory(path);

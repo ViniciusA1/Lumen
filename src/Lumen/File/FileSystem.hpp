@@ -16,6 +16,7 @@ public:
 
     static void Copy(const Path &source, const Path &destination);
     static bool CopyFile(const Path &source, const Path &destination);
+    static bool CopyFolder(const Path &source, const Path &destination);
     static bool CreateDirectory(const Path &path);
     static bool CreateDirectories(const Path &path);
     static bool Remove(const Path &path);
