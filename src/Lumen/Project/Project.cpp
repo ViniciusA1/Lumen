@@ -4,10 +4,11 @@ namespace Lumen
 {
 
 Project::Project(std::string name, std::string lastModified, Path rootDirectory,
-                 Path assetDirectory, Path startScene)
+                 Path workingDirectory, Path assetDirectory, Path startScene)
     : Name(std::move(name)), LastModified(std::move(lastModified)),
-      RootDirectory(std::move(rootDirectory)), AssetDirectory(std::move(assetDirectory)),
-      StartScene(std::move(startScene))
+      RootDirectory(std::move(rootDirectory)),
+      WorkingDirectory(std::move(workingDirectory)),
+      AssetDirectory(std::move(assetDirectory)), StartScene(std::move(startScene))
 {
 }
 

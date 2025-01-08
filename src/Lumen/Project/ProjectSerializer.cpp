@@ -17,6 +17,7 @@ bool ProjectSerializer::Deserialize(Project &project, const Path &path)
         project.Name = config["Name"].as<std::string>();
         project.LastModified = config["LastModified"].as<std::string>();
         project.RootDirectory = path;
+        project.WorkingDirectory = config["WorkingDirectory"].as<std::string>();
         project.AssetDirectory = config["AssetDirectory"].as<std::string>();
         project.StartScene = config["StartScene"].as<std::string>();
     }
@@ -37,7 +38,7 @@ bool ProjectSerializer::Serialize(const Project &project, const Path &path)
         YAML::Node configNode;
         configNode["Name"] = project.Name;
         configNode["LastModified"] = project.LastModified;
-        configNode["RootDirectory"] = project.RootDirectory.String();
+        configNode["WorkingDirectory"] = project.WorkingDirectory.String();
         configNode["AssetDirectory"] = project.AssetDirectory.String();
         configNode["StartScene"] = project.StartScene.String();
 

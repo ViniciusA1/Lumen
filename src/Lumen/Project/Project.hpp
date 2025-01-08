@@ -17,13 +17,14 @@ public:
     std::string Name = "Untitled";
     std::string LastModified;
     Path RootDirectory;
+    Path WorkingDirectory;
     Path AssetDirectory;
     Path StartScene;
 
 public:
     Project() = default;
-    Project(std::string Name, std::string LastModified, Path RootDirectory,
-            Path AssetDirectory, Path StartScene);
+    Project(std::string name, std::string lastModified, Path rootDirectory,
+            Path workingDirectory, Path assetDirectory, Path startScene);
 
     bool operator==(const Project &other) const;
 };
