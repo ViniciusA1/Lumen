@@ -36,8 +36,8 @@ protected:
 protected:
     static Ref<Application> s_Instance;
 
+    Project m_Project;
     bool m_IsRunning = true;
-    const Project m_Project;
     Window m_Window;
     LayerStack m_LayerStack;
 };

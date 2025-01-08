@@ -1,8 +1,10 @@
 #include "Lumen/Core/Application.hpp"
+#include "Lumen/Asset/AssetManager.hpp"
 #include "Lumen/Core/Input.hpp"
 #include "Lumen/Core/Log.hpp"
 #include "Lumen/Event/EventBus.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
+#include "Lumen/Project/ProjectSerializer.hpp"
 #include "Lumen/UI/UI.hpp"
 
 namespace Lumen
@@ -13,6 +15,9 @@ Ref<Application> Application::s_Instance = nullptr;
 Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
 {
     s_Instance = Ref<Application>(this);
+
+    ProjectSerializer().Serialize(m_Project, ".");
+    AssetManager::SetWorkingDirectory(m_Project.AssetDirectory);
 
     EventBus::Subscribe<WindowResizeEvent>(BIND_EVENT(OnWindowResize));
     EventBus::Subscribe<WindowCloseEvent>(BIND_EVENT(OnWindowClose));
