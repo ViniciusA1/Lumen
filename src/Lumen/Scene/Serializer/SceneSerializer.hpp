@@ -9,13 +9,10 @@ namespace Lumen
 class SceneSerializer
 {
 public:
-    SceneSerializer(const Ref<Scene> &scene);
+    SceneSerializer() = default;
 
-    bool Deserialize(const Path &path);
-    bool Serialize(const Path &path);
-
-private:
-    Ref<Scene> m_Scene;
+    bool Deserialize(const Ref<Scene> &scene, const Path &path);
+    bool Serialize(const Ref<Scene> &scene, const Path &path);
 };
 
 } // namespace Lumen

@@ -18,9 +18,9 @@ void SceneManager::CreateScene(const Path &path, const std::string &name)
 
 void SceneManager::LoadScene(const Path &path)
 {
-    Ref<Scene> loadedScene;
-    SceneSerializer serializer(loadedScene);
-    if (serializer.Deserialize(path))
+    Ref<Scene> loadedScene = CreateRef<Scene>();
+    SceneSerializer serializer;
+    if (serializer.Deserialize(loadedScene, path))
     {
         s_LoadedScene[loadedScene->GetID()] = std::move(loadedScene);
     }
@@ -31,14 +31,33 @@ void SceneManager::SaveScene(const Ref<Scene> &scene)
     if (scene == nullptr)
         return;
 
-    SceneSerializer serializer(scene);
-    if (serializer.Serialize(scene->GetPath()))
+    SceneSerializer serializer;
+    if (serializer.Serialize(scene, scene->GetPath()))
     {
+    }
+}
+
+void SceneManager::UnloadScene(UUID uuid)
+{
+    auto it = s_LoadedScene.find(uuid);
+    if (it != s_LoadedScene.end())
+    {
+        SaveScene(it->second);
+        s_LoadedScene.erase(it);
     }
 }
 
 void SceneManager::UnloadScene(const std::string &name)
 {
+    for (const auto &[uuid, scene] : s_LoadedScene)
+    {
+        if (scene->GetName() == name)
+        {
+            SaveScene(scene);
+            s_LoadedScene.erase(uuid);
+            break;
+        }
+    }
 }
 
 void SceneManager::SetActiveScene(UUID uuid)

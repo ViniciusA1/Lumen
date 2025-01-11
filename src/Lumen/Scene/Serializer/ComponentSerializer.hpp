@@ -8,31 +8,31 @@ namespace Lumen
 {
 
 template <typename Component>
-void DeserializeComponent(const YAML::Node &node, Component &component);
+bool DeserializeComponent(Component &component, const YAML::Node &node);
 template <typename Component>
-void SerializeComponent(YAML::Node &node, const Component &component);
+void SerializeComponent(const Component &component, YAML::Node &node);
 
 // Core
-template <> void DeserializeComponent(const YAML::Node &node, IDComponent &id);
-template <> void DeserializeComponent(const YAML::Node &node, TagComponent &tag);
+template <> bool DeserializeComponent(IDComponent &id, const YAML::Node &node);
+template <> bool DeserializeComponent(TagComponent &tag, const YAML::Node &node);
 template <>
-void DeserializeComponent(const YAML::Node &node, TransformComponent &transform);
-template <> void SerializeComponent(YAML::Node &node, const IDComponent &id);
-template <> void SerializeComponent(YAML::Node &node, const TagComponent &tag);
+bool DeserializeComponent(TransformComponent &transform, const YAML::Node &node);
+template <> void SerializeComponent(const IDComponent &id, YAML::Node &node);
+template <> void SerializeComponent(const TagComponent &tag, YAML::Node &node);
 template <>
-void SerializeComponent(YAML::Node &node, const TransformComponent &transform);
+void SerializeComponent(const TransformComponent &transform, YAML::Node &node);
 
 // Graphics
-template <> void DeserializeComponent(const YAML::Node &node, CameraComponent &camera);
+template <> bool DeserializeComponent(CameraComponent &camera, const YAML::Node &node);
 template <>
-void DeserializeComponent(const YAML::Node &node, SpriteRendererComponent &spriteRender);
-template <> void SerializeComponent(YAML::Node &node, const CameraComponent &camera);
+bool DeserializeComponent(SpriteRendererComponent &spriteRender, const YAML::Node &node);
+template <> void SerializeComponent(const CameraComponent &camera, YAML::Node &node);
 template <>
-void SerializeComponent(YAML::Node &node, const SpriteRendererComponent &spriteRender);
+void SerializeComponent(const SpriteRendererComponent &spriteRender, YAML::Node &node);
 
 // Physics
 template <>
-void DeserializeComponent(const YAML::Node &node, VelocityComponent &velocity);
-template <> void SerializeComponent(YAML::Node &node, const VelocityComponent &velocity);
+bool DeserializeComponent(VelocityComponent &velocity, const YAML::Node &node);
+template <> void SerializeComponent(const VelocityComponent &velocity, YAML::Node &node);
 
 } // namespace Lumen

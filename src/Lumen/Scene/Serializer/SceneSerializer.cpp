@@ -1,4 +1,5 @@
 #include "Lumen/Scene/Serializer/SceneSerializer.hpp"
+#include "Lumen/Scene/Serializer/ComponentSerializer.hpp"
 #include "Lumen/Scene/Serializer/SerializerConversions.hpp"
 
 #include <fstream>
@@ -9,24 +10,20 @@ namespace Lumen
 static void DeserializeEntity(EntityManager &manager, const YAML::Node &node);
 static void SerializeEntity(EntityManager &manager, Entity entity, YAML::Node &node);
 
-SceneSerializer::SceneSerializer(const Ref<Scene> &scene) : m_Scene(scene)
-{
-}
-
-bool SceneSerializer::Deserialize(const Path &path)
+bool SceneSerializer::Deserialize(const Ref<Scene> &scene, const Path &path)
 {
     try
     {
         YAML::Node data = YAML::LoadFile(path.String());
         auto sceneNode = data["Scene"];
 
-        m_Scene->m_Name = sceneNode["Name"].as<std::string>();
-        m_Scene->m_ID = sceneNode["UUID"].as<UUID>();
-        m_Scene->m_State = static_cast<SceneState>(sceneNode["State"].as<int>());
+        scene->m_Name = sceneNode["Name"].as<std::string>();
+        scene->m_ID = sceneNode["UUID"].as<UUID>();
+        scene->m_State = static_cast<SceneState>(sceneNode["State"].as<int>());
 
         auto worldNode = sceneNode["World"];
 
-        auto &world = m_Scene->GetWorld();
+        auto &world = scene->GetWorld();
         auto &entityManager = world.GetEntityManager();
 
         for (const auto &entityNode : worldNode["Entities"])
@@ -36,7 +33,7 @@ bool SceneSerializer::Deserialize(const Path &path)
 
         UUID mainCameraID = sceneNode["MainCamera"].as<UUID>();
         Entity mainCamera = entityManager.GetEntity(mainCameraID);
-        m_Scene->m_MainCamera = mainCamera;
+        scene->m_MainCamera = mainCamera;
 
         for (const auto &systemNode : worldNode["Systems"])
         {
@@ -50,22 +47,22 @@ bool SceneSerializer::Deserialize(const Path &path)
     return true;
 }
 
-bool SceneSerializer::Serialize(const Path &path)
+bool SceneSerializer::Serialize(const Ref<Scene> &scene, const Path &path)
 {
     try
     {
         YAML::Node sceneNode;
-        sceneNode["Name"] = m_Scene->m_Name;
-        sceneNode["UUID"] = (uint64_t)m_Scene->m_ID;
-        sceneNode["State"] = static_cast<int>(m_Scene->m_State);
+        sceneNode["Name"] = scene->m_Name;
+        sceneNode["UUID"] = scene->m_ID;
+        sceneNode["State"] = static_cast<int>(scene->m_State);
 
         sceneNode["MainCamera"] =
-            (uint64_t)m_Scene->m_World.GetEntityManager()
-                .GetComponent<IDComponent>(m_Scene->GetMainCameraEntity())
+            scene->m_World.GetEntityManager()
+                .GetComponent<IDComponent>(scene->GetMainCameraEntity())
                 .ID;
 
         YAML::Node worldNode;
-        auto &world = m_Scene->GetWorld();
+        auto &world = scene->GetWorld();
 
         YAML::Node entitiesNode = YAML::Node(YAML::NodeType::Sequence);
         auto &entityManager = world.GetEntityManager();
@@ -84,11 +81,8 @@ bool SceneSerializer::Serialize(const Path &path)
 
         sceneNode["World"] = worldNode;
 
-        YAML::Node rootNode;
-        rootNode["Scene"] = sceneNode;
-
         std::ofstream file(path.String());
-        file << YAML::Dump(rootNode);
+        file << YAML::Dump(sceneNode);
     }
     catch (const std::exception &e)
     {
@@ -100,10 +94,25 @@ bool SceneSerializer::Serialize(const Path &path)
 
 static void DeserializeEntity(EntityManager &manager, const YAML::Node &node)
 {
+    Entity entity = manager.CreateEntity();
+    AllComponentGroup::ForEachComponent([&]<typename Component>() {
+        Component component;
+        if (DeserializeComponent<Component>(component, node))
+        {
+            manager.AddComponent<Component>(entity) = component;
+        }
+    });
 }
 
 static void SerializeEntity(EntityManager &manager, Entity entity, YAML::Node &node)
 {
+    AllComponentGroup::ForEachComponent([&]<typename Component>() {
+        if (manager.HasComponent<Component>(entity))
+        {
+            Component component = manager.GetComponent<Component>(entity);
+            SerializeComponent<Component>(component, node);
+        }
+    });
 }
 
 } // namespace Lumen
