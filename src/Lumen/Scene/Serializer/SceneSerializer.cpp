@@ -14,9 +14,9 @@ bool SceneSerializer::Deserialize(const Ref<Scene> &scene, const Path &path)
 {
     try
     {
-        YAML::Node data = YAML::LoadFile(path.String());
-        auto sceneNode = data["Scene"];
+        YAML::Node sceneNode = YAML::LoadFile(path.String());
 
+        scene->m_Path = path;
         scene->m_Name = sceneNode["Name"].as<std::string>();
         scene->m_ID = sceneNode["UUID"].as<UUID>();
         scene->m_State = static_cast<SceneState>(sceneNode["State"].as<int>());
@@ -31,9 +31,12 @@ bool SceneSerializer::Deserialize(const Ref<Scene> &scene, const Path &path)
             DeserializeEntity(entityManager, entityNode);
         }
 
-        UUID mainCameraID = sceneNode["MainCamera"].as<UUID>();
-        Entity mainCamera = entityManager.GetEntity(mainCameraID);
-        scene->m_MainCamera = mainCamera;
+        if (sceneNode["MainCamera"])
+        {
+            UUID mainCameraID = sceneNode["MainCamera"].as<UUID>();
+            Entity mainCamera = entityManager.GetEntity(mainCameraID);
+            scene->m_MainCamera = mainCamera;
+        }
 
         for (const auto &systemNode : worldNode["Systems"])
         {
@@ -56,16 +59,19 @@ bool SceneSerializer::Serialize(const Ref<Scene> &scene, const Path &path)
         sceneNode["UUID"] = scene->m_ID;
         sceneNode["State"] = static_cast<int>(scene->m_State);
 
-        sceneNode["MainCamera"] =
-            scene->m_World.GetEntityManager()
-                .GetComponent<IDComponent>(scene->GetMainCameraEntity())
-                .ID;
+        auto &world = scene->GetWorld();
+        auto &entityManager = world.GetEntityManager();
+
+        Entity mainCamera = scene->GetMainCameraEntity();
+        if (mainCamera && entityManager.HasComponent<CameraComponent>(mainCamera))
+        {
+            sceneNode["MainCamera"] =
+                entityManager.GetComponent<IDComponent>(mainCamera).ID;
+        }
 
         YAML::Node worldNode;
-        auto &world = scene->GetWorld();
 
         YAML::Node entitiesNode = YAML::Node(YAML::NodeType::Sequence);
-        auto &entityManager = world.GetEntityManager();
 
         for (const auto &entt : entityManager.GetRegistry().view<entt::entity>())
         {
@@ -94,7 +100,10 @@ bool SceneSerializer::Serialize(const Ref<Scene> &scene, const Path &path)
 
 static void DeserializeEntity(EntityManager &manager, const YAML::Node &node)
 {
-    Entity entity = manager.CreateEntity();
+    IDComponent id;
+    DeserializeComponent<IDComponent>(id, node);
+    Entity entity = manager.CreateEntity(id.ID);
+
     AllComponentGroup::ForEachComponent([&]<typename Component>() {
         Component component;
         if (DeserializeComponent<Component>(component, node))

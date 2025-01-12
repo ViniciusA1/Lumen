@@ -33,6 +33,7 @@ template <> struct convert<Lumen::Vector3>
     static Node encode(const Lumen::Vector3 &vec)
     {
         Node node;
+        node.SetStyle(YAML::EmitterStyle::Flow);
         node.push_back(vec.x);
         node.push_back(vec.y);
         node.push_back(vec.z);
@@ -56,6 +57,7 @@ template <> struct convert<Lumen::Color>
     static Node encode(const Lumen::Color &color)
     {
         Node node;
+        node.SetStyle(YAML::EmitterStyle::Flow);
         node.push_back(color.r);
         node.push_back(color.g);
         node.push_back(color.b);
