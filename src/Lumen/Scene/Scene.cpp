@@ -1,12 +1,21 @@
 #include "Lumen/Scene/Scene.hpp"
+#include "Lumen/Event/EventBus.hpp"
 
 namespace Lumen
 {
+
+Scene::Scene()
+{
+    EventBus::Subscribe<ComponentRemoveEvent<CameraComponent>>(
+        BIND_EVENT(OnComponentRemoved));
+}
 
 Scene::Scene(Path path, UUID uuid, std::string name)
     : m_Path(std::move(path)), m_ID(uuid), m_Name(std::move(name)),
       m_State(SceneState::Edit)
 {
+    EventBus::Subscribe<ComponentRemoveEvent<CameraComponent>>(
+        BIND_EVENT(OnComponentRemoved));
 }
 
 UUID Scene::GetID() const
@@ -57,6 +66,26 @@ void Scene::SetState(SceneState state)
 void Scene::OnUpdate()
 {
     m_World.Update();
+}
+
+void Scene::OnComponentRemoved(const ComponentRemoveEvent<CameraComponent> &event)
+{
+    Entity eventEntity = event.GetEntity();
+
+    if (eventEntity != m_MainCamera)
+    {
+        return;
+    }
+
+    m_MainCamera = {};
+    auto view = m_World.GetEntityManager().GetRegistry().view<CameraComponent>();
+    for (auto entity : view)
+    {
+        if (eventEntity != Entity(entity))
+        {
+            m_MainCamera = eventEntity;
+        }
+    }
 }
 
 } // namespace Lumen

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Lumen/Event/SceneEvent.hpp"
 #include "Lumen/Scene/World.hpp"
 
 #include <entt/entity/registry.hpp>
@@ -17,7 +18,7 @@ enum class SceneState
 class Scene
 {
 public:
-    Scene() = default;
+    Scene();
     Scene(Path path, UUID uuid, std::string name);
 
     [[nodiscard]] UUID GetID() const;
@@ -32,6 +33,9 @@ public:
     void SetState(SceneState state);
 
     void OnUpdate();
+
+private:
+    void OnComponentRemoved(const ComponentRemoveEvent<CameraComponent> &event);
 
 private:
     Path m_Path;

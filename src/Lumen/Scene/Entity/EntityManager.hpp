@@ -1,8 +1,11 @@
 #pragma once
 
 #include "Lumen/Core/UUID.hpp"
+#include "Lumen/Event/EventBus.hpp"
+#include "Lumen/Event/SceneEvent.hpp"
 #include "Lumen/Scene/Entity/Component/Component.hpp"
 #include "Lumen/Scene/Entity/Entity.hpp"
+
 #include <entt/entity/registry.hpp>
 #include <unordered_map>
 
@@ -85,6 +88,8 @@ template <typename... T> bool EntityManager::HasComponent(const Entity &entity) 
 
 template <typename T> void EntityManager::RemoveComponent(Entity &entity)
 {
+    T component = GetComponent<T>(entity);
+    EventBus::Publish(ComponentRemoveEvent<T>{entity, component});
     m_Registry.remove<T>(entity);
 }
 
