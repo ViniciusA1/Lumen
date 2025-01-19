@@ -10,11 +10,11 @@
 namespace Lumen
 {
 
-Ref<Application> Application::s_Instance = nullptr;
+Application *Application::s_Instance = nullptr;
 
 Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
 {
-    s_Instance = Ref<Application>(this);
+    s_Instance = this;
 
     ProjectSerializer().Serialize(m_Project, ".");
     AssetManager::SetWorkingDirectory(m_Project.AssetDirectory);

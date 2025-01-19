@@ -34,7 +34,7 @@ protected:
     void OnLayerPop(const LayerPopEvent &event);
 
 protected:
-    static Ref<Application> s_Instance;
+    static Application *s_Instance;
 
     Project m_Project;
     bool m_IsRunning = true;
