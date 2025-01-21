@@ -1,11 +1,11 @@
 #include "Lumen/UI/UI.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
 #include "Lumen/UI/Style/StyleSerializer.hpp"
+#include "Lumen/UI/UIStructures.hpp"
+
+#include "imgui.h"
 
 #include "ImGuizmo.h"
-#include "Lumen/UI/UIStructures.hpp"
-#include "imgui.h"
-#include "imgui_internal.h"
 #include "rlImGui.h"
 
 namespace Lumen::UI
@@ -43,8 +43,8 @@ void EndUI()
 
 void SetStyle(const Style &style)
 {
-    ImGui::GetStyle() = style.GetImGuiStyle();
     s_Style = style;
+    ImGui::GetStyle() = style;
 }
 
 bool Begin(const std::string &name, bool *p_open, WindowFlags flags)
@@ -77,6 +77,16 @@ void BeginDisabled(bool disabled)
 void EndDisabled()
 {
     ImGui::EndDisabled();
+}
+
+void BeginGroup()
+{
+    ImGui::BeginGroup();
+}
+
+void EndGroup()
+{
+    ImGui::EndGroup();
 }
 
 bool BeginMainMenuBar()
@@ -285,9 +295,21 @@ void SetNextWindowPos(const Vector2 &pos, CondFlags cond, const Vector2 &pivot)
     ImGui::SetNextWindowPos({pos.x, pos.y}, static_cast<int>(cond), {pivot.x, pivot.y});
 }
 
-void SetNextWindowSize(const ImVec2 &size, CondFlags cond)
+void SetNextWindowSize(const Vector2 &size, CondFlags cond)
 {
     ImGui::SetNextWindowSize({size.x, size.y}, static_cast<int>(cond));
+}
+
+void DrawRectangle(const Vector2 &pos, const Vector2 &size, Color color)
+{
+    ImGui::GetWindowDrawList()->AddRectFilled(
+        {pos.x, pos.y}, {size.x, size.y}, IM_COL32(color.r, color.g, color.b, color.a));
+}
+
+void DrawText(const std::string &text, const Vector2 &pos, Color color)
+{
+    ImGui::GetWindowDrawList()->AddText(
+        {pos.x, pos.y}, IM_COL32(color.r, color.g, color.b, color.a), text.c_str());
 }
 
 bool Button(const std::string &label, const Vector2 &size)
@@ -305,9 +327,56 @@ bool CollapsingHeader(const std::string &label, TreeNodeFlags flags)
     return ImGui::CollapsingHeader(label.c_str(), static_cast<int>(flags));
 }
 
-bool Combo(const std::string &label, int *currentItem, const char *items)
+bool Combo(const std::string &label, const std::vector<std::string> &items,
+           std::string &currentItem)
 {
-    return ImGui::Combo(label.c_str(), currentItem, items);
+    bool selectionChanged = false;
+
+    if (ImGui::BeginCombo(label.c_str(), currentItem.c_str()))
+    {
+        for (const auto &item : items)
+        {
+            bool isSelected = (currentItem == item);
+
+            if (ImGui::Selectable(item.c_str(), isSelected))
+            {
+                currentItem = item;
+                selectionChanged = true;
+            }
+
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
+
+    return selectionChanged;
+}
+
+bool Combo(const std::string &label, const std::vector<std::string> &items,
+           int &currentItem)
+{
+    bool selectionChanged = false;
+
+    if (ImGui::BeginCombo(label.c_str(), items[currentItem].c_str()))
+    {
+        for (int i = 0; i < items.size(); i++)
+        {
+            bool isSelected = (currentItem == i);
+
+            if (ImGui::Selectable(items[i].c_str(), isSelected))
+            {
+                currentItem = i;
+                selectionChanged = true;
+            }
+
+            if (isSelected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
+
+    return selectionChanged;
 }
 
 void DragFloat(const std::string &label, float *value, float speed, float min, float max,
@@ -407,6 +476,11 @@ void TableSetupScrollFreeze(int cols, int rows)
 void Text(const std::string &text)
 {
     ImGui::Text("%s", text.c_str());
+}
+
+void TextDisabled(const std::string &text)
+{
+    ImGui::TextDisabled("%s", text.c_str());
 }
 
 void TextWrapped(const std::string &text)

@@ -6,6 +6,8 @@
 #include "Lumen/UI/Style/Style.hpp"
 #include "Lumen/UI/UIStructures.hpp"
 
+#include <vector>
+
 namespace Lumen::UI
 {
 
@@ -28,6 +30,9 @@ void EndChild();
 
 void BeginDisabled(bool disabled = true);
 void EndDisabled();
+
+void BeginGroup();
+void EndGroup();
 
 bool BeginMainMenuBar();
 void EndMainMenuBar();
@@ -86,7 +91,10 @@ void SetCursorPosX(float x);
 void SetNextItemWidth(float width);
 void SetNextWindowPos(const Vector2 &pos, CondFlags cond = CondFlags::None,
                       const Vector2 &pivot = {0, 0});
-void SetNextWindowSize(const ImVec2 &size, CondFlags cond = CondFlags::None);
+void SetNextWindowSize(const Vector2 &size, CondFlags cond = CondFlags::None);
+
+void DrawRectangle(const Vector2 &pos, const Vector2 &size, Color color);
+void DrawText(const std::string &text, const Vector2 &pos, Color color);
 
 bool Button(const std::string &label, const Vector2 &size = Vector2(0, 0));
 
@@ -95,7 +103,10 @@ bool Checkbox(const std::string &label, bool *value);
 bool CollapsingHeader(const std::string &label,
                       TreeNodeFlags flags = TreeNodeFlags::None);
 
-bool Combo(const std::string &label, int *currentItem, const char *items);
+bool Combo(const std::string &label, const std::vector<std::string> &items,
+           std::string &currentItem);
+bool Combo(const std::string &label, const std::vector<std::string> &items,
+           int &currentItem);
 
 void DragFloat(const std::string &label, float *value, float speed = 1.0f,
                float min = 0.0f, float max = 0.0f, const std::string &format = "%.3f",
@@ -136,6 +147,7 @@ void TableSetColumnIndex(int column);
 void TableSetupScrollFreeze(int cols, int rows);
 
 void Text(const std::string &text);
+void TextDisabled(const std::string &text);
 void TextWrapped(const std::string &text);
 
 bool TreeNode(const std::string &label, TreeNodeFlags flags = TreeNodeFlags::None);
