@@ -93,7 +93,7 @@ enum class ColorFlags
     NavWindowingHighlight,
     NavWindowingDimBg,
     ModalWindowDimBg,
-    COUNT
+    Count
 };
 
 DEFINE_ENUM_CLASS_BITMASK(ColorFlags)
