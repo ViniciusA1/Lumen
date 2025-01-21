@@ -23,6 +23,7 @@ public:
 
     [[nodiscard]] float Determinant() const;
     [[nodiscard]] Matrix4 Inverse() const;
+    [[nodiscard]] const std::array<float, 16> &ToFloat16() const;
     std::array<float, 16> &ToFloat16();
     [[nodiscard]] float Trace() const;
     [[nodiscard]] Matrix4 Transpose() const;

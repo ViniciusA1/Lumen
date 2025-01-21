@@ -106,6 +106,11 @@ Matrix4 Matrix4::Inverse() const
     return inverse;
 }
 
+const std::array<float, 16> &Matrix4::ToFloat16() const
+{
+    return m;
+}
+
 std::array<float, 16> &Matrix4::ToFloat16()
 {
     return m;
