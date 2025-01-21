@@ -48,9 +48,24 @@ World &Scene::GetWorld()
     return m_World;
 }
 
+void Scene::SetID(UUID uuid)
+{
+    m_ID = uuid;
+}
+
+void Scene::SetName(const std::string &name)
+{
+    m_Name = name;
+}
+
 void Scene::SetMainCamera(Entity camera)
 {
     m_MainCamera = camera;
+}
+
+void Scene::SetPath(const Path &path)
+{
+    m_Path = path;
 }
 
 SceneState Scene::GetState() const

@@ -29,7 +29,10 @@ public:
     [[nodiscard]] SceneState GetState() const;
     World &GetWorld();
 
+    void SetID(UUID uuid);
+    void SetName(const std::string &name);
     void SetMainCamera(Entity camera);
+    void SetPath(const Path &path);
     void SetState(SceneState state);
 
     void OnUpdate();
@@ -45,8 +48,6 @@ private:
     Entity m_MainCamera;
 
     World m_World;
-
-    friend class SceneSerializer;
 };
 
 } // namespace Lumen
