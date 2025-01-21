@@ -1,10 +1,13 @@
 #pragma once
 
+#include "Lumen/Graphics/Color.hpp"
+#include "Lumen/Math/Vector2.hpp"
 #include "Lumen/UI/UIStructures.hpp"
 
-#include "imgui.h"
 #include <map>
 #include <string>
+
+struct ImGuiStyle;
 
 namespace Lumen
 {
@@ -16,17 +19,60 @@ public:
     static const std::map<std::string, UI::ColorFlags> ColorMap;
 
 public:
-    Style() = default;
-    Style(std::string name);
-    Style(const ImGuiStyle &style);
-    Style(std::string name, const ImGuiStyle &style);
+    std::string Name;
 
-    [[nodiscard]] const ImGuiStyle &GetImGuiStyle() const;
-    [[nodiscard]] std::string GetName() const;
+    float Alpha;
+    float DisabledAlpha;
+    Vector2 WindowPadding;
+    float WindowRounding;
+    float WindowBorderSize;
+    Vector2 WindowMinSize;
+    Vector2 WindowTitleAlign;
+    float ChildRounding;
+    float ChildBorderSize;
+    float PopupRounding;
+    float PopupBorderSize;
+    Vector2 FramePadding;
+    float FrameRounding;
+    float FrameBorderSize;
+    Vector2 ItemSpacing;
+    Vector2 ItemInnerSpacing;
+    Vector2 CellPadding;
+    Vector2 TouchExtraPadding;
+    float IndentSpacing;
+    float ColumnsMinSpacing;
+    float ScrollbarSize;
+    float ScrollbarRounding;
+    float GrabMinSize;
+    float GrabRounding;
+    float LogSliderDeadzone;
+    float TabRounding;
+    float TabBorderSize;
+    float TabMinWidthForCloseButton;
+    float TabBarBorderSize;
+    float TabBarOverlineSize;
+    float TableAngledHeadersAngle;
+    Vector2 TableAngledHeadersTextAlign;
+    Vector2 ButtonTextAlign;
+    Vector2 SelectableTextAlign;
+    float SeparatorTextBorderSize;
+    Vector2 SeparatorTextAlign;
+    Vector2 SeparatorTextPadding;
+    Vector2 DisplayWindowPadding;
+    Vector2 DisplaySafeAreaPadding;
+    float DockingSeparatorSize;
+    float MouseCursorScale;
+    bool AntiAliasedLines;
+    bool AntiAliasedLinesUseTex;
+    bool AntiAliasedFill;
+    float CurveTessellationTol;
+    float CircleTessellationMaxError;
+    Color Colors[static_cast<int>(UI::ColorFlags::Count)];
 
-private:
-    std::string m_Name;
-    ImGuiStyle m_ImGuiStyle;
+public:
+    Style();
+
+    operator ImGuiStyle() const;
 };
 
 } // namespace Lumen
