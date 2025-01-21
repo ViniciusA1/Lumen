@@ -1,0 +1,143 @@
+#pragma once
+
+#include "Lumen/File/Path.hpp"
+
+#include "yaml-cpp/yaml.h"
+
+namespace Lumen
+{
+
+class Yaml;
+
+namespace YamlSerializer
+{
+
+template <typename T> Yaml Serialize(const T &obj);
+template <typename T> void Deserialize(const Yaml &node, T &obj);
+
+} // namespace YamlSerializer
+
+class Yaml
+{
+public:
+    enum class EmitterStyle
+    {
+        Default,
+        Block,
+        Flow
+    };
+
+public:
+    Yaml() = default;
+    Yaml(const YAML::Node &node);
+
+    bool IsNull() const;
+    bool IsSequence() const;
+
+    void Clear();
+    bool Contains(const std::string &key) const;
+    std::size_t Size() const;
+
+    void SetStyle(Yaml::EmitterStyle style);
+
+    template <typename T> T As() const { return m_Data.as<T>(); }
+
+    template <typename T> bool Is() const
+    {
+        return m_Data.IsDefined() && m_Data.IsScalar() && m_Data.as<T>();
+    }
+
+    template <typename T> T GetOrDefault(const T &defaultValue) const
+    {
+        if (!IsNull())
+        {
+            return m_Data.as<T>();
+        }
+
+        return defaultValue;
+    }
+
+    void PushBack(const Yaml &yaml);
+
+    template <typename T> void PushBack(const T &value) { m_Data.push_back(value); }
+
+    static Yaml FromFile(const Path &path);
+    bool ToFile(const Path &path);
+
+    YAML::const_iterator begin() const;
+    YAML::const_iterator end() const;
+
+    YAML::iterator begin();
+    YAML::iterator end();
+
+    template <typename T> Yaml &operator<<(const T &obj)
+    {
+        Yaml serializedData = YamlSerializer::Serialize(obj);
+
+        if (m_Data.IsMap())
+        {
+            for (const auto &item : serializedData.m_Data)
+            {
+                m_Data[item.first] = item.second;
+            }
+        }
+        else if (m_Data.IsSequence())
+        {
+            for (const auto &item : serializedData.m_Data)
+            {
+                m_Data.push_back(item);
+            }
+        }
+        else
+        {
+            m_Data = serializedData.m_Data;
+        }
+
+        return *this;
+    }
+
+    template <typename T> const Yaml &operator>>(T &obj) const
+    {
+        YamlSerializer::Deserialize(*this, obj);
+        return *this;
+    }
+
+    template <typename T> const Yaml operator[](const T &key) const
+    {
+        return m_Data[key];
+    }
+
+    template <typename T> Yaml operator[](const T &key) { return m_Data[key]; }
+
+    operator YAML::Node() const;
+
+private:
+    YAML::Node m_Data;
+};
+
+} // namespace Lumen
+
+namespace Lumen::YamlSerializer
+{
+
+template <typename T> Yaml Serialize(const T &obj)
+{
+    YAML::Node yaml;
+    yaml = obj;
+    return {yaml};
+}
+
+template <typename T> void Deserialize(const Yaml &yaml, T &obj)
+{
+    obj = yaml.GetOrDefault<T>(obj);
+}
+
+} // namespace Lumen::YamlSerializer
+
+#include "Lumen/File/Serializer/Conversions/CoreConversion.hpp"
+#include "Lumen/File/Serializer/Conversions/FileConversion.hpp"
+#include "Lumen/File/Serializer/Conversions/GraphicsConversion.hpp"
+#include "Lumen/File/Serializer/Conversions/MathConversion.hpp"
+#include "Lumen/File/Serializer/Conversions/ProjectConversion.hpp"
+#include "Lumen/File/Serializer/Conversions/SceneConversion.hpp"
+#include "Lumen/File/Serializer/Conversions/UIConversion.hpp"
