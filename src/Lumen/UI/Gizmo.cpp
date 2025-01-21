@@ -3,6 +3,8 @@
 #include "Lumen/Math/Matrix4.hpp"
 #include "Lumen/UI/UI.hpp"
 
+#include "imgui.h"
+
 #include "ImGuizmo.h"
 
 namespace Lumen
