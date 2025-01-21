@@ -14,10 +14,13 @@ void SerializeComponent(const Component &component, YAML::Node &node);
 
 // Core
 template <> bool DeserializeComponent(IDComponent &id, const YAML::Node &node);
+template <> bool DeserializeComponent(NameComponent &name, const YAML::Node &node);
 template <> bool DeserializeComponent(TagComponent &tag, const YAML::Node &node);
 template <>
 bool DeserializeComponent(TransformComponent &transform, const YAML::Node &node);
+
 template <> void SerializeComponent(const IDComponent &id, YAML::Node &node);
+template <> void SerializeComponent(const NameComponent &name, YAML::Node &node);
 template <> void SerializeComponent(const TagComponent &tag, YAML::Node &node);
 template <>
 void SerializeComponent(const TransformComponent &transform, YAML::Node &node);
@@ -26,6 +29,7 @@ void SerializeComponent(const TransformComponent &transform, YAML::Node &node);
 template <> bool DeserializeComponent(CameraComponent &camera, const YAML::Node &node);
 template <>
 bool DeserializeComponent(SpriteRendererComponent &spriteRender, const YAML::Node &node);
+
 template <> void SerializeComponent(const CameraComponent &camera, YAML::Node &node);
 template <>
 void SerializeComponent(const SpriteRendererComponent &spriteRender, YAML::Node &node);
@@ -33,6 +37,7 @@ void SerializeComponent(const SpriteRendererComponent &spriteRender, YAML::Node 
 // Physics
 template <>
 bool DeserializeComponent(VelocityComponent &velocity, const YAML::Node &node);
+
 template <> void SerializeComponent(const VelocityComponent &velocity, YAML::Node &node);
 
 } // namespace Lumen

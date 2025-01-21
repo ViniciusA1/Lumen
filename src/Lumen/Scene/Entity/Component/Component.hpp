@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Lumen/Scene/Entity//Component/Core/NameComponent.hpp"
 #include "Lumen/Scene/Entity/Component/Core/IDComponent.hpp"
 #include "Lumen/Scene/Entity/Component/Core/TagComponent.hpp"
 #include "Lumen/Scene/Entity/Component/Core/TransformComponent.hpp"
@@ -18,7 +19,8 @@ template <typename... Component> struct ComponentGroup
     }
 };
 
-using CoreComponentGroup = ComponentGroup<IDComponent, TagComponent, TransformComponent>;
+using CoreComponentGroup =
+    ComponentGroup<IDComponent, NameComponent, TagComponent, TransformComponent>;
 
 using GraphicsComponentGroup = ComponentGroup<CameraComponent, SpriteRendererComponent>;
 
@@ -27,11 +29,11 @@ using PhysicsComponentGroup = ComponentGroup<VelocityComponent>;
 using UIComponentGroup = ComponentGroup<>;
 
 using AllComponentGroup =
-    ComponentGroup<IDComponent, TagComponent, TransformComponent, CameraComponent,
-                   SpriteRendererComponent, VelocityComponent>;
+    ComponentGroup<IDComponent, NameComponent, TagComponent, TransformComponent,
+                   CameraComponent, SpriteRendererComponent, VelocityComponent>;
 
 using CopyableComponentGroup =
-    ComponentGroup<TagComponent, TransformComponent, CameraComponent,
+    ComponentGroup<NameComponent, TagComponent, TransformComponent, CameraComponent,
                    SpriteRendererComponent, VelocityComponent>;
 
 using DrawableComponentGroup = ComponentGroup<TransformComponent, CameraComponent,

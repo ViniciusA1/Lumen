@@ -7,10 +7,10 @@ namespace Lumen
 
 struct TagComponent
 {
-    std::string Tag;
+    std::string Name;
 
     TagComponent() = default;
-    TagComponent(std::string tag) : Tag(std::move(tag)) {}
+    TagComponent(std::string name) : Name(std::move(name)) {}
 };
 
 } // namespace Lumen

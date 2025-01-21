@@ -13,12 +13,21 @@ template <> bool DeserializeComponent(IDComponent &id, const YAML::Node &node)
     return true;
 }
 
+template <> bool DeserializeComponent(NameComponent &name, const YAML::Node &node)
+{
+    if (!node["Name"])
+        return false;
+
+    name.Name = node["Name"].as<std::string>();
+    return true;
+}
+
 template <> bool DeserializeComponent(TagComponent &tag, const YAML::Node &node)
 {
     if (!node["Tag"])
         return false;
 
-    tag.Tag = node["Tag"].as<std::string>();
+    tag.Name = node["Tag"].as<std::string>();
     return true;
 }
 
@@ -40,9 +49,14 @@ template <> void SerializeComponent(const IDComponent &id, YAML::Node &node)
     node["ID"] = id.ID;
 }
 
+template <> void SerializeComponent(const NameComponent &name, YAML::Node &node)
+{
+    node["Name"] = name.Name;
+}
+
 template <> void SerializeComponent(const TagComponent &tag, YAML::Node &node)
 {
-    node["Tag"] = tag.Tag;
+    node["Tag"] = tag.Name;
 }
 
 template <> void SerializeComponent(const TransformComponent &transform, YAML::Node &node)
