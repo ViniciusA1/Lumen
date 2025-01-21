@@ -13,7 +13,8 @@ public:
     World();
     ~World() = default;
 
-    inline EntityManager &GetEntityManager();
+    [[nodiscard]] const EntityManager &GetEntityManager() const;
+    EntityManager &GetEntityManager();
 
     template <typename T, typename... Args> T &AddSystem(Args &&...args);
     template <typename T> T &GetSystem();
@@ -26,11 +27,6 @@ private:
     EntityManager m_EntityManager;
     std::unordered_map<std::type_index, Scope<System>> m_SystemMap;
 };
-
-EntityManager &World::GetEntityManager()
-{
-    return m_EntityManager;
-}
 
 template <typename T, typename... Args> T &World::AddSystem(Args &&...args)
 {

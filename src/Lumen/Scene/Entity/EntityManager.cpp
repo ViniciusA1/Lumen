@@ -1,4 +1,5 @@
 #include "Lumen/Scene/Entity/EntityManager.hpp"
+
 #include "entt/entity/entity.hpp"
 
 namespace Lumen
@@ -6,6 +7,26 @@ namespace Lumen
 
 EntityManager::EntityManager(World &world) : m_ParentWorld(world)
 {
+}
+
+const entt::registry &EntityManager::GetRegistry() const
+{
+    return m_Registry;
+}
+
+entt::registry &EntityManager::GetRegistry()
+{
+    return m_Registry;
+}
+
+World &EntityManager::GetWorld()
+{
+    return m_ParentWorld;
+}
+
+std::unordered_map<UUID, Entity> &EntityManager::GetEntityMap()
+{
+    return m_EntityMap;
 }
 
 Entity EntityManager::CreateEntity()
@@ -17,7 +38,8 @@ Entity EntityManager::CreateEntity(UUID uuid, const std::string &name)
 {
     Entity entity = {m_Registry.create()};
     AddComponent<IDComponent>(entity, uuid);
-    AddComponent<TagComponent>(entity, name.empty() ? "NewEntity" : name);
+    AddComponent<NameComponent>(entity, name.empty() ? "NewEntity" : name);
+    AddComponent<TagComponent>(entity, "Untagged");
     AddComponent<TransformComponent>(entity);
     m_EntityMap[uuid] = entity;
     return entity;
@@ -27,7 +49,7 @@ Entity EntityManager::CopyEntity(Entity &entity)
 {
     Entity newEntity = m_Registry.create();
     AddComponent<IDComponent>(newEntity, UUID());
-    AddComponent<TagComponent>(newEntity, GetComponent<TagComponent>(entity).Tag);
+    AddComponent<TagComponent>(newEntity, GetComponent<TagComponent>(entity).Name);
     CopyComponent(CopyableComponentGroup{}, newEntity, entity);
     return newEntity;
 }
@@ -47,23 +69,23 @@ void EntityManager::DestroyEntity(Entity &entity)
     m_Registry.destroy(entity);
 }
 
-Entity EntityManager::GetEntity(const UUID &uuid)
+Entity EntityManager::GetEntity(const UUID &uuid) const
 {
     if (m_EntityMap.find(uuid) != m_EntityMap.end())
     {
-        return m_EntityMap[uuid];
+        return m_EntityMap.at(uuid);
     }
     return {};
 }
 
-Entity EntityManager::GetEntity(entt::entity entity)
+Entity EntityManager::GetEntity(entt::entity entity) const
 {
     if (entity != entt::null)
     {
         UUID uuid = m_Registry.get<IDComponent>(entity).ID;
         if (m_EntityMap.find(uuid) != m_EntityMap.end())
         {
-            return m_EntityMap[uuid];
+            return m_EntityMap.at(uuid);
         }
     }
     return {};

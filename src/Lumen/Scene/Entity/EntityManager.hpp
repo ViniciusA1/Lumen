@@ -19,21 +19,23 @@ class EntityManager
 public:
     EntityManager(World &world);
 
-    inline entt::registry &GetRegistry();
-    inline World &GetWorld();
-    inline std::unordered_map<UUID, Entity> &GetEntityMap();
+    [[nodiscard]] const entt::registry &GetRegistry() const;
+    entt::registry &GetRegistry();
+    World &GetWorld();
+    std::unordered_map<UUID, Entity> &GetEntityMap();
 
     Entity CreateEntity();
     Entity CreateEntity(UUID uuid, const std::string &name = "");
     Entity CopyEntity(Entity &entity);
     void DestroyEntity(const UUID &uuid);
     void DestroyEntity(Entity &entity);
-    Entity GetEntity(const UUID &uuid);
-    Entity GetEntity(entt::entity entity);
+    [[nodiscard]] Entity GetEntity(const UUID &uuid) const;
+    [[nodiscard]] Entity GetEntity(entt::entity entity) const;
     template <typename... Components> auto GetAllEntitiesWith();
 
     template <typename T, typename... Args>
     T &AddComponent(Entity &entity, Args &&...args);
+    template <typename T> const T &GetComponent(const Entity &entity) const;
     template <typename T> T &GetComponent(const Entity &entity);
     template <typename... T> [[nodiscard]] bool HasComponent(const Entity &entity) const;
     template <typename T> void RemoveComponent(Entity &entity);
@@ -50,21 +52,6 @@ private:
     World &m_ParentWorld;
 };
 
-entt::registry &EntityManager::GetRegistry()
-{
-    return m_Registry;
-}
-
-World &EntityManager::GetWorld()
-{
-    return m_ParentWorld;
-}
-
-std::unordered_map<UUID, Entity> &EntityManager::GetEntityMap()
-{
-    return m_EntityMap;
-}
-
 template <typename... Components> auto EntityManager::GetAllEntitiesWith()
 {
     return m_Registry.view<Components...>();
@@ -74,6 +61,11 @@ template <typename T, typename... Args>
 T &EntityManager::AddComponent(Entity &entity, Args &&...args)
 {
     return m_Registry.emplace<T>(entity, std::forward<Args>(args)...);
+}
+
+template <typename T> const T &EntityManager::GetComponent(const Entity &entity) const
+{
+    return m_Registry.get<T>(entity);
 }
 
 template <typename T> T &EntityManager::GetComponent(const Entity &entity)
