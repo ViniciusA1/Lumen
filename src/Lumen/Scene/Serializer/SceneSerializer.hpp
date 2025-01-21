@@ -11,7 +11,7 @@ class SceneSerializer
 public:
     SceneSerializer() = default;
 
-    bool Deserialize(const Ref<Scene> &scene, const Path &path);
+    bool Deserialize(Ref<Scene> &scene, const Path &path);
     bool Serialize(const Ref<Scene> &scene, const Path &path);
 };
 
