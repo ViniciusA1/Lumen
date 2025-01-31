@@ -15,14 +15,15 @@ include_directories(
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/IconsFontCpp"
 )
 
-add_subdirectory(lib/raylib)
+add_subdirectory(lib/box2d)
+add_subdirectory(lib/entt)
 add_subdirectory(lib/imgui)
-add_subdirectory(lib/rlImGui)
 add_subdirectory(lib/ImGuiFileDialog)
 add_subdirectory(lib/ImGuizmo)
 add_subdirectory(lib/Jolt/Build)
 add_subdirectory(lib/json)
-add_subdirectory(lib/entt)
+add_subdirectory(lib/raylib)
+add_subdirectory(lib/rlImGui)
 add_subdirectory(lib/yaml)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
@@ -35,13 +36,14 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-	raylib
+	box2d
+	EnTT
 	imgui
-	rlImGui
 	ImGuiFileDialog
 	ImGuizmo
 	Jolt
-	EnTT
-	yaml-cpp::yaml-cpp
+	raylib
+	rlImGui
 	nlohmann_json::nlohmann_json
+	yaml-cpp::yaml-cpp
 )
