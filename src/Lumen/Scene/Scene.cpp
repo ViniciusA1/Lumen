@@ -4,18 +4,19 @@
 namespace Lumen
 {
 
+template <>
+void Scene::OnComponentRemoved(const ComponentRemoveEvent<CameraComponent> &event);
+
 Scene::Scene()
 {
-    EventBus::Subscribe<ComponentRemoveEvent<CameraComponent>>(
-        BIND_EVENT(OnComponentRemoved));
+    BindEvents();
 }
 
-Scene::Scene(Path path, UUID uuid, std::string name)
-    : m_Path(std::move(path)), m_ID(uuid), m_Name(std::move(name)),
-      m_State(SceneState::Edit)
+Scene::Scene(UUID uuid, std::string name, Path path, SceneType type)
+    : m_ID(uuid), m_Path(std::move(path)), m_Name(std::move(name)),
+      m_State(SceneState::Edit), m_Type(type)
 {
-    EventBus::Subscribe<ComponentRemoveEvent<CameraComponent>>(
-        BIND_EVENT(OnComponentRemoved));
+    BindEvents();
 }
 
 UUID Scene::GetID() const
@@ -73,16 +74,36 @@ SceneState Scene::GetState() const
     return m_State;
 }
 
+SceneType Scene::GetType() const
+{
+    return m_Type;
+}
+
 void Scene::SetState(SceneState state)
 {
     m_State = state;
 }
 
-void Scene::OnUpdate()
+void Scene::BindEvents()
 {
-    m_World.Update();
+    BindComponentEvent<CameraComponent>();
 }
 
+template <typename T> void Scene::BindComponentEvent()
+{
+    EventBus::Subscribe<ComponentAddEvent<T>>(BIND_EVENT(OnComponentAdded));
+    EventBus::Subscribe<ComponentRemoveEvent<T>>(BIND_EVENT(OnComponentRemoved));
+}
+
+template <typename T> void Scene::OnComponentAdded(const ComponentAddEvent<T> &event)
+{
+}
+
+template <typename T> void Scene::OnComponentRemoved(const ComponentRemoveEvent<T> &event)
+{
+}
+
+template <>
 void Scene::OnComponentRemoved(const ComponentRemoveEvent<CameraComponent> &event)
 {
     Entity eventEntity = event.GetEntity();

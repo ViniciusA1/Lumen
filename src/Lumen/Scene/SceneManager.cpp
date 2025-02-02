@@ -1,7 +1,6 @@
 #include "Lumen/Scene/SceneManager.hpp"
+#include "Lumen/Scene/SceneFactory.hpp"
 #include "Lumen/Scene/Serializer/SceneSerializer.hpp"
-
-#include <iterator>
 
 namespace Lumen
 {
@@ -9,16 +8,15 @@ namespace Lumen
 Ref<Scene> SceneManager::s_ActiveScene;
 std::unordered_map<UUID, Ref<Scene>> SceneManager::s_LoadedScene;
 
-void SceneManager::CreateScene(const Path &path, const std::string &name)
+void SceneManager::CreateScene(const Path &path, const std::string &name, SceneType type)
 {
-    UUID uuid = UUID();
-    Ref<Scene> newScene = CreateRef<Scene>(path, uuid, name);
+    Ref<Scene> newScene = SceneFactory::CreateScene(type, UUID(), path, name);
     SaveScene(newScene);
 }
 
-void SceneManager::LoadScene(const Path &path)
+void SceneManager::LoadScene(const Path &path, SceneType type)
 {
-    Ref<Scene> loadedScene = CreateRef<Scene>();
+    Ref<Scene> loadedScene = SceneFactory::CreateScene(type);
     SceneSerializer serializer;
     if (serializer.Deserialize(loadedScene, path))
     {

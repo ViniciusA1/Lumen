@@ -14,6 +14,7 @@ template <> Yaml Serialize(const Ref<Scene> &scene)
     sceneNode["Name"] << scene->GetName();
     sceneNode["UUID"] << scene->GetID();
     sceneNode["State"] << static_cast<int>(scene->GetState());
+    sceneNode["Type"] << static_cast<int>(scene->GetType());
 
     auto &world = scene->GetWorld();
     auto &entityManager = world.GetEntityManager();
@@ -31,15 +32,18 @@ template <> Yaml Serialize(const Ref<Scene> &scene)
 
 template <> void Deserialize(const Yaml &yaml, Ref<Scene> &scene)
 {
-    std::string name = scene->GetName();
-    UUID uuid = scene->GetID();
-    int state = static_cast<int>(scene->GetState());
-    yaml["Name"] >> name;
-    yaml["UUID"] >> uuid;
-    yaml["State"] >> state;
-    scene->SetName(name);
-    scene->SetID(uuid);
-    scene->SetState(static_cast<SceneState>(state));
+    {
+        std::string name;
+        UUID uuid;
+        int state, type;
+        yaml["Name"] >> name;
+        yaml["UUID"] >> uuid;
+        yaml["State"] >> state;
+        yaml["State"] >> type;
+        scene->SetName(name);
+        scene->SetID(uuid);
+        scene->SetState(static_cast<SceneState>(state));
+    }
 
     auto &world = scene->GetWorld();
     auto &entityManager = world.GetEntityManager();

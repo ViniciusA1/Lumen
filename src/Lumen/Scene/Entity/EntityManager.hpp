@@ -60,7 +60,9 @@ template <typename... Components> auto EntityManager::GetAllEntitiesWith()
 template <typename T, typename... Args>
 T &EntityManager::AddComponent(Entity &entity, Args &&...args)
 {
-    return m_Registry.emplace<T>(entity, std::forward<Args>(args)...);
+    T &component = m_Registry.emplace<T>(entity, std::forward<Args>(args)...);
+    EventBus::Publish(ComponentAddEvent<T>{entity, component});
+    return component;
 }
 
 template <typename T> const T &EntityManager::GetComponent(const Entity &entity) const

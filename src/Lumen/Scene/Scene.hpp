@@ -15,11 +15,17 @@ enum class SceneState
     Pause
 };
 
+enum class SceneType
+{
+    Type2D,
+    Type3D
+};
+
 class Scene
 {
 public:
     Scene();
-    Scene(Path path, UUID uuid, std::string name);
+    Scene(UUID uuid, std::string name, Path path, SceneType type);
 
     [[nodiscard]] UUID GetID() const;
     CameraComponent &GetMainCamera();
@@ -27,6 +33,7 @@ public:
     [[nodiscard]] std::string GetName() const;
     [[nodiscard]] Path GetPath() const;
     [[nodiscard]] SceneState GetState() const;
+    [[nodiscard]] SceneType GetType() const;
     World &GetWorld();
 
     void SetID(UUID uuid);
@@ -35,18 +42,21 @@ public:
     void SetPath(const Path &path);
     void SetState(SceneState state);
 
-    void OnUpdate();
+    virtual void OnUpdate() = 0;
 
-private:
-    void OnComponentRemoved(const ComponentRemoveEvent<CameraComponent> &event);
+protected:
+    void BindEvents();
+    template <typename T> void BindComponentEvent();
+    template <typename T> void OnComponentAdded(const ComponentAddEvent<T> &event);
+    template <typename T> void OnComponentRemoved(const ComponentRemoveEvent<T> &event);
 
-private:
+protected:
     Path m_Path;
     UUID m_ID;
     std::string m_Name;
     SceneState m_State;
+    SceneType m_Type;
     Entity m_MainCamera;
-
     World m_World;
 };
 
