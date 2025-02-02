@@ -1,6 +1,8 @@
 #pragma once
 
 struct Vector2;
+struct ImVec2;
+struct b2Vec2;
 
 namespace Lumen
 {
@@ -18,6 +20,8 @@ public:
 
     Vector2(float x = 0.0f, float y = 0.0f);
     Vector2(const ::Vector2 &vec);
+    Vector2(const ::ImVec2 &vec);
+    Vector2(const ::b2Vec2 &vec);
 
     friend Vector2 operator+(const Vector2 &lhs, const Vector2 &rhs);
     friend Vector2 operator-(const Vector2 &lhs, const Vector2 &rhs);
@@ -32,6 +36,8 @@ public:
     friend bool operator==(const Vector2 &lhs, const Vector2 &rhs);
     friend bool operator!=(const Vector2 &lhs, const Vector2 &rhs);
     operator ::Vector2() const;
+    operator ::ImVec2() const;
+    operator ::b2Vec2() const;
 
     [[nodiscard]] float Length() const;
     [[nodiscard]] float LengthSqr() const;

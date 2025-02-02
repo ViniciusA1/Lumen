@@ -1,8 +1,12 @@
 #include "Lumen/Math/Vector2.hpp"
 #include "Lumen/Math/Matrix4.hpp"
+
+#include "box2d/math_functions.h"
+#include "imgui.h"
+#include "raymath.h"
+
 #include <algorithm>
 #include <cmath>
-#include <raymath.h>
 
 namespace Lumen
 {
@@ -15,6 +19,14 @@ Vector2::Vector2(float x, float y) : x(x), y(y)
 }
 
 Vector2::Vector2(const ::Vector2 &vec) : x(vec.x), y(vec.y)
+{
+}
+
+Vector2::Vector2(const ::ImVec2 &vec) : x(vec.x), y(vec.y)
+{
+}
+
+Vector2::Vector2(const ::b2Vec2 &vec) : x(vec.x), y(vec.y)
 {
 }
 
@@ -93,6 +105,16 @@ bool operator!=(const Vector2 &lhs, const Vector2 &rhs)
 }
 
 Vector2::operator ::Vector2() const
+{
+    return {x, y};
+}
+
+Vector2::operator ::ImVec2() const
+{
+    return {x, y};
+}
+
+Vector2::operator ::b2Vec2() const
 {
     return {x, y};
 }

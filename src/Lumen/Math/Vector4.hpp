@@ -1,6 +1,7 @@
 #pragma once
 
 struct Vector4;
+struct ImVec4;
 
 namespace Lumen
 {
@@ -16,6 +17,7 @@ public:
 
     Vector4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f);
     Vector4(const ::Vector4 &vec);
+    Vector4(const ::ImVec4 &vec);
 
     friend Vector4 operator+(const Vector4 &lhs, const Vector4 &rhs);
     friend Vector4 operator-(const Vector4 &lhs, const Vector4 &rhs);
@@ -30,6 +32,7 @@ public:
     friend bool operator==(const Vector4 &lhs, const Vector4 &rhs);
     friend bool operator!=(const Vector4 &lhs, const Vector4 &rhs);
     operator ::Vector4() const;
+    operator ::ImVec4() const;
 
     [[nodiscard]] float Length() const;
     [[nodiscard]] float LengthSqr() const;

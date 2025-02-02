@@ -1,7 +1,9 @@
 #include "Lumen/Math/Vector4.hpp"
+
+#include "imgui.h"
+#include "raymath.h"
 #include <algorithm>
 #include <cmath>
-#include <raymath.h>
 
 namespace Lumen
 {
@@ -14,6 +16,10 @@ Vector4::Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w)
 }
 
 Vector4::Vector4(const ::Vector4 &vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w)
+{
+}
+
+Vector4::Vector4(const ::ImVec4 &vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w)
 {
 }
 
@@ -105,6 +111,11 @@ bool operator!=(const Vector4 &lhs, const Vector4 &rhs)
 Vector4::operator ::Vector4() const
 {
     return ::Vector4{x, y, z, w};
+}
+
+Vector4::operator ::ImVec4() const
+{
+    return ::ImVec4{x, y, z, w};
 }
 
 float Vector4::Length() const
