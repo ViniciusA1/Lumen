@@ -22,8 +22,14 @@ template <> void Deserialize(const Yaml &yaml, IDComponent &id);
 template <> Yaml Serialize(const NameComponent &name);
 template <> void Deserialize(const Yaml &yaml, NameComponent &name);
 
-template <> Yaml Serialize(const TagComponent &tag);
-template <> void Deserialize(const Yaml &yaml, TagComponent &tag);
+template <> Yaml Serialize(const UntaggedComponent &tag);
+template <> void Deserialize(const Yaml &yaml, UntaggedComponent &tag);
+template <> Yaml Serialize(const EnemyTagComponent &tag);
+template <> void Deserialize(const Yaml &yaml, EnemyTagComponent &tag);
+template <> Yaml Serialize(const MainCameraTagComponent &tag);
+template <> void Deserialize(const Yaml &yaml, MainCameraTagComponent &tag);
+template <> Yaml Serialize(const PlayerTagComponent &tag);
+template <> void Deserialize(const Yaml &yaml, PlayerTagComponent &tag);
 
 template <> Yaml Serialize(const TransformComponent &transform);
 template <> void Deserialize(const Yaml &yaml, TransformComponent &transform);

@@ -20,7 +20,11 @@ template <typename... Component> struct ComponentGroup
 };
 
 using CoreComponentGroup =
-    ComponentGroup<IDComponent, NameComponent, TagComponent, TransformComponent>;
+    ComponentGroup<IDComponent, NameComponent, UntaggedComponent, EnemyTagComponent,
+                   MainCameraTagComponent, PlayerTagComponent, TransformComponent>;
+
+using TagComponentGroup = ComponentGroup<UntaggedComponent, EnemyTagComponent,
+                                         MainCameraTagComponent, PlayerTagComponent>;
 
 using GraphicsComponentGroup = ComponentGroup<CameraComponent, SpriteRendererComponent>;
 
@@ -29,12 +33,14 @@ using PhysicsComponentGroup = ComponentGroup<VelocityComponent>;
 using UIComponentGroup = ComponentGroup<>;
 
 using AllComponentGroup =
-    ComponentGroup<IDComponent, NameComponent, TagComponent, TransformComponent,
+    ComponentGroup<IDComponent, NameComponent, UntaggedComponent, EnemyTagComponent,
+                   MainCameraTagComponent, PlayerTagComponent, TransformComponent,
                    CameraComponent, SpriteRendererComponent, VelocityComponent>;
 
 using CopyableComponentGroup =
-    ComponentGroup<NameComponent, TagComponent, TransformComponent, CameraComponent,
-                   SpriteRendererComponent, VelocityComponent>;
+    ComponentGroup<NameComponent, UntaggedComponent, EnemyTagComponent,
+                   MainCameraTagComponent, PlayerTagComponent, TransformComponent,
+                   CameraComponent, SpriteRendererComponent, VelocityComponent>;
 
 using DrawableComponentGroup = ComponentGroup<TransformComponent, CameraComponent,
                                               SpriteRendererComponent, VelocityComponent>;
