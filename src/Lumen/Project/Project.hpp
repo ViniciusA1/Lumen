@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Lumen/File/Path.hpp"
+#include "Lumen/Scene/SceneType.hpp"
 
 namespace Lumen
 {
@@ -16,6 +17,7 @@ class Project
 public:
     std::string Name = "Untitled";
     std::string LastModified;
+    SceneType Type;
     Path RootDirectory;
     Path WorkingDirectory;
     Path AssetDirectory;
@@ -23,8 +25,9 @@ public:
 
 public:
     Project() = default;
-    Project(std::string name, std::string lastModified, Path rootDirectory,
-            Path workingDirectory, Path assetDirectory, Path startScene);
+    Project(std::string name, std::string lastModified, SceneType type,
+            Path rootDirectory, Path workingDirectory, Path assetDirectory,
+            Path startScene);
 
     bool operator==(const Project &other) const;
 };
