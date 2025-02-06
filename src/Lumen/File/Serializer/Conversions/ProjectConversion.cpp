@@ -1,6 +1,7 @@
 #include "Lumen/File/Serializer/Conversions/ProjectConversion.hpp"
 
 #include "Lumen/File/Serializer/Conversions/FileConversion.hpp"
+#include "Lumen/File/Serializer/Conversions/SceneConversion.hpp"
 
 namespace Lumen::JsonSerializer
 {
@@ -38,6 +39,7 @@ template <> Yaml Serialize(const Project &project)
 
     yaml["Name"] << project.Name;
     yaml["LastModified"] << project.LastModified;
+    yaml["Type"] << project.Type;
     yaml["WorkingDirectory"] << project.WorkingDirectory;
     yaml["AssetDirectory"] << project.AssetDirectory;
     yaml["StartScene"] << project.StartScene;
@@ -49,6 +51,7 @@ template <> void Deserialize(const Yaml &yaml, Project &project)
 {
     yaml["Name"] >> project.Name;
     yaml["LastModified"] >> project.LastModified;
+    yaml["Type"] >> project.Type;
     yaml["WorkingDirectory"] >> project.WorkingDirectory;
     yaml["AssetDirectory"] >> project.AssetDirectory;
     yaml["StartScene"] >> project.StartScene;

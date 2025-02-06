@@ -39,7 +39,7 @@ template <> void Deserialize(const Yaml &yaml, Ref<Scene> &scene)
         yaml["Name"] >> name;
         yaml["UUID"] >> uuid;
         yaml["State"] >> state;
-        yaml["State"] >> type;
+        yaml["Type"] >> type;
         scene->SetName(name);
         scene->SetID(uuid);
         scene->SetState(static_cast<SceneState>(state));
@@ -117,6 +117,20 @@ template <> void Deserialize(const Yaml &yaml, EntityManager &manager)
             }
         });
     }
+}
+
+template <> Yaml Serialize(const SceneType &type)
+{
+    Yaml yaml;
+    yaml << static_cast<int>(type);
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, SceneType &type)
+{
+    int typeInt;
+    yaml >> typeInt;
+    type = static_cast<SceneType>(typeInt);
 }
 
 template <> Yaml Serialize(const IDComponent &id)

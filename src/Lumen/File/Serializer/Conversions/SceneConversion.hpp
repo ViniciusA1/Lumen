@@ -16,6 +16,9 @@ template <> void Deserialize(const Yaml &yaml, World &world);
 template <> Yaml Serialize(const EntityManager &manager);
 template <> void Deserialize(const Yaml &yaml, EntityManager &manager);
 
+template <> Yaml Serialize(const SceneType &type);
+template <> void Deserialize(const Yaml &yaml, SceneType &type);
+
 template <> Yaml Serialize(const IDComponent &id);
 template <> void Deserialize(const Yaml &yaml, IDComponent &id);
 

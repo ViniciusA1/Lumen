@@ -1,25 +1,14 @@
 #pragma once
 
 #include "Lumen/Event/SceneEvent.hpp"
+#include "Lumen/Scene/SceneState.hpp"
+#include "Lumen/Scene/SceneType.hpp"
 #include "Lumen/Scene/World.hpp"
 
 #include <entt/entity/registry.hpp>
 
 namespace Lumen
 {
-
-enum class SceneState
-{
-    Edit,
-    Play,
-    Pause
-};
-
-enum class SceneType
-{
-    Type2D,
-    Type3D
-};
 
 class Scene
 {
