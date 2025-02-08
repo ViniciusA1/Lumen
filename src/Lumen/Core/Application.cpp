@@ -16,7 +16,7 @@ Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
 {
     s_Instance = this;
 
-    ProjectSerializer().Serialize(m_Project, ".");
+    ProjectSerializer().Deserialize(m_Project, ".");
     AssetManager::SetWorkingDirectory(m_Project.AssetDirectory);
 
     EventBus::Subscribe<WindowResizeEvent>(BIND_EVENT(OnWindowResize));
