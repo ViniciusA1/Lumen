@@ -6,6 +6,8 @@
 #include "Lumen/UI/Style/Style.hpp"
 #include "Lumen/UI/UIStructures.hpp"
 
+#include <functional>
+#include <span>
 #include <vector>
 
 namespace Lumen::UI
@@ -61,6 +63,9 @@ void DockSpaceOverViewport();
 void PushID(int id);
 void PushID(const std::string &id);
 void PopID();
+
+void PushOverlay(const std::function<void()> &overlay);
+void PopOverlay();
 
 void PushStyleColor(ColorFlags flag, const Color &color);
 void PopStyleColor(int count = 1);
@@ -119,18 +124,19 @@ void DragFloat3(const std::string &label, float *value, float speed = 1.0f,
                 SliderFlags flags = SliderFlags::None);
 
 void Image(unsigned int *textureID, const Vector2 &size,
-           const Vector2 &uv0 = Vector2(0, 0), const Vector2 &uv1 = Vector2(1, 1));
+           const Vector2 &uv0 = Vector2(0, 0), const Vector2 &uv1 = Vector2(1, 1),
+           Color tintColor = Color::White, Color borderColor = Color(0, 0, 0, 0));
 
-bool InputText(const std::string &label, char *buffer, size_t bufferSize);
-bool InputTextWithHint(const std::string &label, const std::string &hint, char *buffer,
-                       size_t bufferSize);
+bool InputText(const std::string &label, const std::span<char> &buffer);
+bool InputTextWithHint(const std::string &label, const std::string &hint,
+                       const std::span<char> &buffer);
 
 bool MenuItem(const std::string &label, const std::string &shortcut = "",
               bool selected = false, bool enabled = true);
 
 void OpenPopup(const std::string &label, PopupFlags flags = PopupFlags::None);
 
-void SearchBar(char *buffer, size_t size);
+void SearchBar(const std::span<char> &buffer);
 
 bool Selectable(const std::string &label, bool selected = false,
                 SelectableFlags flags = SelectableFlags::None,

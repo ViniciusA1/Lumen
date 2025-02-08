@@ -12,6 +12,7 @@ namespace Lumen::UI
 {
 
 static Lumen::Style s_Style;
+static std::vector<std::function<void()>> s_OverlayList;
 
 void Init()
 {
@@ -37,6 +38,11 @@ void BeginUI()
 
 void EndUI()
 {
+    for (const auto &overlay : s_OverlayList)
+    {
+        overlay();
+    }
+
     Lumen::Renderer::EndTextureMode();
     rlImGuiEnd();
 }
@@ -166,6 +172,16 @@ void PushID(const std::string &id)
 void PopID()
 {
     ImGui::PopID();
+}
+
+void PushOverlay(const std::function<void()> &overlay)
+{
+    s_OverlayList.push_back(overlay);
+}
+
+void PopOverlay()
+{
+    s_OverlayList.pop_back();
 }
 
 void PushStyleColor(ColorFlags flag, const Color &color)
@@ -401,20 +417,22 @@ void DragFloat3(const std::string &label, float *value, float speed, float min, 
 }
 
 void Image(unsigned int *textureID, const Vector2 &size, const Vector2 &uv0,
-           const Vector2 &uv1)
+           const Vector2 &uv1, Color tintColor, Color borderColor)
 {
-    ImGui::Image(textureID, {size.x, size.y}, {uv0.x, uv0.y}, {uv1.x, uv1.y});
+    ImGui::Image(textureID, {size.x, size.y}, {uv0.x, uv0.y}, {uv1.x, uv1.y},
+                 tintColor.Normalize(), borderColor.Normalize());
 }
 
-bool InputText(const std::string &label, char *buffer, size_t bufferSize)
+bool InputText(const std::string &label, const std::span<char> &buffer)
 {
-    return ImGui::InputText(label.c_str(), buffer, bufferSize);
+    return ImGui::InputText(label.c_str(), buffer.data(), buffer.size());
 }
 
-bool InputTextWithHint(const std::string &label, const std::string &hint, char *buffer,
-                       size_t bufferSize)
+bool InputTextWithHint(const std::string &label, const std::string &hint,
+                       const std::span<char> &buffer)
 {
-    return ImGui::InputTextWithHint(label.c_str(), hint.c_str(), buffer, bufferSize);
+    return ImGui::InputTextWithHint(label.c_str(), hint.c_str(), buffer.data(),
+                                    buffer.size());
 }
 
 bool MenuItem(const std::string &label, const std::string &shortcut, bool selected,
@@ -429,10 +447,10 @@ void OpenPopup(const std::string &label, PopupFlags flags)
     ImGui::OpenPopup(label.c_str(), static_cast<int>(flags));
 }
 
-void SearchBar(char *buffer, size_t size)
+void SearchBar(const std::span<char> &buffer)
 {
-    ImGui::InputTextWithHint("##Search", ICON_FA_MAGNIFYING_GLASS " Search...", buffer,
-                             size);
+    ImGui::InputTextWithHint("##Search", ICON_FA_MAGNIFYING_GLASS " Search...",
+                             buffer.data(), buffer.size());
 }
 
 bool Selectable(const std::string &label, bool selected, SelectableFlags flags,
