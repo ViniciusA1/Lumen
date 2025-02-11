@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Lumen/Scene/Entity/Component/Core/TransformComponent.hpp"
 #include <array>
 
 struct Matrix;
@@ -45,9 +46,12 @@ public:
     static Matrix4 RotateXYZ(const Vector3 &angle);
     static Matrix4 RotateZYX(const Vector3 &angle);
     static Matrix4 Scale(float x, float y, float z);
+    static Matrix4 Scale(const Vector3 &scale);
     static Matrix4 Transform(const Vector3 &translation, const Vector3 &rotation,
                              const Vector3 &scale);
+    static Matrix4 Transform(const TransformComponent &transform);
     static Matrix4 Translate(float x, float y, float z);
+    static Matrix4 Translate(const Vector3 &translation);
 
     float &operator[](std::size_t index);
     const float &operator[](std::size_t index) const;

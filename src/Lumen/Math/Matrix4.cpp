@@ -408,6 +408,12 @@ Matrix4 Matrix4::Scale(float x, float y, float z)
                     0.0f, 0.0f, 1.0f});
 }
 
+Matrix4 Matrix4::Scale(const Vector3 &scale)
+{
+    return Matrix4({scale.x, 0.0f, 0.0f, 0.0f, 0.0f, scale.y, 0.0f, 0.0f, 0.0f, 0.0f,
+                    scale.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
+}
+
 Matrix4 Matrix4::Transform(const Vector3 &position, const Vector3 &rotation,
                            const Vector3 &scale)
 {
@@ -417,10 +423,21 @@ Matrix4 Matrix4::Transform(const Vector3 &position, const Vector3 &rotation,
     return translationMatrix * rotationMatrix * scaleMatrix;
 }
 
+Matrix4 Matrix4::Transform(const TransformComponent &transform)
+{
+    return Matrix4::Transform(transform.Position, transform.Rotation, transform.Scale);
+}
+
 Matrix4 Matrix4::Translate(float x, float y, float z)
 {
     return {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
             0.0f, 0.0f, 1.0f, 0.0f, x,    y,    z,    1.0f};
+}
+
+Matrix4 Matrix4::Translate(const Vector3 &translation)
+{
+    return {1.0f, 0.0f, 0.0f, 0.0f, 0.0f,          1.0f,          0.0f,          0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f, translation.x, translation.y, translation.z, 1.0f};
 }
 
 float &Matrix4::operator[](std::size_t index)
