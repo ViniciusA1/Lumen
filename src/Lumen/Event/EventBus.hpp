@@ -13,12 +13,19 @@ namespace Lumen
 
 using EventCallbackFunction = std::function<void(const std::any &)>;
 
+enum class PublishMode
+{
+    Immediate,
+    Queue
+};
+
 class EventBus
 {
 public:
     template <typename EventType>
     static void Subscribe(std::function<void(const EventType &)> callback);
-    template <typename EventType> static void Publish(const EventType &event);
+    template <typename EventType>
+    static void Publish(const EventType &event, PublishMode mode = PublishMode::Queue);
 
     static void ProcessEvents();
 
@@ -38,9 +45,24 @@ void EventBus::Subscribe(std::function<void(const EventType &)> callback)
     });
 }
 
-template <typename EventType> void EventBus::Publish(const EventType &event)
+template <typename EventType>
+void EventBus::Publish(const EventType &event, PublishMode mode)
 {
-    m_EventQueue.emplace(typeid(EventType), event);
+    if (mode == PublishMode::Queue)
+    {
+        m_EventQueue.emplace(typeid(EventType), event);
+    }
+    else
+    {
+        auto it = m_Subscribers.find(typeid(EventType));
+        if (it != m_Subscribers.end())
+        {
+            for (auto &subscriber : it->second)
+            {
+                subscriber(event);
+            }
+        }
+    }
 }
 
 } // namespace Lumen

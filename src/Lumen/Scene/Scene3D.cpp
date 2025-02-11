@@ -3,7 +3,7 @@
 namespace Lumen
 {
 
-Scene3D::Scene3D() : Scene()
+Scene3D::Scene3D() : Scene(SceneType::Type3D)
 {
 }
 

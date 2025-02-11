@@ -13,7 +13,7 @@ namespace Lumen
 class Scene
 {
 public:
-    Scene();
+    Scene(SceneType type);
     Scene(UUID uuid, std::string name, Path path, SceneType type);
 
     [[nodiscard]] UUID GetID() const;

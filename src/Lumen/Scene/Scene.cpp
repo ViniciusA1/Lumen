@@ -1,13 +1,23 @@
 #include "Lumen/Scene/Scene.hpp"
+#include "Entity/Component/Core/TagComponent.hpp"
 #include "Lumen/Event/EventBus.hpp"
 
 namespace Lumen
 {
 
 template <>
+void Scene::OnComponentAdded(const ComponentAddEvent<UntaggedComponent> &event);
+template <>
+void Scene::OnComponentAdded(const ComponentAddEvent<EnemyTagComponent> &event);
+template <>
+void Scene::OnComponentAdded(const ComponentAddEvent<MainCameraTagComponent> &event);
+template <>
+void Scene::OnComponentAdded(const ComponentAddEvent<PlayerTagComponent> &event);
+
+template <>
 void Scene::OnComponentRemoved(const ComponentRemoveEvent<CameraComponent> &event);
 
-Scene::Scene()
+Scene::Scene(SceneType type) : m_Type(type)
 {
     BindEvents();
 }
@@ -86,6 +96,10 @@ void Scene::SetState(SceneState state)
 
 void Scene::BindEvents()
 {
+    BindComponentEvent<UntaggedComponent>();
+    BindComponentEvent<EnemyTagComponent>();
+    BindComponentEvent<MainCameraTagComponent>();
+    BindComponentEvent<PlayerTagComponent>();
     BindComponentEvent<CameraComponent>();
 }
 
@@ -104,9 +118,49 @@ template <typename T> void Scene::OnComponentRemoved(const ComponentRemoveEvent<
 }
 
 template <>
+void Scene::OnComponentAdded(const ComponentAddEvent<UntaggedComponent> &event)
+{
+    auto &manager = m_World.GetEntityManager();
+    TagComponentGroup::ForEachComponent([&]<typename Component>() {
+        if (typeid(UntaggedComponent) != typeid(Component))
+            manager.RemoveComponent<Component>(event.Entity);
+    });
+}
+
+template <>
+void Scene::OnComponentAdded(const ComponentAddEvent<EnemyTagComponent> &event)
+{
+    auto &manager = m_World.GetEntityManager();
+    TagComponentGroup::ForEachComponent([&]<typename Component>() {
+        if (typeid(EnemyTagComponent) != typeid(Component))
+            manager.RemoveComponent<Component>(event.Entity);
+    });
+}
+
+template <>
+void Scene::OnComponentAdded(const ComponentAddEvent<MainCameraTagComponent> &event)
+{
+    auto &manager = m_World.GetEntityManager();
+    TagComponentGroup::ForEachComponent([&]<typename Component>() {
+        if (typeid(MainCameraTagComponent) != typeid(Component))
+            manager.RemoveComponent<Component>(event.Entity);
+    });
+}
+
+template <>
+void Scene::OnComponentAdded(const ComponentAddEvent<PlayerTagComponent> &event)
+{
+    auto &manager = m_World.GetEntityManager();
+    TagComponentGroup::ForEachComponent([&]<typename Component>() {
+        if (typeid(PlayerTagComponent) != typeid(Component))
+            manager.RemoveComponent<Component>(event.Entity);
+    });
+}
+
+template <>
 void Scene::OnComponentRemoved(const ComponentRemoveEvent<CameraComponent> &event)
 {
-    Entity eventEntity = event.GetEntity();
+    Entity eventEntity = event.Entity;
 
     if (eventEntity != m_MainCamera)
     {

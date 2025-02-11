@@ -39,13 +39,13 @@ Entity EntityManager::CreateEntity(UUID uuid, const std::string &name)
     Entity entity = {m_Registry.create()};
     AddComponent<IDComponent>(entity, uuid);
     AddComponent<NameComponent>(entity, name.empty() ? "NewEntity" : name);
-    AddComponent<TagComponent>(entity, "Untagged");
+    AddComponent<UntaggedComponent>(entity);
     AddComponent<TransformComponent>(entity);
     m_EntityMap[uuid] = entity;
     return entity;
 }
 
-Entity EntityManager::CopyEntity(Entity &entity)
+Entity EntityManager::CopyEntity(Entity entity)
 {
     Entity newEntity = m_Registry.create();
     AddComponent<IDComponent>(newEntity, UUID());
@@ -54,7 +54,7 @@ Entity EntityManager::CopyEntity(Entity &entity)
     return newEntity;
 }
 
-void EntityManager::DestroyEntity(const UUID &uuid)
+void EntityManager::DestroyEntity(UUID uuid)
 {
     if (m_EntityMap.find(uuid) != m_EntityMap.end())
     {
@@ -63,13 +63,13 @@ void EntityManager::DestroyEntity(const UUID &uuid)
     }
 }
 
-void EntityManager::DestroyEntity(Entity &entity)
+void EntityManager::DestroyEntity(Entity entity)
 {
     m_EntityMap.erase(GetComponent<IDComponent>(entity).ID);
     m_Registry.destroy(entity);
 }
 
-Entity EntityManager::GetEntity(const UUID &uuid) const
+Entity EntityManager::GetEntity(UUID uuid) const
 {
     if (m_EntityMap.find(uuid) != m_EntityMap.end())
     {

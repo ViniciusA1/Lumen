@@ -112,7 +112,7 @@ template <> void Deserialize(const Yaml &yaml, EntityManager &manager)
                 node >> component;
                 manager.AddComponent<Component>(entity) = component;
             }
-            catch (std::exception e)
+            catch (YAML::Exception e)
             {
             }
         });
@@ -160,97 +160,49 @@ template <> void Deserialize(const Yaml &yaml, NameComponent &name)
 template <> Yaml Serialize(const UntaggedComponent &tag)
 {
     Yaml yaml;
-    yaml["Tag"].PushBack(tag.Name);
+    yaml["Untagged"] << tag.Name;
     return yaml;
 }
 
 template <> void Deserialize(const Yaml &yaml, UntaggedComponent &tag)
 {
-    int id = 0;
-    for (const auto &node : yaml["Tag"])
-    {
-        if (node.as<std::string>() == "Untagged")
-        {
-            yaml["Tag"][id] >> tag.Name;
-            return;
-        }
-
-        id++;
-    }
-
-    throw std::runtime_error("Untagged component not found in YAML.");
+    yaml["Untagged"] >> tag.Name;
 }
 
 template <> Yaml Serialize(const EnemyTagComponent &tag)
 {
     Yaml yaml;
-    yaml["Tag"].PushBack(tag.Name);
+    yaml["EnemyTag"] << tag.Name;
     return yaml;
 }
 
 template <> void Deserialize(const Yaml &yaml, EnemyTagComponent &tag)
 {
-    int id = 0;
-    for (const auto &node : yaml["Tag"])
-    {
-        if (node.as<std::string>() == "Enemy")
-        {
-            yaml["Tag"][id] >> tag.Name;
-            return;
-        }
-
-        id++;
-    }
-
-    throw std::runtime_error("Enemy component not found in YAML.");
+    yaml["EnemyTag"] >> tag.Name;
 }
 
 template <> Yaml Serialize(const MainCameraTagComponent &tag)
 {
     Yaml yaml;
-    yaml["Tag"].PushBack(tag.Name);
+    yaml["MainCameraTag"] << tag.Name;
     return yaml;
 }
 
 template <> void Deserialize(const Yaml &yaml, MainCameraTagComponent &tag)
 {
-    int id = 0;
-    for (const auto &node : yaml["Tag"])
-    {
-        if (node.as<std::string>() == "MainCamera")
-        {
-            yaml["Tag"][id] >> tag.Name;
-            return;
-        }
-
-        id++;
-    }
-
-    throw std::runtime_error("MainCamera component not found in YAML.");
+    yaml["MainCameraTag"] >> tag.Name;
 }
 
 template <> Yaml Serialize(const PlayerTagComponent &tag)
 {
     Yaml yaml;
-    yaml["Tag"].PushBack(tag.Name);
+    yaml["PlayerTag"] << tag.Name;
     return yaml;
 }
 
 template <> void Deserialize(const Yaml &yaml, PlayerTagComponent &tag)
 {
-    int id = 0;
-    for (const auto &node : yaml["Tag"])
-    {
-        if (node.as<std::string>() == "Player")
-        {
-            yaml["Tag"][id] >> tag.Name;
-            return;
-        }
-
-        id++;
-    }
-
-    throw std::runtime_error("Player component not found in YAML.");
+    yaml["PlayerTag"] >> tag.Name;
 }
 
 template <> Yaml Serialize(const TransformComponent &transform)
