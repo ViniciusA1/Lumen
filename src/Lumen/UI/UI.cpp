@@ -416,6 +416,43 @@ void DragFloat3(const std::string &label, float *value, float speed, float min, 
                       static_cast<int>(flags));
 }
 
+bool Filter(const std::vector<std::string> &filters, int &currentFilter)
+{
+    return UI::Combo(ICON_FA_FILTER, filters, currentFilter);
+}
+
+bool FilterButton(const std::vector<std::string> &filters, int &currentFilter)
+{
+    ImVec2 buttonPos = ImGui::GetCursorScreenPos();
+    ImVec2 buttonSize = ImGui::CalcTextSize(ICON_FA_FILTER " " ICON_FA_SORT_DOWN);
+    buttonSize.x += ImGui::GetStyle().FramePadding.x * 2;
+
+    if (ImGui::Button(ICON_FA_FILTER " " ICON_FA_SORT_DOWN))
+    {
+        ImGui::OpenPopup("FilterButtonCombo");
+    }
+
+    ImVec2 popupPos =
+        ImVec2(buttonPos.x + buttonSize.x * 0.5f, buttonPos.y + buttonSize.y + 10);
+    ImGui::SetNextWindowPos(popupPos, ImGuiCond_Always, ImVec2(0.5f, 0.0f));
+
+    bool filterChanged = false;
+    if (ImGui::BeginPopup("FilterButtonCombo"))
+    {
+        for (int i = 0; i < filters.size(); i++)
+        {
+            if (ImGui::Selectable(filters[i].c_str(), currentFilter == i))
+            {
+                currentFilter = i;
+                filterChanged = true;
+            }
+        }
+        ImGui::EndPopup();
+    }
+
+    return filterChanged;
+}
+
 void Image(unsigned int *textureID, const Vector2 &size, const Vector2 &uv0,
            const Vector2 &uv1, Color tintColor, Color borderColor)
 {

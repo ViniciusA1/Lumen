@@ -123,6 +123,9 @@ void DragFloat3(const std::string &label, float *value, float speed = 1.0f,
                 float min = 0.0f, float max = 0.0f, const std::string &format = "%.3f",
                 SliderFlags flags = SliderFlags::None);
 
+bool Filter(const std::vector<std::string> &filters, int &currentFilter);
+bool FilterButton(const std::vector<std::string> &filters, int &currentFilter);
+
 void Image(unsigned int *textureID, const Vector2 &size,
            const Vector2 &uv0 = Vector2(0, 0), const Vector2 &uv1 = Vector2(1, 1),
            Color tintColor = Color::White, Color borderColor = Color(0, 0, 0, 0));
