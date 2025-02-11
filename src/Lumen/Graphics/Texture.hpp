@@ -19,7 +19,7 @@ public:
     [[nodiscard]] int GetHeight() const;
     [[nodiscard]] int GetMipmap() const;
     [[nodiscard]] unsigned int GetRendererID() const;
-    [[nodiscard]] unsigned int *GetRendererID();
+    [[nodiscard]] unsigned int &GetRendererID();
     [[nodiscard]] int GetWidth() const;
 
     operator ::Texture() const;

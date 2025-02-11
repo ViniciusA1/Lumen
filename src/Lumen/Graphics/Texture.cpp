@@ -39,9 +39,9 @@ unsigned int Texture2D::GetRendererID() const
     return m_RendererID;
 }
 
-unsigned int *Texture2D::GetRendererID()
+unsigned int &Texture2D::GetRendererID()
 {
-    return &m_RendererID;
+    return m_RendererID;
 }
 
 int Texture2D::GetWidth() const
