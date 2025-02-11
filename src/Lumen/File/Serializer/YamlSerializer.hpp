@@ -2,6 +2,9 @@
 
 #include "Lumen/File/Path.hpp"
 
+#if WIN32
+#define YAML_CPP_STATIC_DEFINE
+#endif
 #include "yaml-cpp/yaml.h"
 
 namespace Lumen
