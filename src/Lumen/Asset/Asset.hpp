@@ -1,28 +1,9 @@
 #pragma once
 
-#include "Lumen/Core/UUID.hpp"
-#include "Lumen/File/Path.hpp"
-#include <string>
+#include "Lumen/Asset/AssetMetadata.hpp"
 
 namespace Lumen
 {
-
-struct AssetMetadata
-{
-    UUID ID;
-    std::string Name;
-    Path Path;
-
-    AssetMetadata(UUID id, std::string name, class Path path)
-        : ID(id), Name(std::move(name)), Path(std::move(path))
-    {
-    }
-
-    AssetMetadata(std::string name, class Path path)
-        : AssetMetadata(UUID(), std::move(name), std::move(path))
-    {
-    }
-};
 
 class Asset
 {

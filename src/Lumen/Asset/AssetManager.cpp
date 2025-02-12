@@ -3,8 +3,8 @@
 namespace Lumen
 {
 
-std::map<std::type_index, std::map<UUID, Ref<Asset>>> AssetManager::s_AssetCache;
-std::map<std::type_index, Ref<Asset>> AssetManager::s_DefaultAsset;
+std::map<UUID, Ref<Asset>> AssetManager::s_AssetMap;
+std::map<std::type_index, Ref<Asset>> AssetManager::s_DefaultAssetMap;
 Path AssetManager::s_WorkingDirectory;
 
 Path AssetManager::GetWorkingDirectory()

@@ -1,11 +1,24 @@
 #include "Lumen/Asset/Importer/MeshImporter.hpp"
 
-namespace Lumen
+#include "raylib.h"
+
+namespace Lumen::AssetImporter
 {
 
-Ref<Asset> MeshImporter::ImportMesh(const AssetMetadata &metadata)
+template <> Ref<Mesh> Import(const AssetMetadata &metadata)
 {
     return nullptr;
 }
 
-} // namespace Lumen
+template <> bool Export(const Ref<Mesh> &mesh)
+{
+    if (!mesh->IsValid())
+    {
+        return false;
+    }
+
+    ::UnloadMesh(*mesh);
+    return true;
+}
+
+} // namespace Lumen::AssetImporter

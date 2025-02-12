@@ -1,16 +1,27 @@
 #include "Lumen/Asset/Importer/ShaderImporter.hpp"
-#include "Lumen/Graphics/Shader.hpp"
+
 #include "raylib.h"
 
-namespace Lumen
+namespace Lumen::AssetImporter
 {
 
-Ref<Asset> ShaderImporter::ImportShader(const AssetMetadata &metadata)
+template <> Ref<Shader> Import(const AssetMetadata &metadata)
 {
     Ref<Shader> shader = CreateRef<Shader>(
         metadata, LoadShader((metadata.Path / "vert.glsl").String().c_str(),
                              (metadata.Path / "frag.glsl").String().c_str()));
-    return std::static_pointer_cast<Asset>(shader);
+    return shader;
 }
 
-} // namespace Lumen
+template <> bool Export(const Ref<Shader> &shader)
+{
+    if (!shader->IsValid())
+    {
+        return false;
+    }
+
+    ::UnloadShader(*shader);
+    return true;
+}
+
+} // namespace Lumen::AssetImporter

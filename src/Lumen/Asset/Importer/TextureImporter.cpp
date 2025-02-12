@@ -1,15 +1,26 @@
 #include "Lumen/Asset/Importer/TextureImporter.hpp"
-#include "Lumen/Graphics/Texture.hpp"
+
 #include "raylib.h"
 
-namespace Lumen
+namespace Lumen::AssetImporter
 {
 
-Ref<Asset> TextureImporter::ImportTexture(const AssetMetadata &metadata)
+template <> Ref<Texture2D> Import(const AssetMetadata &metadata)
 {
     Ref<Texture2D> texture =
         CreateRef<Texture2D>(metadata, LoadTexture(metadata.Path.String().c_str()));
-    return std::static_pointer_cast<Asset>(texture);
+    return texture;
 }
 
-} // namespace Lumen
+template <> bool Export(const Ref<Texture2D> &texture)
+{
+    if (!texture->IsValid())
+    {
+        return false;
+    }
+
+    ::UnloadTexture(*texture);
+    return true;
+}
+
+} // namespace Lumen::AssetImporter

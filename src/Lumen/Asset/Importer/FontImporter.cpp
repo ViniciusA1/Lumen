@@ -1,14 +1,25 @@
 #include "Lumen/Asset/Importer/FontImporter.hpp"
-#include "Lumen/Graphics/Font.hpp"
+
 #include "raylib.h"
 
-namespace Lumen
+namespace Lumen::AssetImporter
 {
 
-Ref<Asset> FontImporter::ImportFont(const AssetMetadata &metadata)
+template <> Ref<Font> Import(const AssetMetadata &metadata)
 {
     Ref<Font> font = CreateRef<Font>(metadata, LoadFont(metadata.Path.String().c_str()));
-    return std::static_pointer_cast<Asset>(font);
+    return font;
 }
 
-} // namespace Lumen
+template <> bool Export(const Ref<Font> &font)
+{
+    if (!font->IsValid())
+    {
+        return false;
+    }
+
+    ::UnloadFont(*font);
+    return true;
+}
+
+} // namespace Lumen::AssetImporter

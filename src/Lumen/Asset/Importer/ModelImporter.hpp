@@ -1,15 +1,12 @@
 #pragma once
 
-#include "Lumen/Asset/Asset.hpp"
-#include "Lumen/Core/Memory.hpp"
+#include "Lumen/Asset/AssetImporter.hpp"
+#include "Lumen/Graphics/Model.hpp"
 
-namespace Lumen
+namespace Lumen::AssetImporter
 {
 
-class ModelImporter
-{
-public:
-    static Ref<Asset> ImportModel(const AssetMetadata &metadata);
-};
+template <> Ref<Model> Import(const AssetMetadata &metadata);
+template <> bool Export(const Ref<Model> &model);
 
-} // namespace Lumen
+} // namespace Lumen::AssetImporter

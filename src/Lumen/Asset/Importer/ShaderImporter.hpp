@@ -1,15 +1,12 @@
 #pragma once
 
-#include "Lumen/Asset/Asset.hpp"
-#include "Lumen/Core/Memory.hpp"
+#include "Lumen/Asset/AssetImporter.hpp"
+#include "Lumen/Graphics/Shader.hpp"
 
-namespace Lumen
+namespace Lumen::AssetImporter
 {
 
-class ShaderImporter
-{
-public:
-    static Ref<Asset> ImportShader(const AssetMetadata &metadata);
-};
+template <> Ref<Shader> Import(const AssetMetadata &metadata);
+template <> bool Export(const Ref<Shader> &shader);
 
-} // namespace Lumen
+} // namespace Lumen::AssetImporter

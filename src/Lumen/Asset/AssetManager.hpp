@@ -3,7 +3,9 @@
 #include "Lumen/Asset/Asset.hpp"
 #include "Lumen/Asset/AssetImporter.hpp"
 #include "Lumen/Core/Memory.hpp"
+
 #include <map>
+#include <memory>
 #include <typeindex>
 
 namespace Lumen
@@ -15,37 +17,29 @@ public:
     template <typename T> static inline Ref<T> Get(UUID uuid);
     template <typename T> static inline Ref<T> Get(const std::string &name);
     template <typename T> static inline Ref<T> Load(const AssetMetadata &metadata);
+    template <typename T> static inline void Unload(UUID uuid);
 
     static Path GetWorkingDirectory();
     static void SetWorkingDirectory(const Path &path);
 
 private:
-    static std::map<std::type_index, std::map<UUID, Ref<Asset>>> s_AssetCache;
-    static std::map<std::type_index, Ref<Asset>> s_DefaultAsset;
+    static std::map<UUID, Ref<Asset>> s_AssetMap;
+    static std::map<std::type_index, Ref<Asset>> s_DefaultAssetMap;
     static Path s_WorkingDirectory;
 };
 
 template <typename T> Ref<T> AssetManager::Get(UUID uuid)
 {
-    auto typeCacheIt = s_AssetCache.find(typeid(T));
-    if (typeCacheIt == s_AssetCache.end())
+    auto it = s_AssetMap.find(uuid);
+    if (it == s_AssetMap.end())
     {
-        auto defaultIt = s_DefaultAsset.find(typeid(T));
-        if (defaultIt != s_DefaultAsset.end())
+        auto defaultIt = s_DefaultAssetMap.find(typeid(T));
+        if (defaultIt != s_DefaultAssetMap.end())
         {
             return std::dynamic_pointer_cast<T>(defaultIt->second);
         }
-    }
 
-    const auto &typeCache = typeCacheIt->second;
-    auto it = typeCache.find(uuid);
-    if (it == typeCache.end())
-    {
-        auto defaultIt = s_DefaultAsset.find(typeid(T));
-        if (defaultIt != s_DefaultAsset.end())
-        {
-            return std::dynamic_pointer_cast<T>(defaultIt->second);
-        }
+        return nullptr;
     }
 
     return std::dynamic_pointer_cast<T>(it->second);
@@ -53,19 +47,7 @@ template <typename T> Ref<T> AssetManager::Get(UUID uuid)
 
 template <typename T> Ref<T> AssetManager::Get(const std::string &name)
 {
-    auto typeCacheIt = s_AssetCache.find(typeid(T));
-    if (typeCacheIt == s_AssetCache.end())
-    {
-        auto defaultIt = s_DefaultAsset.find(typeid(T));
-        if (defaultIt != s_DefaultAsset.end())
-        {
-            return std::dynamic_pointer_cast<T>(defaultIt->second);
-        }
-    }
-
-    const auto &typeCache = typeCacheIt->second;
-
-    for (const auto &[uuid, asset] : typeCache)
+    for (const auto &[uuid, asset] : s_AssetMap)
     {
         if (asset->GetMetadata().Name == name)
         {
@@ -73,35 +55,48 @@ template <typename T> Ref<T> AssetManager::Get(const std::string &name)
         }
     }
 
-    auto defaultIt = s_DefaultAsset.find(typeid(T));
-    if (defaultIt != s_DefaultAsset.end())
+    auto defaultIt = s_DefaultAssetMap.find(typeid(T));
+    if (defaultIt != s_DefaultAssetMap.end())
     {
         return std::dynamic_pointer_cast<T>(defaultIt->second);
     }
+
+    return nullptr;
 }
 
 template <typename T> Ref<T> AssetManager::Load(const AssetMetadata &metadata)
 {
-    auto &typeCache = s_AssetCache[typeid(T)];
-    auto it = typeCache.find(metadata.ID);
-    if (it != typeCache.end())
+    auto it = s_AssetMap.find(metadata.ID);
+    if (it != s_AssetMap.end())
     {
         return std::dynamic_pointer_cast<T>(it->second);
     }
 
     AssetMetadata data = {metadata.ID, metadata.Name, s_WorkingDirectory / metadata.Path};
-    Ref<Asset> asset = AssetImporter::ImportAsset(typeid(T), data);
+    Ref<T> asset = AssetImporter::Import<T>(data);
     if (asset == nullptr)
     {
-        auto defaultIt = s_DefaultAsset.find(typeid(T));
-        if (defaultIt != s_DefaultAsset.end())
+        auto defaultIt = s_DefaultAssetMap.find(typeid(T));
+        if (defaultIt != s_DefaultAssetMap.end())
         {
             return std::dynamic_pointer_cast<T>(defaultIt->second);
         }
+
+        return nullptr;
     }
 
-    typeCache[metadata.ID] = asset;
-    return std::dynamic_pointer_cast<T>(asset);
+    s_AssetMap[metadata.ID] = std::static_pointer_cast<Asset>(asset);
+    return asset;
+}
+
+template <typename T> void AssetManager::Unload(UUID uuid)
+{
+    auto it = s_AssetMap.find(uuid);
+    if (it != s_AssetMap.end())
+    {
+        AssetImporter::Export<T>(std::static_pointer_cast<T>(it->second));
+        s_AssetMap.erase(it);
+    }
 }
 
 } // namespace Lumen

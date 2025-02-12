@@ -1,15 +1,12 @@
 #pragma once
 
-#include "Lumen/Asset/Asset.hpp"
-#include "Lumen/Core/Memory.hpp"
+#include "Lumen/Asset/AssetImporter.hpp"
+#include "Lumen/Graphics/Font.hpp"
 
-namespace Lumen
+namespace Lumen::AssetImporter
 {
 
-class FontImporter
-{
-public:
-    static Ref<Asset> ImportFont(const AssetMetadata &metadata);
-};
+template <> Ref<Font> Import(const AssetMetadata &metadata);
+template <> bool Export(const Ref<Font> &font);
 
-} // namespace Lumen
+} // namespace Lumen::AssetImporter
