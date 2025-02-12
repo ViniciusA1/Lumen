@@ -28,6 +28,28 @@ template <> void Deserialize(const Json &json, Project &project)
     json["StartScene"] >> project.StartScene;
 }
 
+template <> Json Serialize(const ProjectTemplate &projTemplate)
+{
+    Json json;
+    json["Name"] << projTemplate.Name;
+    json["Description"] << projTemplate.Description;
+    json["Type"] << projTemplate.Type;
+    json["WorkingDirectory"] << projTemplate.WorkingDirectory;
+    json["AssetDirectory"] << projTemplate.AssetDirectory;
+    json["StartScene"] << projTemplate.StartScene;
+    return json;
+}
+
+template <> void Deserialize(const Json &json, ProjectTemplate &projTemplate)
+{
+    json["Name"] >> projTemplate.Name;
+    json["Description"] >> projTemplate.Description;
+    json["Type"] >> projTemplate.Type;
+    json["WorkingDirectory"] >> projTemplate.WorkingDirectory;
+    json["AssetDirectory"] >> projTemplate.AssetDirectory;
+    json["StartScene"] >> projTemplate.StartScene;
+}
+
 } // namespace Lumen::JsonSerializer
 
 namespace Lumen::YamlSerializer
@@ -55,6 +77,28 @@ template <> void Deserialize(const Yaml &yaml, Project &project)
     yaml["WorkingDirectory"] >> project.WorkingDirectory;
     yaml["AssetDirectory"] >> project.AssetDirectory;
     yaml["StartScene"] >> project.StartScene;
+}
+
+template <> Yaml Serialize(const ProjectTemplate &projTemplate)
+{
+    Yaml yaml;
+    yaml["Name"] << projTemplate.Name;
+    yaml["Description"] << projTemplate.Description;
+    yaml["Type"] << projTemplate.Type;
+    yaml["WorkingDirectory"] << projTemplate.WorkingDirectory;
+    yaml["AssetDirectory"] << projTemplate.AssetDirectory;
+    yaml["StartScene"] << projTemplate.StartScene;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, ProjectTemplate &projTemplate)
+{
+    yaml["Name"] >> projTemplate.Name;
+    yaml["Description"] >> projTemplate.Description;
+    yaml["Type"] >> projTemplate.Type;
+    yaml["WorkingDirectory"] >> projTemplate.WorkingDirectory;
+    yaml["AssetDirectory"] >> projTemplate.AssetDirectory;
+    yaml["StartScene"] >> projTemplate.StartScene;
 }
 
 } // namespace Lumen::YamlSerializer
