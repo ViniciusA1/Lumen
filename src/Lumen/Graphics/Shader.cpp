@@ -4,12 +4,12 @@
 namespace Lumen
 {
 
-Shader::Shader(const AssetMetadata &metadata, const ::Shader &shader)
-    : Asset(metadata), m_RendererID(shader.id), m_Locs(shader.locs)
+Shader::Shader(UUID uuid, const ::Shader &shader)
+    : Asset(uuid), m_RendererID(shader.id), m_Locs(shader.locs)
 {
 }
 
-Shader::Shader(const ::Shader &shader) : Shader({UUID(), "", {""}}, shader)
+Shader::Shader(const ::Shader &shader) : Shader(UUID(), shader)
 {
 }
 
@@ -26,6 +26,11 @@ int *Shader::GetLocations() const
 unsigned int Shader::GetRendererID() const
 {
     return m_RendererID;
+}
+
+AssetType Shader::GetType() const
+{
+    return AssetType::Shader;
 }
 
 Shader::operator ::Shader() const

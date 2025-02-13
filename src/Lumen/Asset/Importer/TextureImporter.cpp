@@ -5,10 +5,10 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Texture2D> Import(const AssetMetadata &metadata)
+template <> Ref<Texture2D> Import(UUID uuid, const AssetMetadata &metadata)
 {
     Ref<Texture2D> texture =
-        CreateRef<Texture2D>(metadata, LoadTexture(metadata.Path.String().c_str()));
+        CreateRef<Texture2D>(uuid, LoadTexture(metadata.Path.String().c_str()));
     return texture;
 }
 

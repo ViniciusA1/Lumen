@@ -13,10 +13,12 @@ namespace Lumen
 class Font : public Asset
 {
 public:
-    Font(const AssetMetadata &metadata, const ::Font &font);
+    Font(UUID uuid, const ::Font &font);
     Font(const ::Font &font);
 
     [[nodiscard]] bool IsValid() const override;
+
+    [[nodiscard]] AssetType GetType() const override;
 
     operator ::Font() const;
 

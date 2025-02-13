@@ -10,7 +10,7 @@ namespace Lumen
 class Texture2D : public Asset
 {
 public:
-    Texture2D(const AssetMetadata &metadata, const ::Texture &texture);
+    Texture2D(UUID uuid, const ::Texture &texture);
     Texture2D(const ::Texture &texture);
 
     [[nodiscard]] bool IsValid() const override;
@@ -20,6 +20,7 @@ public:
     [[nodiscard]] int GetMipmap() const;
     [[nodiscard]] unsigned int GetRendererID() const;
     [[nodiscard]] unsigned int &GetRendererID();
+    [[nodiscard]] AssetType GetType() const override;
     [[nodiscard]] int GetWidth() const;
 
     operator ::Texture() const;

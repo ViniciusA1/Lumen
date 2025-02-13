@@ -5,10 +5,9 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Model> Import(const AssetMetadata &metadata)
+template <> Ref<Model> Import(UUID uuid, const AssetMetadata &metadata)
 {
-    Ref<Model> model =
-        CreateRef<Model>(metadata, LoadModel(metadata.Path.String().c_str()));
+    Ref<Model> model = CreateRef<Model>(uuid, LoadModel(metadata.Path.String().c_str()));
     return model;
 }
 

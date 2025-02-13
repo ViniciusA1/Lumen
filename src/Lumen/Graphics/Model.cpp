@@ -4,21 +4,26 @@
 namespace Lumen
 {
 
-Model::Model(const AssetMetadata &metadata, const ::Model &model)
-    : Asset(metadata), m_Transform(model.transform), m_MeshCount(model.meshCount),
+Model::Model(UUID uuid, const ::Model &model)
+    : Asset(uuid), m_Transform(model.transform), m_MeshCount(model.meshCount),
       m_MaterialCount(model.materialCount), m_Meshes(model.meshes),
       m_Materials(model.materials), m_MeshMaterial(model.meshMaterial),
       m_BoneCount(model.boneCount), m_Bones(model.bones), m_BindPose(model.bindPose)
 {
 }
 
-Model::Model(const ::Model &model) : Model({UUID(), "", {""}}, model)
+Model::Model(const ::Model &model) : Model(UUID(), model)
 {
 }
 
 bool Model::IsValid() const
 {
     return IsModelReady(*this);
+}
+
+AssetType Model::GetType() const
+{
+    return AssetType::Model;
 }
 
 Model::operator ::Model() const

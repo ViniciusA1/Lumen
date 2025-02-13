@@ -10,7 +10,7 @@ namespace Lumen
 class Image : public Asset
 {
 public:
-    Image(const AssetMetadata &metadata, const ::Image &image);
+    Image(UUID uuid, const ::Image &image);
     Image(const ::Image &image);
 
     [[nodiscard]] bool IsValid() const override;
@@ -19,6 +19,7 @@ public:
     [[nodiscard]] int GetFormat() const;
     [[nodiscard]] int GetHeight() const;
     [[nodiscard]] int GetMipmap() const;
+    [[nodiscard]] AssetType GetType() const override;
     [[nodiscard]] int GetWidth() const;
 
     operator ::Image() const;

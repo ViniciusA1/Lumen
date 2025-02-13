@@ -4,24 +4,28 @@
 namespace Lumen
 {
 
-Mesh::Mesh(const AssetMetadata &metadata, const ::Mesh &mesh)
-    : Asset(metadata), m_VertexCount(mesh.vertexCount),
-      m_TriangleCount(mesh.triangleCount), m_Vertices(mesh.vertices),
-      m_Texcoords(mesh.texcoords), m_Texcoords2(mesh.texcoords2), m_Normals(mesh.normals),
-      m_Tangents(mesh.tangents), m_Colors(mesh.colors), m_Indices(mesh.indices),
-      m_AnimVertices(mesh.animVertices), m_AnimNormals(mesh.animNormals),
-      m_BoneIds(mesh.boneIds), m_BoneWeights(mesh.boneWeights), m_VaoID(mesh.vaoId),
-      m_VboID(mesh.vboId)
+Mesh::Mesh(UUID uuid, const ::Mesh &mesh)
+    : Asset(uuid), m_VertexCount(mesh.vertexCount), m_TriangleCount(mesh.triangleCount),
+      m_Vertices(mesh.vertices), m_Texcoords(mesh.texcoords),
+      m_Texcoords2(mesh.texcoords2), m_Normals(mesh.normals), m_Tangents(mesh.tangents),
+      m_Colors(mesh.colors), m_Indices(mesh.indices), m_AnimVertices(mesh.animVertices),
+      m_AnimNormals(mesh.animNormals), m_BoneIds(mesh.boneIds),
+      m_BoneWeights(mesh.boneWeights), m_VaoID(mesh.vaoId), m_VboID(mesh.vboId)
 {
 }
 
-Mesh::Mesh(const ::Mesh &mesh) : Mesh({UUID(), "", {""}}, mesh)
+Mesh::Mesh(const ::Mesh &mesh) : Mesh(UUID(), mesh)
 {
 }
 
 bool Mesh::IsValid() const
 {
     return true;
+}
+
+AssetType Mesh::GetType() const
+{
+    return AssetType::Mesh;
 }
 
 Mesh::operator ::Mesh() const

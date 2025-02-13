@@ -5,11 +5,11 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Shader> Import(const AssetMetadata &metadata)
+template <> Ref<Shader> Import(UUID uuid, const AssetMetadata &metadata)
 {
     Ref<Shader> shader = CreateRef<Shader>(
-        metadata, LoadShader((metadata.Path / "vert.glsl").String().c_str(),
-                             (metadata.Path / "frag.glsl").String().c_str()));
+        uuid, LoadShader((metadata.Path / "vert.glsl").String().c_str(),
+                         (metadata.Path / "frag.glsl").String().c_str()));
     return shader;
 }
 

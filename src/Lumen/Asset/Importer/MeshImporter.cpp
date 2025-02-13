@@ -5,7 +5,7 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Mesh> Import(const AssetMetadata &metadata)
+template <> Ref<Mesh> Import(UUID uuid, const AssetMetadata &metadata)
 {
     return nullptr;
 }

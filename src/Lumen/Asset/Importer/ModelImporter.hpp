@@ -6,7 +6,7 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Model> Import(const AssetMetadata &metadata);
+template <> Ref<Model> Import(UUID uuid, const AssetMetadata &metadata);
 template <> bool Export(const Ref<Model> &model);
 
 } // namespace Lumen::AssetImporter

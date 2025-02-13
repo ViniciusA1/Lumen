@@ -4,13 +4,13 @@
 namespace Lumen
 {
 
-Image::Image(const AssetMetadata &metadata, const ::Image &image)
-    : Asset(metadata), m_Data(image.data), m_Width(image.width), m_Height(image.height),
+Image::Image(UUID uuid, const ::Image &image)
+    : Asset(uuid), m_Data(image.data), m_Width(image.width), m_Height(image.height),
       m_Mipmaps(image.mipmaps), m_Format(image.format)
 {
 }
 
-Image::Image(const ::Image &image) : Image({UUID(), "", {""}}, image)
+Image::Image(const ::Image &image) : Image(UUID(), image)
 {
 }
 
@@ -37,6 +37,11 @@ int Image::GetHeight() const
 int Image::GetMipmap() const
 {
     return m_Mipmaps;
+}
+
+AssetType Image::GetType() const
+{
+    return AssetType::Image;
 }
 
 int Image::GetWidth() const

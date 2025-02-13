@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Lumen/Asset/AssetMetadata.hpp"
+#include "Lumen/Asset/AssetType.hpp"
+#include "Lumen/Core/UUID.hpp"
 
 namespace Lumen
 {
@@ -8,14 +9,16 @@ namespace Lumen
 class Asset
 {
 public:
-    Asset(AssetMetadata metadata);
-    virtual ~Asset() = default;
+    Asset() = default;
+    Asset(UUID uuid);
 
-    AssetMetadata &GetMetadata() { return m_Metadata; }
     [[nodiscard]] virtual bool IsValid() const = 0;
 
+    [[nodiscard]] UUID GetID() const;
+    [[nodiscard]] virtual AssetType GetType() const = 0;
+
 private:
-    AssetMetadata m_Metadata;
+    UUID m_ID;
 };
 
 } // namespace Lumen

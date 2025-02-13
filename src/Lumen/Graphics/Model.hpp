@@ -15,10 +15,13 @@ namespace Lumen
 class Model : public Asset
 {
 public:
-    Model(const AssetMetadata &metadata, const ::Model &model);
+    Model(UUID uuid, const ::Model &model);
     Model(const ::Model &model);
 
     [[nodiscard]] bool IsValid() const override;
+
+    [[nodiscard]] AssetType GetType() const override;
+
     operator ::Model() const;
 
 private:

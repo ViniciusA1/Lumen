@@ -10,13 +10,14 @@ namespace Lumen
 class Shader : public Asset
 {
 public:
-    Shader(const AssetMetadata &metadata, const ::Shader &shader);
+    Shader(UUID uuid, const ::Shader &shader);
     Shader(const ::Shader &shader);
 
     [[nodiscard]] bool IsValid() const override;
 
     [[nodiscard]] int *GetLocations() const;
     [[nodiscard]] unsigned int GetRendererID() const;
+    [[nodiscard]] AssetType GetType() const override;
 
     operator ::Shader() const;
 

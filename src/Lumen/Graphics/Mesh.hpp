@@ -10,10 +10,13 @@ namespace Lumen
 class Mesh : public Asset
 {
 public:
-    Mesh(const AssetMetadata &metadata, const ::Mesh &mesh);
+    Mesh(UUID uuid, const ::Mesh &mesh);
     Mesh(const ::Mesh &mesh);
 
     [[nodiscard]] bool IsValid() const override;
+
+    [[nodiscard]] AssetType GetType() const override;
+
     operator ::Mesh() const;
 
 private:

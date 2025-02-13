@@ -4,13 +4,13 @@
 namespace Lumen
 {
 
-Texture2D::Texture2D(const AssetMetadata &metadata, const ::Texture &texture)
-    : Asset(metadata), m_RendererID(texture.id), m_Width(texture.width),
+Texture2D::Texture2D(UUID uuid, const ::Texture &texture)
+    : Asset(uuid), m_RendererID(texture.id), m_Width(texture.width),
       m_Height(texture.height), m_Mipmaps(texture.mipmaps), m_Format(texture.format)
 {
 }
 
-Texture2D::Texture2D(const ::Texture &texture) : Texture2D({UUID(), "", {""}}, texture)
+Texture2D::Texture2D(const ::Texture &texture) : Texture2D(UUID(), texture)
 {
 }
 
@@ -42,6 +42,11 @@ unsigned int Texture2D::GetRendererID() const
 unsigned int &Texture2D::GetRendererID()
 {
     return m_RendererID;
+}
+
+AssetType Texture2D::GetType() const
+{
+    return AssetType::Texture2D;
 }
 
 int Texture2D::GetWidth() const

@@ -11,81 +11,102 @@
 namespace Lumen
 {
 
+enum class AssetManagerMode
+{
+    Editor,
+    Runtime
+};
+
 class AssetManager
 {
 public:
-    template <typename T> static inline Ref<T> Get(UUID uuid);
-    template <typename T> static inline Ref<T> Get(const std::string &name);
-    template <typename T> static inline Ref<T> Load(const AssetMetadata &metadata);
-    template <typename T> static inline void Unload(UUID uuid);
+    AssetManager() = delete;
 
+public:
+    static bool IsLoaded(UUID uuid);
+    static bool IsValid(UUID uuid);
+
+    static std::map<UUID, AssetMetadata> &GetMetadataMap();
+    static AssetMetadata GetMetadata(UUID uuid);
+    static AssetManagerMode GetMode();
     static Path GetWorkingDirectory();
+
+    static void SetMetadata(UUID uuid, const AssetMetadata &metadata);
+    static void SetMode(AssetManagerMode mode);
     static void SetWorkingDirectory(const Path &path);
+
+    template <typename T> static inline Ref<T> Get(UUID uuid);
+    template <typename T>
+    static inline Ref<T> Load(UUID uuid, const AssetMetadata &metadata);
+    template <typename T> static inline void Unload(UUID uuid);
 
 private:
     static std::map<UUID, Ref<Asset>> s_AssetMap;
+    static std::map<UUID, AssetMetadata> s_AssetMetadataMap;
     static std::map<std::type_index, Ref<Asset>> s_DefaultAssetMap;
     static Path s_WorkingDirectory;
+    static AssetManagerMode s_Mode;
 };
 
 template <typename T> Ref<T> AssetManager::Get(UUID uuid)
 {
-    auto it = s_AssetMap.find(uuid);
-    if (it == s_AssetMap.end())
+    if (IsLoaded(uuid))
     {
-        auto defaultIt = s_DefaultAssetMap.find(typeid(T));
-        if (defaultIt != s_DefaultAssetMap.end())
-        {
-            return std::dynamic_pointer_cast<T>(defaultIt->second);
-        }
-
-        return nullptr;
+        return std::dynamic_pointer_cast<T>(s_AssetMap.at(uuid));
     }
 
-    return std::dynamic_pointer_cast<T>(it->second);
+    Ref<T> asset = nullptr;
+
+    if (s_Mode == AssetManagerMode::Editor)
+    {
+        AssetMetadata metadata = s_AssetMetadataMap.at(uuid);
+        AssetMetadata data = {s_WorkingDirectory / metadata.Path, metadata.Name};
+        asset = AssetImporter::Import<T>(uuid, data);
+        if (asset == nullptr || !asset->IsValid())
+        {
+            auto defaultIt = s_DefaultAssetMap.find(typeid(T));
+            if (defaultIt != s_DefaultAssetMap.end())
+            {
+                return std::dynamic_pointer_cast<T>(defaultIt->second);
+            }
+
+            return nullptr;
+        }
+
+        s_AssetMap[uuid] = std::static_pointer_cast<Asset>(asset);
+    }
+
+    return asset;
 }
 
-template <typename T> Ref<T> AssetManager::Get(const std::string &name)
+template <typename T> Ref<T> AssetManager::Load(UUID uuid, const AssetMetadata &metadata)
 {
-    for (const auto &[uuid, asset] : s_AssetMap)
+    if (IsLoaded(uuid))
     {
-        if (asset->GetMetadata().Name == name)
+        return std::dynamic_pointer_cast<T>(s_AssetMap.at(uuid));
+    }
+
+    Ref<T> asset = nullptr;
+
+    if (s_Mode == AssetManagerMode::Editor)
+    {
+        AssetMetadata data = {s_WorkingDirectory / metadata.Path, metadata.Name};
+        asset = AssetImporter::Import<T>(uuid, data);
+        if (asset == nullptr || !asset->IsValid())
         {
-            return std::dynamic_pointer_cast<T>(asset);
-        }
-    }
+            auto defaultIt = s_DefaultAssetMap.find(typeid(T));
+            if (defaultIt != s_DefaultAssetMap.end())
+            {
+                return std::dynamic_pointer_cast<T>(defaultIt->second);
+            }
 
-    auto defaultIt = s_DefaultAssetMap.find(typeid(T));
-    if (defaultIt != s_DefaultAssetMap.end())
-    {
-        return std::dynamic_pointer_cast<T>(defaultIt->second);
-    }
-
-    return nullptr;
-}
-
-template <typename T> Ref<T> AssetManager::Load(const AssetMetadata &metadata)
-{
-    auto it = s_AssetMap.find(metadata.ID);
-    if (it != s_AssetMap.end())
-    {
-        return std::dynamic_pointer_cast<T>(it->second);
-    }
-
-    AssetMetadata data = {metadata.ID, metadata.Name, s_WorkingDirectory / metadata.Path};
-    Ref<T> asset = AssetImporter::Import<T>(data);
-    if (asset == nullptr)
-    {
-        auto defaultIt = s_DefaultAssetMap.find(typeid(T));
-        if (defaultIt != s_DefaultAssetMap.end())
-        {
-            return std::dynamic_pointer_cast<T>(defaultIt->second);
+            return nullptr;
         }
 
-        return nullptr;
+        s_AssetMap[uuid] = std::static_pointer_cast<Asset>(asset);
+        s_AssetMetadataMap[uuid] = metadata;
     }
 
-    s_AssetMap[metadata.ID] = std::static_pointer_cast<Asset>(asset);
     return asset;
 }
 

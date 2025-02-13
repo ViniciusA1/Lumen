@@ -5,9 +5,9 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Font> Import(const AssetMetadata &metadata)
+template <> Ref<Font> Import(UUID uuid, const AssetMetadata &metadata)
 {
-    Ref<Font> font = CreateRef<Font>(metadata, LoadFont(metadata.Path.String().c_str()));
+    Ref<Font> font = CreateRef<Font>(uuid, LoadFont(metadata.Path.String().c_str()));
     return font;
 }
 

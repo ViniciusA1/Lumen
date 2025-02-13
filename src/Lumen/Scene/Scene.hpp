@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Lumen/Event/SceneEvent.hpp"
+#include "Lumen/File/Path.hpp"
 #include "Lumen/Scene/SceneState.hpp"
 #include "Lumen/Scene/SceneType.hpp"
 #include "Lumen/Scene/World.hpp"
