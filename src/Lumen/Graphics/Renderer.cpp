@@ -3,13 +3,12 @@
 #include "Lumen/Math/Matrix4.hpp"
 
 #include "raylib.h"
-#include "raymath.h"
 #include "rlgl.h"
 
 namespace Lumen
 {
 
-static ::RenderTexture s_RenderTexture = {0};
+static RenderTexture s_RenderTexture;
 
 void Renderer::BeginBlendMode()
 {
@@ -89,9 +88,9 @@ RenderTexture &Renderer::GetRenderTexture()
 
 void Renderer::ResizeRenderTexture(int width, int height)
 {
-    ::Texture texture = s_RenderTexture.texture;
+    Texture2D texture = s_RenderTexture.GetColorTexture();
 
-    if (texture.width != width || texture.height != height)
+    if (texture.GetWidth() != width || texture.GetHeight() != height)
     {
         ::UnloadRenderTexture(s_RenderTexture);
         s_RenderTexture = LoadRenderTexture(width, height);

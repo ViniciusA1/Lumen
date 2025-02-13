@@ -4,13 +4,12 @@
 #include "Lumen/Graphics/Color.hpp"
 #include "Lumen/Graphics/Material.hpp"
 #include "Lumen/Graphics/Mesh.hpp"
+#include "Lumen/Graphics/RenderTexture.hpp"
 #include "Lumen/Graphics/Shader.hpp"
 #include "Lumen/Math/Rectangle.hpp"
 #include "Lumen/Math/Vector2.hpp"
 #include "Lumen/Scene/Entity/Component/Core/TransformComponent.hpp"
 #include "Lumen/Scene/Entity/Component/Graphics/CameraComponent.hpp"
-
-struct RenderTexture;
 
 namespace Lumen
 {
