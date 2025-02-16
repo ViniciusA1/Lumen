@@ -1,16 +1,14 @@
 #pragma once
 
 #include "Lumen/Core/UUID.hpp"
-#include "Lumen/Graphics/Color.hpp"
 #include "Lumen/Scene/Entity/Component/ComponentBase.hpp"
 
 namespace Lumen
 {
 
-struct SpriteRendererComponent : public ComponentBase
+struct ModelRendererComponent : public ComponentBase
 {
-    Color Color = Color::White;
-    UUID Texture = 0;
+    UUID Model = 0;
 };
 
 } // namespace Lumen

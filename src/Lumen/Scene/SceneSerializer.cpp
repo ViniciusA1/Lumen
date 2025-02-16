@@ -1,7 +1,5 @@
-#include "Lumen/Scene/Serializer/SceneSerializer.hpp"
+#include "Lumen/Scene/SceneSerializer.hpp"
 #include "Lumen/File/Serializer/YamlSerializer.hpp"
-
-#include <fstream>
 
 namespace Lumen
 {

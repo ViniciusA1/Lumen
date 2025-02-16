@@ -1,6 +1,6 @@
 #include "Lumen/Scene/SceneManager.hpp"
 #include "Lumen/Scene/SceneFactory.hpp"
-#include "Lumen/Scene/Serializer/SceneSerializer.hpp"
+#include "Lumen/Scene/SceneSerializer.hpp"
 
 namespace Lumen
 {

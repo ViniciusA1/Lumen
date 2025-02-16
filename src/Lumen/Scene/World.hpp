@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Lumen/Core/Memory.hpp"
 #include "Lumen/Scene/Entity/EntityManager.hpp"
 #include "Lumen/Scene/Entity/System/System.hpp"
+
 #include <typeindex>
 
 namespace Lumen

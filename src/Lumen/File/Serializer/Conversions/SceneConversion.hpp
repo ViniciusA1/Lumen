@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Lumen/Core/Memory.hpp"
 #include "Lumen/File/Serializer/YamlSerializer.hpp"
-
 #include "Lumen/Scene/Scene.hpp"
 
 namespace Lumen::YamlSerializer
