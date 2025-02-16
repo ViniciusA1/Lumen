@@ -77,24 +77,24 @@ bool Yaml::ToFile(const Path &path)
     return true;
 }
 
-YAML::const_iterator Yaml::begin() const
+Yaml::ConstIterator Yaml::begin() const
 {
-    return m_Data.begin();
+    return ConstIterator(m_Data.begin());
 }
 
-YAML::const_iterator Yaml::end() const
+Yaml::ConstIterator Yaml::end() const
 {
-    return m_Data.end();
+    return ConstIterator(m_Data.end());
 }
 
-YAML::iterator Yaml::begin()
+Yaml::Iterator Yaml::begin()
 {
-    return m_Data.begin();
+    return Iterator(m_Data.begin());
 }
 
-YAML::iterator Yaml::end()
+Yaml::Iterator Yaml::end()
 {
-    return m_Data.end();
+    return Iterator(m_Data.end());
 }
 
 Yaml::operator YAML::Node() const

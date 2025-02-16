@@ -3,9 +3,9 @@
 namespace Lumen
 {
 
-std::map<UUID, Ref<Asset>> AssetManager::s_AssetMap;
-std::map<UUID, AssetMetadata> AssetManager::s_AssetMetadataMap;
-std::map<std::type_index, Ref<Asset>> AssetManager::s_DefaultAssetMap;
+std::unordered_map<UUID, Ref<Asset>> AssetManager::s_AssetMap;
+std::unordered_map<UUID, AssetMetadata> AssetManager::s_AssetMetadataMap;
+std::unordered_map<std::type_index, Ref<Asset>> AssetManager::s_DefaultAssetMap;
 Path AssetManager::s_WorkingDirectory;
 AssetManagerMode AssetManager::s_Mode = AssetManagerMode::Editor;
 
@@ -22,7 +22,7 @@ bool AssetManager::IsValid(UUID uuid)
     return s_AssetMap.at(uuid)->IsValid();
 }
 
-std::map<UUID, AssetMetadata> &AssetManager::GetMetadataMap()
+std::unordered_map<UUID, AssetMetadata> &AssetManager::GetMetadataMap()
 {
     return s_AssetMetadataMap;
 }
@@ -63,6 +63,12 @@ void AssetManager::SetMode(AssetManagerMode mode)
 void AssetManager::SetWorkingDirectory(const Path &path)
 {
     s_WorkingDirectory = path;
+}
+
+void AssetManager::Clear()
+{
+    s_AssetMap.clear();
+    s_AssetMetadataMap.clear();
 }
 
 } // namespace Lumen

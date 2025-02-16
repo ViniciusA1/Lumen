@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "Lumen/File/Path.hpp"
 
 #if WIN32
@@ -67,11 +69,65 @@ public:
     static Yaml FromFile(const Path &path);
     bool ToFile(const Path &path);
 
-    YAML::const_iterator begin() const;
-    YAML::const_iterator end() const;
+    class Iterator
+    {
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = Yaml;
+        using difference_type = std::ptrdiff_t;
+        using pointer = Yaml *;
+        using reference = Yaml &;
 
-    YAML::iterator begin();
-    YAML::iterator end();
+        explicit Iterator(YAML::iterator it) : m_Iterator(std::move(it)) {}
+
+        Yaml operator*() const { return *m_Iterator; }
+        Iterator &operator++()
+        {
+            ++m_Iterator;
+            return *this;
+        }
+
+        bool operator!=(const Iterator &other) const
+        {
+            return m_Iterator != other.m_Iterator;
+        }
+
+    private:
+        YAML::iterator m_Iterator;
+    };
+
+    class ConstIterator
+    {
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = const Yaml;
+        using difference_type = std::ptrdiff_t;
+        using pointer = const Yaml *;
+        using reference = const Yaml &;
+
+        explicit ConstIterator(YAML::const_iterator it) : m_Iterator(std::move(it)) {}
+
+        Yaml operator*() const { return *m_Iterator; }
+        ConstIterator &operator++()
+        {
+            ++m_Iterator;
+            return *this;
+        }
+
+        bool operator!=(const ConstIterator &other) const
+        {
+            return m_Iterator != other.m_Iterator;
+        }
+
+    private:
+        YAML::const_iterator m_Iterator;
+    };
+
+    ConstIterator begin() const;
+    ConstIterator end() const;
+
+    Iterator begin();
+    Iterator end();
 
     template <typename T> Yaml &operator<<(const T &obj)
     {
@@ -137,6 +193,7 @@ template <typename T> void Deserialize(const Yaml &yaml, T &obj)
 
 } // namespace Lumen::YamlSerializer
 
+#include "Lumen/File/Serializer/Conversions/AssetConversion.hpp"
 #include "Lumen/File/Serializer/Conversions/CoreConversion.hpp"
 #include "Lumen/File/Serializer/Conversions/FileConversion.hpp"
 #include "Lumen/File/Serializer/Conversions/GraphicsConversion.hpp"
