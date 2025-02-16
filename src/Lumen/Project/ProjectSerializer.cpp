@@ -7,7 +7,7 @@ namespace Lumen
 
 bool ProjectSerializer::Deserialize(Project &project, const Path &path)
 {
-    Path configPath = path / "ProjectConfig.lproj";
+    Path configPath = path / "config/ProjectConfig.lproj";
 
     Yaml yaml = Yaml::FromFile(configPath);
     if (yaml.IsNull())

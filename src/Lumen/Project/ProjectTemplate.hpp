@@ -15,6 +15,7 @@ public:
 
     Path RootDirectory;
     Path WorkingDirectory;
+    Path ConfigDirectory;
     Path AssetDirectory;
     Path StartScene;
 

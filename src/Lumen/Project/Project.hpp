@@ -15,19 +15,22 @@ enum class ProjectSortOption
 class Project
 {
 public:
-    std::string Name = "Untitled";
+    std::string Name;
     std::string LastModified;
     SceneType Type;
     Path RootDirectory;
     Path WorkingDirectory;
+    Path ConfigDirectory;
     Path AssetDirectory;
     Path StartScene;
 
 public:
     Project() = default;
     Project(std::string name, std::string lastModified, SceneType type,
-            Path rootDirectory, Path workingDirectory, Path assetDirectory,
-            Path startScene);
+            Path rootDirectory, Path workingDirectory, Path configDirectory,
+            Path assetDirectory, Path startScene);
+
+    [[nodiscard]] bool IsValid() const;
 
     bool operator==(const Project &other) const;
 };
