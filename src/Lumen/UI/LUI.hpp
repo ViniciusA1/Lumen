@@ -3,14 +3,14 @@
 #include "Lumen/Core/InputCode.hpp"
 #include "Lumen/Graphics/Color.hpp"
 #include "Lumen/Math/Vector2.hpp"
-#include "Lumen/UI/Style/Style.hpp"
-#include "Lumen/UI/UIStructures.hpp"
+#include "Lumen/UI/LUIStructures.hpp"
+#include "Lumen/UI/LUIStyle.hpp"
 
 #include <functional>
 #include <span>
 #include <vector>
 
-namespace Lumen::UI
+namespace Lumen::LUI
 {
 
 void Init();
@@ -19,7 +19,7 @@ void Shutdown();
 void BeginUI();
 void EndUI();
 
-void SetStyle(const Style &style);
+void SetStyle(const LUIStyle &style);
 
 bool Begin(const std::string &name, bool *p_open = nullptr,
            WindowFlags flags = WindowFlags::None);
@@ -72,6 +72,7 @@ void PopStyleColor(int count = 1);
 
 void SetConfigFlags(ConfigFlags flags);
 
+void Centralize(CondFlags cond = CondFlags::None);
 void Columns(int count = 1, const char *id = nullptr, bool borders = true);
 void NextColumn();
 void NewLine();
@@ -97,6 +98,7 @@ void SetNextItemWidth(float width);
 void SetNextWindowPos(const Vector2 &pos, CondFlags cond = CondFlags::None,
                       const Vector2 &pivot = {0, 0});
 void SetNextWindowSize(const Vector2 &size, CondFlags cond = CondFlags::None);
+void SetTooltip(const std::string &text);
 
 void DrawRectangle(const Vector2 &pos, const Vector2 &size, Color color);
 void DrawText(const std::string &text, const Vector2 &pos, Color color);
@@ -162,4 +164,4 @@ void TextWrapped(const std::string &text);
 bool TreeNode(const std::string &label, TreeNodeFlags flags = TreeNodeFlags::None);
 void TreePop();
 
-} // namespace Lumen::UI
+} // namespace Lumen::LUI

@@ -19,13 +19,12 @@ class Application
 {
 public:
     Application(const ApplicationArgs &args);
-    ~Application();
 
     static Application &Get() { return *s_Instance; }
     const Project &GetProject() { return m_Project; }
     Window &GetWindow() { return m_Window; }
 
-    void Run();
+    virtual void Run();
 
 protected:
     void OnWindowResize(const WindowResizeEvent &event);

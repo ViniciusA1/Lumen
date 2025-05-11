@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-namespace Lumen::UI
+namespace Lumen::LUI
 {
 
 #define DEFINE_ENUM_CLASS_BITMASK(Enum)                                                  \
@@ -349,4 +349,4 @@ enum class WindowFlags
 
 DEFINE_ENUM_CLASS_BITMASK(WindowFlags)
 
-} // namespace Lumen::UI
+} // namespace Lumen::LUI

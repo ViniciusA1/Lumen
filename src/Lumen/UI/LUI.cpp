@@ -1,23 +1,23 @@
-#include "Lumen/UI/UI.hpp"
+#include "Lumen/UI/LUI.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
-#include "Lumen/UI/Style/StyleSerializer.hpp"
-#include "Lumen/UI/UIStructures.hpp"
+#include "Lumen/UI/LUIStructures.hpp"
+#include "Lumen/UI/LUIStyleSerializer.hpp"
 
 #include "imgui.h"
 
 #include "ImGuizmo.h"
 #include "rlImGui.h"
 
-namespace Lumen::UI
+namespace Lumen::LUI
 {
 
-static Lumen::Style s_Style;
+static Lumen::LUIStyle s_Style;
 static std::vector<std::function<void()>> s_OverlayList;
 
 void Init()
 {
     rlImGuiSetup(true);
-    Lumen::StyleSerializer serializer;
+    Lumen::LUIStyleSerializer serializer;
     if (serializer.Deserialize({"assets/UI/Style/Dark.json"}, s_Style))
     {
         SetStyle(s_Style);
@@ -47,7 +47,7 @@ void EndUI()
     rlImGuiEnd();
 }
 
-void SetStyle(const Style &style)
+void SetStyle(const LUIStyle &style)
 {
     s_Style = style;
     ImGui::GetStyle() = style;
@@ -200,6 +200,12 @@ void SetConfigFlags(ConfigFlags flags)
     ImGui::GetIO().ConfigFlags |= static_cast<int>(flags);
 }
 
+void Centralize(CondFlags cond)
+{
+    Vector2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos({center.x, center.y}, static_cast<int>(cond), {0.5f, 0.5f});
+}
+
 void Columns(int count, const char *id, bool borders)
 {
     ImGui::Columns(count, id, borders);
@@ -322,6 +328,11 @@ void DrawRectangle(const Vector2 &pos, const Vector2 &size, Color color)
         {pos.x, pos.y}, {size.x, size.y}, IM_COL32(color.r, color.g, color.b, color.a));
 }
 
+void SetTooltip(const std::string &text)
+{
+    ImGui::SetTooltip("%s", text.c_str());
+}
+
 void DrawText(const std::string &text, const Vector2 &pos, Color color)
 {
     ImGui::GetWindowDrawList()->AddText(
@@ -418,7 +429,7 @@ void DragFloat3(const std::string &label, float *value, float speed, float min, 
 
 bool Filter(const std::vector<std::string> &filters, int &currentFilter)
 {
-    return UI::Combo(ICON_FA_FILTER, filters, currentFilter);
+    return LUI::Combo(ICON_FA_FILTER, filters, currentFilter);
 }
 
 bool FilterButton(const std::vector<std::string> &filters, int &currentFilter)
@@ -553,4 +564,4 @@ void TreePop()
     ImGui::TreePop();
 }
 
-} // namespace Lumen::UI
+} // namespace Lumen::LUI

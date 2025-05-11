@@ -5,13 +5,13 @@
 namespace Lumen
 {
 
-class UILayer : public Layer
+class LUILayer : public Layer
 {
 public:
-    UILayer(std::string name, bool isVisible = true);
+    LUILayer(std::string name, bool isVisible = true);
 
     void OnDraw() override;
-    virtual void OnUIDraw() {};
+    virtual void OnLUIDraw() {};
 };
 
 } // namespace Lumen

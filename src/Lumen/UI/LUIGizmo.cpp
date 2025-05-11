@@ -1,7 +1,6 @@
-#include "Lumen/UI/Gizmo.hpp"
+#include "Lumen/UI/LUIGizmo.hpp"
 #include "Lumen/Math/Math.hpp"
 #include "Lumen/Math/Matrix4.hpp"
-#include "Lumen/UI/UI.hpp"
 
 #include "imgui.h"
 
@@ -10,8 +9,9 @@
 namespace Lumen
 {
 
-void Gizmo::DrawCubeView(CameraComponent &camera, float length, const Vector2 &position,
-                         const Vector2 &size, const Color &backgroundColor)
+void LUIGizmo::DrawCubeView(CameraComponent &camera, float length,
+                            const Vector2 &position, const Vector2 &size,
+                            const Color &backgroundColor)
 {
     Matrix4 view = Matrix4::LookAt(camera.Position, camera.Target, camera.Up);
     ImGuizmo::ViewManipulate(view.ToFloat16().data(), length, {position.x, position.y},
@@ -25,9 +25,9 @@ void Gizmo::DrawCubeView(CameraComponent &camera, float length, const Vector2 &p
     }
 }
 
-void Gizmo::DrawTransform(TransformComponent &transform, const CameraComponent &camera,
-                          const Rectangle &viewport, TransformOperation operation,
-                          TransformMode mode, const float *snap)
+void LUIGizmo::DrawTransform(TransformComponent &transform, const CameraComponent &camera,
+                             const Rectangle &viewport, TransformOperation operation,
+                             TransformMode mode, const float *snap)
 {
     Matrix4 view = Matrix4::LookAt(camera.Position, camera.Target, camera.Up);
     Matrix4 projection = Matrix4::Perspective(

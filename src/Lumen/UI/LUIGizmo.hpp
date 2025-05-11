@@ -9,7 +9,7 @@
 namespace Lumen
 {
 
-class Gizmo
+class LUIGizmo
 {
 public:
     enum class TransformOperation
@@ -43,7 +43,7 @@ public:
     };
 
 public:
-    Gizmo() = delete;
+    LUIGizmo() = delete;
 
     static void DrawCubeView(CameraComponent &camera, float length,
                              const Vector2 &position, const Vector2 &size,

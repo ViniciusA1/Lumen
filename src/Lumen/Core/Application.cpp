@@ -5,7 +5,6 @@
 #include "Lumen/Event/EventBus.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
 #include "Lumen/Project/ProjectSerializer.hpp"
-#include "Lumen/UI/UI.hpp"
 
 namespace Lumen
 {
@@ -24,13 +23,7 @@ Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
     EventBus::Subscribe<LayerPushEvent>(BIND_EVENT(OnLayerPush));
     EventBus::Subscribe<LayerPopEvent>(BIND_EVENT(OnLayerPop));
 
-    UI::Init();
     Log::Init();
-}
-
-Application::~Application()
-{
-    UI::Shutdown();
 }
 
 void Application::Run()
@@ -41,7 +34,6 @@ void Application::Run()
     {
         Input::PollEvents();
         Renderer::BeginDrawing();
-        UI::BeginUI();
         Renderer::ClearBackground(Color::Black);
 
         EventBus::ProcessEvents();
@@ -56,8 +48,6 @@ void Application::Run()
         }
 
         Renderer::DrawFPS({0, 0}, 20, Color::Green);
-
-        UI::EndUI();
         Renderer::EndDrawing();
     }
 }

@@ -1,10 +1,10 @@
-#include "Lumen/UI/Style/StyleSerializer.hpp"
+#include "Lumen/UI/LUIStyleSerializer.hpp"
 #include "Lumen/File/Serializer/JsonSerializer.hpp"
 
 namespace Lumen
 {
 
-bool StyleSerializer::Serialize(const Path &path, const Style &style)
+bool LUIStyleSerializer::Serialize(const Path &path, const LUIStyle &style)
 {
     Json json;
     json << style;
@@ -12,7 +12,7 @@ bool StyleSerializer::Serialize(const Path &path, const Style &style)
     return result;
 }
 
-bool StyleSerializer::Deserialize(const Path &path, Style &style)
+bool LUIStyleSerializer::Deserialize(const Path &path, LUIStyle &style)
 {
     Json json = Json::FromFile(path);
 
