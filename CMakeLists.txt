@@ -18,7 +18,7 @@ include_directories(
 add_subdirectory(lib/box2d)
 add_subdirectory(lib/entt)
 add_subdirectory(lib/imgui)
-add_subdirectory(lib/ImGuiFileDialog)
+add_subdirectory(lib/nativefiledialog)
 add_subdirectory(lib/ImGuizmo)
 add_subdirectory(lib/Jolt/Build)
 add_subdirectory(lib/json)
@@ -39,7 +39,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 	box2d
 	EnTT
 	imgui
-	ImGuiFileDialog
+	nfd
 	ImGuizmo
 	Jolt
 	raylib
