@@ -5,54 +5,44 @@
 namespace Lumen
 {
 
-RenderTexture::RenderTexture() : m_RendererID(0), m_ColorTexture({}), m_DepthTexture({})
+RenderTexture::RenderTexture(const ::RenderTexture &renderTexture)
+    : m_RenderTexture(new ::RenderTexture(renderTexture))
 {
 }
 
-RenderTexture::RenderTexture(const ::RenderTexture &renderTexture)
-    : m_RendererID(renderTexture.id), m_ColorTexture(renderTexture.texture),
-      m_DepthTexture(renderTexture.depth)
+RenderTexture::RenderTexture(::RenderTexture *renderTexture)
+    : m_RenderTexture(renderTexture)
 {
 }
 
 bool RenderTexture::IsValid() const
 {
-    return IsRenderTextureReady(*this);
+    return m_RenderTexture && ::IsRenderTextureValid(*m_RenderTexture);
 }
 
 Texture2D RenderTexture::GetColorTexture() const
 {
-    return m_ColorTexture;
+    return &m_RenderTexture->texture;
 }
 
 Texture2D RenderTexture::GetDepthTexture() const
 {
-    return m_DepthTexture;
+    return &m_RenderTexture->depth;
 }
 
-unsigned int RenderTexture::GetRendererID() const
+int RenderTexture::GetRendererID() const
 {
-    return m_RendererID;
-}
-
-Texture2D &RenderTexture::GetColorTexture()
-{
-    return m_ColorTexture;
-}
-
-Texture2D &RenderTexture::GetDepthTexture()
-{
-    return m_DepthTexture;
-}
-
-unsigned int &RenderTexture::GetRendererID()
-{
-    return m_RendererID;
+    return m_RenderTexture->id;
 }
 
 RenderTexture::operator ::RenderTexture() const
 {
-    return {m_RendererID, m_ColorTexture, m_DepthTexture};
+    return *m_RenderTexture;
+}
+
+RenderTexture::operator ::RenderTexture *() const
+{
+    return m_RenderTexture;
 }
 
 } // namespace Lumen

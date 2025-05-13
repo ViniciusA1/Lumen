@@ -1,23 +1,35 @@
 #include "Lumen/Graphics/Font.hpp"
+
 #include "raylib.h"
 
 namespace Lumen
 {
 
-Font::Font(UUID uuid, const ::Font &font)
-    : Asset(uuid), m_BaseSize(font.baseSize), m_GlyphCount(font.glyphCount),
-      m_GlyphPadding(font.glyphPadding), m_Texture(font.texture), m_Recs(font.recs),
-      m_Glyphs(font.glyphs)
+Font::Font(const AssetHandle &handle, const ::Font &font)
+    : Asset(handle), m_Font(new ::Font(font))
 {
 }
 
-Font::Font(const ::Font &font) : Font(UUID(), font)
+Font::Font(const AssetHandle &handle, ::Font *font) : Asset(handle), m_Font(font)
+{
+}
+
+Font::Font(const ::Font &font) : Font({}, font)
+{
+}
+
+Font::Font(::Font *font) : Font({}, font)
 {
 }
 
 bool Font::IsValid() const
 {
-    return ::IsFontReady(*this);
+    return m_Font && ::IsFontValid(*m_Font);
+}
+
+Texture2D Font::GetTexture() const
+{
+    return &m_Font->texture;
 }
 
 AssetType Font::GetType() const
@@ -27,7 +39,12 @@ AssetType Font::GetType() const
 
 Font::operator ::Font() const
 {
-    return {m_BaseSize, m_GlyphCount, m_GlyphPadding, m_Texture, m_Recs, m_Glyphs};
+    return *m_Font;
+}
+
+Font::operator ::Font *() const
+{
+    return m_Font;
 }
 
 } // namespace Lumen

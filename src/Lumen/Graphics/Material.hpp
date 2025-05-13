@@ -1,12 +1,7 @@
 #pragma once
 
 #include "Lumen/Asset/Asset.hpp"
-#include "Lumen/Graphics/MaterialMap.hpp"
-#include "Lumen/Graphics/Shader.hpp"
 
-#include <array>
-
-struct MaterialMap;
 struct Material;
 
 namespace Lumen
@@ -15,19 +10,21 @@ namespace Lumen
 class Material : public Asset
 {
 public:
-    Material(UUID uuid, const ::Material &material);
+    Material() = default;
+    Material(const AssetHandle &handle, const ::Material &material);
+    Material(const AssetHandle &handle, ::Material *material);
     Material(const ::Material &material);
+    Material(::Material *material);
 
     [[nodiscard]] bool IsValid() const override;
 
-    [[nodiscard]] AssetType GetType() const override;
+    [[nodiscard]] AssetType GetType() const final;
 
     operator ::Material() const;
+    operator ::Material *() const;
 
 private:
-    Shader m_Shader;
-    ::MaterialMap *m_Maps;
-    std::array<float, 4> m_Params;
+    ::Material *m_Material = nullptr;
 };
 
 } // namespace Lumen

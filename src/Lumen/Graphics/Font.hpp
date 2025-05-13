@@ -4,8 +4,6 @@
 #include "Lumen/Graphics/Texture.hpp"
 
 struct Font;
-struct Rectangle;
-struct GlyphInfo;
 
 namespace Lumen
 {
@@ -13,22 +11,22 @@ namespace Lumen
 class Font : public Asset
 {
 public:
-    Font(UUID uuid, const ::Font &font);
+    Font() = default;
+    Font(const AssetHandle &handle, const ::Font &font);
+    Font(const AssetHandle &handle, ::Font *font);
     Font(const ::Font &font);
+    Font(::Font *font);
 
-    [[nodiscard]] bool IsValid() const override;
+    [[nodiscard]] bool IsValid() const final;
 
-    [[nodiscard]] AssetType GetType() const override;
+    [[nodiscard]] Texture2D GetTexture() const;
+    [[nodiscard]] AssetType GetType() const final;
 
     operator ::Font() const;
+    operator ::Font *() const;
 
 private:
-    int m_BaseSize;
-    int m_GlyphCount;
-    int m_GlyphPadding;
-    Texture2D m_Texture;
-    ::Rectangle *m_Recs;
-    ::GlyphInfo *m_Glyphs;
+    ::Font *m_Font = nullptr;
 };
 
 } // namespace Lumen

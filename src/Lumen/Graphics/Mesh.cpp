@@ -1,26 +1,30 @@
 #include "Lumen/Graphics/Mesh.hpp"
+
 #include "raylib.h"
 
 namespace Lumen
 {
 
-Mesh::Mesh(UUID uuid, const ::Mesh &mesh)
-    : Asset(uuid), m_VertexCount(mesh.vertexCount), m_TriangleCount(mesh.triangleCount),
-      m_Vertices(mesh.vertices), m_Texcoords(mesh.texcoords),
-      m_Texcoords2(mesh.texcoords2), m_Normals(mesh.normals), m_Tangents(mesh.tangents),
-      m_Colors(mesh.colors), m_Indices(mesh.indices), m_AnimVertices(mesh.animVertices),
-      m_AnimNormals(mesh.animNormals), m_BoneIds(mesh.boneIds),
-      m_BoneWeights(mesh.boneWeights), m_VaoID(mesh.vaoId), m_VboID(mesh.vboId)
+Mesh::Mesh(const AssetHandle &handle, const ::Mesh &mesh)
+    : Asset(handle), m_Mesh(new ::Mesh(mesh))
 {
 }
 
-Mesh::Mesh(const ::Mesh &mesh) : Mesh(UUID(), mesh)
+Mesh::Mesh(const AssetHandle &handle, ::Mesh *mesh) : Asset(handle), m_Mesh(mesh)
+{
+}
+
+Mesh::Mesh(const ::Mesh &mesh) : Mesh({}, mesh)
+{
+}
+
+Mesh::Mesh(::Mesh *mesh) : Mesh({}, mesh)
 {
 }
 
 bool Mesh::IsValid() const
 {
-    return true;
+    return m_Mesh && m_Mesh->vertexCount != 0;
 }
 
 AssetType Mesh::GetType() const
@@ -30,9 +34,12 @@ AssetType Mesh::GetType() const
 
 Mesh::operator ::Mesh() const
 {
-    return {m_VertexCount, m_TriangleCount, m_Vertices,    m_Texcoords, m_Texcoords2,
-            m_Normals,     m_Tangents,      m_Colors,      m_Indices,   m_AnimVertices,
-            m_AnimNormals, m_BoneIds,       m_BoneWeights, m_VaoID,     m_VboID};
+    return *m_Mesh;
+}
+
+Mesh::operator ::Mesh *() const
+{
+    return m_Mesh;
 }
 
 } // namespace Lumen

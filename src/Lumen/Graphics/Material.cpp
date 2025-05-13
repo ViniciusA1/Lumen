@@ -5,20 +5,27 @@
 namespace Lumen
 {
 
-Material::Material(UUID uuid, const ::Material &material)
-    : Asset(uuid), m_Shader(material.shader), m_Maps(material.maps),
-      m_Params({material.params[0], material.params[1], material.params[2],
-                material.params[3]})
+Material::Material(const AssetHandle &handle, const ::Material &material)
+    : Asset(handle), m_Material(new ::Material(material))
 {
 }
 
-Material::Material(const ::Material &material) : Material(UUID(), material)
+Material::Material(const AssetHandle &handle, ::Material *material)
+    : Asset(handle), m_Material(material)
+{
+}
+
+Material::Material(const ::Material &material) : Material({}, material)
+{
+}
+
+Material::Material(::Material *material) : Material({}, material)
 {
 }
 
 bool Material::IsValid() const
 {
-    return IsMaterialReady(*this);
+    return m_Material && IsMaterialValid(*m_Material);
 }
 
 AssetType Material::GetType() const
@@ -28,7 +35,12 @@ AssetType Material::GetType() const
 
 Material::operator ::Material() const
 {
-    return {m_Shader, m_Maps, {m_Params[0], m_Params[1], m_Params[2], m_Params[3]}};
+    return *m_Material;
+}
+
+Material::operator ::Material *() const
+{
+    return m_Material;
 }
 
 } // namespace Lumen
