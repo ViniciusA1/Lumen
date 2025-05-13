@@ -5,6 +5,8 @@ struct Vector3;
 namespace Lumen
 {
 
+class Vector2;
+class Vector4;
 class Matrix4;
 class Quaternion;
 
@@ -17,7 +19,12 @@ public:
 public:
     float x, y, z;
 
-    Vector3(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+    constexpr Vector3(float x = 0.0f, float y = 0.0f, float z = 0.0f) : x(x), y(y), z(z)
+    {
+    }
+
+    Vector3(const Vector2 &vec);
+    Vector3(const Vector4 &vec);
     Vector3(const ::Vector3 &vec);
 
     friend Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs);

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Lumen/Scene/Entity/Component/Core/TransformComponent.hpp"
+#include "Lumen/Scene/Component/Core/TransformComponent.hpp"
+
 #include <array>
 
 struct Matrix;

@@ -1,5 +1,6 @@
 #include "Lumen/Math/Vector2.hpp"
 #include "Lumen/Math/Matrix4.hpp"
+#include "Lumen/Math/Vector4.hpp"
 
 #include "box2d/math_functions.h"
 #include "imgui.h"
@@ -14,7 +15,11 @@ namespace Lumen
 const Vector2 Vector2::One = {1, 1};
 const Vector2 Vector2::Zero = {0, 0};
 
-Vector2::Vector2(float x, float y) : x(x), y(y)
+Vector2::Vector2(const Vector3 &vec) : x(vec.x), y(vec.y)
+{
+}
+
+Vector2::Vector2(const Vector4 &vec) : x(vec.x), y(vec.y)
 {
 }
 

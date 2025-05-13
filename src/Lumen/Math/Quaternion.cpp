@@ -37,7 +37,7 @@ float Quaternion::Length() const
 Quaternion Quaternion::Normalized() const
 {
     float length = Length();
-    return length > 0.0f ? *this / length : *this;
+    return length > 0.0f ? (*this) * (1.0f / length) : *this;
 }
 
 Matrix4 Quaternion::ToMatrix() const

@@ -6,6 +6,9 @@ struct ImVec4;
 namespace Lumen
 {
 
+class Vector2;
+class Vector3;
+
 class Vector4
 {
 public:
@@ -15,7 +18,13 @@ public:
 public:
     float x, y, z, w;
 
-    Vector4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f);
+    constexpr Vector4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f)
+        : x(x), y(y), z(z), w(w)
+    {
+    }
+
+    Vector4(const Vector2 &vec);
+    Vector4(const Vector3 &vec);
     Vector4(const ::Vector4 &vec);
     Vector4(const ::ImVec4 &vec);
 

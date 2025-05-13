@@ -7,6 +7,8 @@ struct b2Vec2;
 namespace Lumen
 {
 
+class Vector3;
+class Vector4;
 class Matrix4;
 
 class Vector2
@@ -18,7 +20,10 @@ public:
 public:
     float x, y;
 
-    Vector2(float x = 0.0f, float y = 0.0f);
+    constexpr Vector2(float x = 0.0f, float y = 0.0f) : x(x), y(y) {}
+
+    Vector2(const Vector3 &vec);
+    Vector2(const Vector4 &vec);
     Vector2(const ::Vector2 &vec);
     Vector2(const ::ImVec2 &vec);
     Vector2(const ::b2Vec2 &vec);
