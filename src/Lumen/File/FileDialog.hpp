@@ -2,6 +2,7 @@
 
 #include "Lumen/File/Path.hpp"
 
+#include <span>
 #include <vector>
 
 namespace Lumen
@@ -28,6 +29,8 @@ public:
 public:
     static void Init();
     static void Shutdown();
+
+    static void CopyResult(const std::span<char> &buffer, const DialogResult &result);
 
     static DialogResult OpenFile(
         const std::vector<std::pair<std::string, std::string>> &filters = {},

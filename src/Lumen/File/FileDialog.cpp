@@ -15,6 +15,15 @@ void FileDialog::Shutdown()
     NFD_Quit();
 }
 
+void FileDialog::CopyResult(const std::span<char> &buffer, const DialogResult &result)
+{
+    if (result.Status != DialogResult::Status::Ok)
+        return;
+
+    const std::string &strResult = result.Paths[0].String();
+    std::copy(strResult.begin(), strResult.end(), buffer.begin());
+}
+
 static nfdfilteritem_t makeFilter(const std::pair<std::string, std::string> &f)
 {
     return {f.first.c_str(), f.second.c_str()};
