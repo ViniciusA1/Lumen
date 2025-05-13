@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Lumen/Scene/Entity//Component/Core/NameComponent.hpp"
-#include "Lumen/Scene/Entity/Component/Core/IDComponent.hpp"
-#include "Lumen/Scene/Entity/Component/Core/TagComponent.hpp"
-#include "Lumen/Scene/Entity/Component/Core/TransformComponent.hpp"
-#include "Lumen/Scene/Entity/Component/Graphics/CameraComponent.hpp"
-#include "Lumen/Scene/Entity/Component/Graphics/SpriteRendererComponent.hpp"
-#include "Lumen/Scene/Entity/Component/Physics/VelocityComponent.hpp"
+#include "Lumen/Scene/Component/Core/IDComponent.hpp"
+#include "Lumen/Scene/Component/Core/NameComponent.hpp"
+#include "Lumen/Scene/Component/Core/TagComponent.hpp"
+#include "Lumen/Scene/Component/Core/TransformComponent.hpp"
+#include "Lumen/Scene/Component/Graphics/CameraComponent.hpp"
+#include "Lumen/Scene/Component/Graphics/SpriteRendererComponent.hpp"
+#include "Lumen/Scene/Component/Physics/VelocityComponent.hpp"
 
 namespace Lumen
 {

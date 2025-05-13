@@ -17,11 +17,19 @@ EntityManager &World::GetEntityManager()
     return m_EntityManager;
 }
 
-void World::Update()
+void World::OnUpdate()
 {
-    for (auto &[type, system] : m_SystemMap)
+    for (auto &system : m_UpdateSystemList)
     {
         system->OnUpdate();
+    }
+}
+
+void World::OnDraw()
+{
+    for (auto &system : m_DrawSystemList)
+    {
+        system->OnDraw();
     }
 }
 

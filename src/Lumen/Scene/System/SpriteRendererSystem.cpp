@@ -1,15 +1,15 @@
-#include "Lumen/Scene/Entity/System/SpriteRendererSystem.hpp"
+#include "Lumen/Scene/System/SpriteRendererSystem.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
 #include "Lumen/Scene/World.hpp"
 
 namespace Lumen
 {
 
-SpriteRendererSystem::SpriteRendererSystem(World &world) : System(world)
+SpriteRendererSystem::SpriteRendererSystem(World &world) : DrawSystem(world)
 {
 }
 
-void SpriteRendererSystem::OnUpdate()
+void SpriteRendererSystem::OnDraw()
 {
     auto query = Query<TransformComponent, SpriteRendererComponent>();
 

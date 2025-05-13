@@ -1,12 +1,11 @@
 #pragma once
 
 #include "Lumen/Core/UUID.hpp"
-#include "Lumen/Scene/Entity/Component/ComponentBase.hpp"
 
 namespace Lumen
 {
 
-struct ModelRendererComponent : public ComponentBase
+struct ModelRendererComponent
 {
     UUID Model = 0;
 };

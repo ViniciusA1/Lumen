@@ -2,12 +2,11 @@
 
 #include "Lumen/Core/UUID.hpp"
 #include "Lumen/Graphics/Color.hpp"
-#include "Lumen/Scene/Entity/Component/ComponentBase.hpp"
 
 namespace Lumen
 {
 
-struct SpriteRendererComponent : public ComponentBase
+struct SpriteRendererComponent
 {
     Color Color = Color::White;
     UUID Texture = 0;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Lumen/Math/Vector3.hpp"
-#include "Lumen/Scene/Entity/Component/ComponentBase.hpp"
 
 namespace Lumen
 {
@@ -12,7 +11,7 @@ enum class ProjectionType
     Orthographic
 };
 
-struct CameraComponent : public ComponentBase
+struct CameraComponent
 {
     Vector3 Position = {10.0f, 10.0f, 10.0f};
     Vector3 Target = {0.0f, 0.0f, 0.0f};

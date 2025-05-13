@@ -3,7 +3,7 @@
 #include "Lumen/Core/UUID.hpp"
 #include "Lumen/Event/EventBus.hpp"
 #include "Lumen/Event/SceneEvent.hpp"
-#include "Lumen/Scene/Entity/Component/Component.hpp"
+#include "Lumen/Scene/Component/Component.hpp"
 #include "Lumen/Scene/Entity/Entity.hpp"
 
 #include <entt/entity/registry.hpp>
