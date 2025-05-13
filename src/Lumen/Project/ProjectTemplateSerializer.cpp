@@ -7,24 +7,21 @@ namespace Lumen
 bool ProjectTemplateSerializer::Deserialize(ProjectTemplate &projTemplate,
                                             const Path &path)
 {
-    Path configPath = path / "ProjectTemplate.ltempl";
-
-    Yaml yaml = Yaml::FromFile(configPath);
+    Yaml yaml = Yaml::FromFile(path);
     if (yaml.IsNull())
         return false;
 
     yaml >> projTemplate;
-    projTemplate.RootDirectory = path;
+    projTemplate.RootDirectory = path.ParentPath();
     return true;
 }
 
 bool ProjectTemplateSerializer::Serialize(const ProjectTemplate &projTemplate,
                                           const Path &path)
 {
-    Path configPath = path / "ProjectTemplate.ltempl";
     Yaml yaml;
     yaml << projTemplate;
-    return yaml.ToFile(configPath);
+    return yaml.ToFile(path);
 }
 
 } // namespace Lumen
