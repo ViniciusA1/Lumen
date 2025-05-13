@@ -5,15 +5,10 @@
 namespace Lumen
 {
 
-class AssetMetadata
+struct AssetMetadata
 {
-public:
-    Path Path;
+    class Path Path;
     std::string Name;
-
-public:
-    AssetMetadata() = default;
-    AssetMetadata(class Path path, std::string name);
 };
 
 } // namespace Lumen

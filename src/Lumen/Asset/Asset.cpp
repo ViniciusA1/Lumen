@@ -3,13 +3,13 @@
 namespace Lumen
 {
 
-Asset::Asset(UUID uuid) : m_ID(uuid)
+Asset::Asset(const AssetHandle &handle) : m_Handle(handle)
 {
 }
 
-UUID Asset::GetID() const
+AssetHandle Asset::GetHandle() const
 {
-    return m_ID;
+    return m_Handle;
 }
 
 } // namespace Lumen

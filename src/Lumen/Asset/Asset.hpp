@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Lumen/Asset/AssetHandle.hpp"
 #include "Lumen/Asset/AssetType.hpp"
-#include "Lumen/Core/UUID.hpp"
 
 namespace Lumen
 {
@@ -10,15 +10,15 @@ class Asset
 {
 public:
     Asset() = default;
-    Asset(UUID uuid);
+    Asset(const AssetHandle &handle);
 
     [[nodiscard]] virtual bool IsValid() const = 0;
 
-    [[nodiscard]] UUID GetID() const;
+    [[nodiscard]] AssetHandle GetHandle() const;
     [[nodiscard]] virtual AssetType GetType() const = 0;
 
 private:
-    UUID m_ID;
+    AssetHandle m_Handle;
 };
 
 } // namespace Lumen
