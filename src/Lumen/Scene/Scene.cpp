@@ -1,5 +1,4 @@
 #include "Lumen/Scene/Scene.hpp"
-#include "Entity/Component/Core/TagComponent.hpp"
 #include "Lumen/Event/EventBus.hpp"
 
 namespace Lumen
@@ -92,6 +91,19 @@ SceneType Scene::GetType() const
 void Scene::SetState(SceneState state)
 {
     m_State = state;
+}
+
+void Scene::OnUpdate()
+{
+    if (m_State == SceneState::Pause)
+        return;
+
+    m_World.OnUpdate();
+}
+
+void Scene::OnDraw()
+{
+    m_World.OnDraw();
 }
 
 void Scene::BindEvents()

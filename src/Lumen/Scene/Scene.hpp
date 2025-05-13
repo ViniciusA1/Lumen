@@ -32,7 +32,8 @@ public:
     void SetPath(const Path &path);
     void SetState(SceneState state);
 
-    virtual void OnUpdate() = 0;
+    void OnUpdate();
+    void OnDraw();
 
 protected:
     void BindEvents();
