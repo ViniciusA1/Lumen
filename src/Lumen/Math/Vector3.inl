@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Lumen/Math/Math.hpp"
 #include "Lumen/Math/Matrix4.hpp"
 #include "Lumen/Math/Quaternion.hpp"
 #include "Lumen/Math/Vector3.hpp"
@@ -35,15 +36,15 @@ constexpr float Vector3::Angle(const Vector3 &v1, const Vector3 &v2)
     if (lengths == 0.0f)
         return 0.0f;
 
-    return std::acos(dot / lengths);
+    return Math::Acos(dot / lengths);
 }
 
 constexpr Vector3 Vector3::Clamp(const Vector3 &v, const Vector3 &min, const Vector3 &max)
 {
     return {
-        std::fmin(std::fmax(v.x, min.x), max.x),
-        std::fmin(std::fmax(v.y, min.y), max.y),
-        std::fmin(std::fmax(v.z, min.z), max.z),
+        Math::Min(Math::Max(v.x, min.x), max.x),
+        Math::Min(Math::Max(v.y, min.y), max.y),
+        Math::Min(Math::Max(v.z, min.z), max.z),
     };
 }
 
@@ -54,7 +55,7 @@ constexpr Vector3 Vector3::Clamp(const Vector3 &v, float min, float max)
     float length = v.LengthSqr();
     if (length > 0.0f)
     {
-        length = sqrtf(length);
+        length = Math::Sqrt(length);
 
         float scale = 1;
         if (length < min)
@@ -74,8 +75,11 @@ constexpr Vector3 Vector3::Clamp(const Vector3 &v, float min, float max)
 
 constexpr Vector3 Vector3::Cross(const Vector3 &v1, const Vector3 &v2)
 {
-    return {v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z,
-            v1.x * v2.y - v1.y * v2.x};
+    return {
+        v1.y * v2.z - v1.z * v2.y,
+        v1.z * v2.x - v1.x * v2.z,
+        v1.x * v2.y - v1.y * v2.x,
+    };
 }
 
 constexpr float Vector3::Dot(const Vector3 &v1, const Vector3 &v2)
@@ -100,12 +104,20 @@ constexpr Vector3 Vector3::Lerp(const Vector3 &v1, const Vector3 &v2, float amou
 
 constexpr Vector3 Vector3::Max(const Vector3 &v1, const Vector3 &v2)
 {
-    return {std::fmax(v1.x, v2.x), std::fmax(v1.y, v2.y), std::fmax(v1.z, v2.z)};
+    return {
+        Math::Max(v1.x, v2.x),
+        Math::Max(v1.y, v2.y),
+        Math::Max(v1.z, v2.z),
+    };
 }
 
 constexpr Vector3 Vector3::Min(const Vector3 &v1, const Vector3 &v2)
 {
-    return {std::fmin(v1.x, v2.x), std::fmin(v1.y, v2.y), std::fmin(v1.z, v2.z)};
+    return {
+        Math::Min(v1.x, v2.x),
+        Math::Min(v1.y, v2.y),
+        Math::Min(v1.z, v2.z),
+    };
 }
 
 constexpr void Vector3::OrthoNormalize(Vector3 &v1, Vector3 &v2)
@@ -132,11 +144,11 @@ constexpr Vector3 Vector3::RotateByAxisAngle(const Vector3 &v, const Vector3 &ax
     Vector3 axisNormalized = axis.Normalized();
 
     angle /= 2.0f;
-    float a = sinf(angle);
+    float a = Math::Sin(angle);
     float b = axisNormalized.x * a;
     float c = axisNormalized.y * a;
     float d = axisNormalized.z * a;
-    a = cosf(angle);
+    a = Math::Cos(angle);
     Vector3 w = {b, c, d};
 
     Vector3 wv = Vector3::Cross(w, v);
@@ -173,22 +185,38 @@ constexpr Vector3 Vector3::Transform(const Vector3 &v, const Matrix4 &mat)
 
 constexpr Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs)
 {
-    return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
+    return {
+        lhs.x + rhs.x,
+        lhs.y + rhs.y,
+        lhs.z + rhs.z,
+    };
 }
 
 constexpr Vector3 operator-(const Vector3 &lhs, const Vector3 &rhs)
 {
-    return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
+    return {
+        lhs.x - rhs.x,
+        lhs.y - rhs.y,
+        lhs.z - rhs.z,
+    };
 }
 
 constexpr Vector3 operator*(const Vector3 &vec, float scalar)
 {
-    return {vec.x * scalar, vec.y * scalar, vec.z * scalar};
+    return {
+        vec.x * scalar,
+        vec.y * scalar,
+        vec.z * scalar,
+    };
 }
 
 constexpr Vector3 operator*(float scalar, const Vector3 &vec)
 {
-    return {vec.x * scalar, vec.y * scalar, vec.z * scalar};
+    return {
+        vec.x * scalar,
+        vec.y * scalar,
+        vec.z * scalar,
+    };
 }
 
 constexpr Vector3 operator/(const Vector3 &vec, float scalar)
@@ -196,7 +224,11 @@ constexpr Vector3 operator/(const Vector3 &vec, float scalar)
     if (scalar == 0.0f)
         return vec;
 
-    return {vec.x / scalar, vec.y / scalar, vec.z / scalar};
+    return {
+        vec.x / scalar,
+        vec.y / scalar,
+        vec.z / scalar,
+    };
 }
 
 constexpr Vector3 operator/(float scalar, const Vector3 &vec)
@@ -204,7 +236,11 @@ constexpr Vector3 operator/(float scalar, const Vector3 &vec)
     if (vec.x == 0.0f || vec.y == 0.0f || vec.z == 0.0f)
         return vec;
 
-    return {scalar / vec.x, scalar / vec.y, scalar / vec.z};
+    return {
+        scalar / vec.x,
+        scalar / vec.y,
+        scalar / vec.z,
+    };
 }
 
 constexpr Vector3 &operator+=(Vector3 &lhs, const Vector3 &rhs)

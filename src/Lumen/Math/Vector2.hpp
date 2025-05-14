@@ -65,5 +65,12 @@ public:
 
 } // namespace Lumen
 
-#include "Lumen/Math/Math.hpp"
 #include "Lumen/Math/Vector2.inl"
+
+namespace Lumen
+{
+
+inline constexpr Vector2 Vector2::One{1.0f, 1.0f};
+inline constexpr Vector2 Vector2::Zero{0.0f, 0.0f};
+
+} // namespace Lumen

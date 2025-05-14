@@ -38,7 +38,10 @@ constexpr bool Rectangle::Intersects(const Rectangle &other) const
 
 constexpr Vector2 Rectangle::GetCenter() const
 {
-    return {x + Width / 2.0f, y + Height / 2.0f};
+    return {
+        x + Width / 2.0f,
+        y + Height / 2.0f,
+    };
 }
 
 constexpr Vector2 Rectangle::GetPosition() const

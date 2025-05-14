@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Lumen/Math/Math.hpp"
 #include "Lumen/Math/Matrix4.hpp"
 #include "Lumen/Math/Vector2.hpp"
 
@@ -125,17 +126,26 @@ constexpr Vector2 Vector2::Transform(const Vector2 &v, const Matrix4 &mat)
 
 constexpr Vector2 operator+(const Vector2 &lhs, const Vector2 &rhs)
 {
-    return {lhs.x + rhs.x, lhs.y + rhs.y};
+    return {
+        lhs.x + rhs.x,
+        lhs.y + rhs.y,
+    };
 }
 
 constexpr Vector2 operator-(const Vector2 &lhs, const Vector2 &rhs)
 {
-    return {lhs.x - rhs.x, lhs.y - rhs.y};
+    return {
+        lhs.x - rhs.x,
+        lhs.y - rhs.y,
+    };
 }
 
 constexpr Vector2 operator*(const Vector2 &vec, float scalar)
 {
-    return {vec.x * scalar, vec.y * scalar};
+    return {
+        vec.x * scalar,
+        vec.y * scalar,
+    };
 }
 
 constexpr Vector2 operator*(float scalar, const Vector2 &vec)
@@ -147,14 +157,22 @@ constexpr Vector2 operator/(const Vector2 &vec, float scalar)
 {
     if (scalar == 0)
         return vec;
-    return {vec.x / scalar, vec.y / scalar};
+
+    return {
+        vec.x / scalar,
+        vec.y / scalar,
+    };
 }
 
 constexpr Vector2 operator/(float scalar, const Vector2 &vec)
 {
     if (vec.x == 0 || vec.y == 0)
         return vec;
-    return {scalar / vec.x, scalar / vec.y};
+
+    return {
+        scalar / vec.x,
+        scalar / vec.y,
+    };
 }
 
 constexpr Vector2 &operator+=(Vector2 &lhs, const Vector2 &rhs)
@@ -182,6 +200,7 @@ constexpr Vector2 &operator/=(Vector2 &vec, float scalar)
 {
     if (scalar == 0)
         return vec;
+
     vec.x /= scalar;
     vec.y /= scalar;
     return vec;

@@ -8,9 +8,6 @@
 namespace Lumen
 {
 
-const Vector4 Vector4::One = {1, 1, 1, 1};
-const Vector4 Vector4::Zero = {0, 0, 0, 0};
-
 Vector4::Vector4(const Vector2 &vec) : x(vec.x), y(vec.y), z(0.0f), w(0.0f)
 {
 }

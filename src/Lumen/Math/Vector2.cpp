@@ -9,9 +9,6 @@
 namespace Lumen
 {
 
-const Vector2 Vector2::One = {1, 1};
-const Vector2 Vector2::Zero = {0, 0};
-
 Vector2::Vector2(const Vector3 &vec) : x(vec.x), y(vec.y)
 {
 }

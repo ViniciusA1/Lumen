@@ -255,7 +255,7 @@ constexpr Matrix4 Matrix4::Ortho(float left, float right, float bottom, float to
 
 constexpr Matrix4 Matrix4::Perspective(float fovY, float aspect, float near, float far)
 {
-    double top = near * std::tan(fovY * 0.5);
+    double top = near * Math::Tan(fovY * 0.5);
     double right = top * aspect;
 
     return Frustum(-right, right, -top, top, near, far);
@@ -268,8 +268,8 @@ constexpr Matrix4 Matrix4::Rotate(const Vector3 &axis, float angle)
     Vector3 normalized = axis.Normalized();
     float x = normalized.x, y = normalized.y, z = normalized.z;
 
-    float sinres = std::sin(angle);
-    float cosres = std::cos(angle);
+    float sinres = Math::Sin(angle);
+    float cosres = Math::Cos(angle);
     float t = 1.0f - cosres;
 
     result[0] = x * x * t + cosres;
@@ -293,8 +293,8 @@ constexpr Matrix4 Matrix4::RotateX(float angle)
 {
     Matrix4 result = Matrix4::Identity;
 
-    float cosAngle = std::cos(angle);
-    float sinAngle = std::sin(angle);
+    float cosAngle = Math::Cos(angle);
+    float sinAngle = Math::Sin(angle);
 
     result[5] = cosAngle;
     result[6] = sinAngle;
@@ -308,8 +308,8 @@ constexpr Matrix4 Matrix4::RotateY(float angle)
 {
     Matrix4 result = Matrix4::Identity;
 
-    float cosAngle = std::cos(angle);
-    float sinAngle = std::sin(angle);
+    float cosAngle = Math::Cos(angle);
+    float sinAngle = Math::Sin(angle);
 
     result[0] = cosAngle;
     result[2] = -sinAngle;
@@ -323,8 +323,8 @@ constexpr Matrix4 Matrix4::RotateZ(float angle)
 {
     Matrix4 result = Matrix4::Identity;
 
-    float cosAngle = std::cos(angle);
-    float sinAngle = std::sin(angle);
+    float cosAngle = Math::Cos(angle);
+    float sinAngle = Math::Sin(angle);
 
     result[0] = cosAngle;
     result[1] = sinAngle;
@@ -338,12 +338,12 @@ constexpr Matrix4 Matrix4::RotateXYZ(const Vector3 &angle)
 {
     Matrix4 result = Matrix4::Identity;
 
-    float cosz = std::cos(-angle.z);
-    float sinz = std::sin(-angle.z);
-    float cosy = std::cos(-angle.y);
-    float siny = std::sin(-angle.y);
-    float cosx = std::cos(-angle.x);
-    float sinx = std::sin(-angle.x);
+    float cosz = Math::Cos(-angle.z);
+    float sinz = Math::Sin(-angle.z);
+    float cosy = Math::Cos(-angle.y);
+    float siny = Math::Sin(-angle.y);
+    float cosx = Math::Cos(-angle.x);
+    float sinx = Math::Sin(-angle.x);
 
     result[0] = cosz * cosy;
     result[1] = (cosz * siny * sinx) - (sinz * cosx);
@@ -364,12 +364,12 @@ constexpr Matrix4 Matrix4::RotateZYX(const Vector3 &angle)
 {
     Matrix4 result;
 
-    float cz = std::cos(angle.z);
-    float sz = std::sin(angle.z);
-    float cy = std::cos(angle.y);
-    float sy = std::sin(angle.y);
-    float cx = std::cos(angle.x);
-    float sx = std::sin(angle.x);
+    float cz = Math::Cos(angle.z);
+    float sz = Math::Sin(angle.z);
+    float cy = Math::Cos(angle.y);
+    float sy = Math::Sin(angle.y);
+    float cx = Math::Cos(angle.x);
+    float sx = Math::Sin(angle.x);
 
     result[0] = cz * cy;
     result[4] = cz * sy * sx - cx * sz;
@@ -390,14 +390,46 @@ constexpr Matrix4 Matrix4::RotateZYX(const Vector3 &angle)
 
 constexpr Matrix4 Matrix4::Scale(float x, float y, float z)
 {
-    return Matrix4({x, 0.0f, 0.0f, 0.0f, 0.0f, y, 0.0f, 0.0f, 0.0f, 0.0f, z, 0.0f, 0.0f,
-                    0.0f, 0.0f, 1.0f});
+    return Matrix4({
+        x,
+        0.0f,
+        0.0f,
+        0.0f,
+        0.0f,
+        y,
+        0.0f,
+        0.0f,
+        0.0f,
+        0.0f,
+        z,
+        0.0f,
+        0.0f,
+        0.0f,
+        0.0f,
+        1.0f,
+    });
 }
 
 constexpr Matrix4 Matrix4::Scale(const Vector3 &scale)
 {
-    return Matrix4({scale.x, 0.0f, 0.0f, 0.0f, 0.0f, scale.y, 0.0f, 0.0f, 0.0f, 0.0f,
-                    scale.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
+    return Matrix4({
+        scale.x,
+        0.0f,
+        0.0f,
+        0.0f,
+        0.0f,
+        scale.y,
+        0.0f,
+        0.0f,
+        0.0f,
+        0.0f,
+        scale.z,
+        0.0f,
+        0.0f,
+        0.0f,
+        0.0f,
+        1.0f,
+    });
 }
 
 constexpr Matrix4 Matrix4::Transform(const Vector3 &position, const Vector3 &rotation,
@@ -411,14 +443,18 @@ constexpr Matrix4 Matrix4::Transform(const Vector3 &position, const Vector3 &rot
 
 constexpr Matrix4 Matrix4::Translate(float x, float y, float z)
 {
-    return {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 1.0f, 0.0f, x,    y,    z,    1.0f};
+    return {
+        1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f, x,    y,    z,    1.0f,
+    };
 }
 
 constexpr Matrix4 Matrix4::Translate(const Vector3 &translation)
 {
-    return {1.0f, 0.0f, 0.0f, 0.0f, 0.0f,          1.0f,          0.0f,          0.0f,
-            0.0f, 0.0f, 1.0f, 0.0f, translation.x, translation.y, translation.z, 1.0f};
+    return {
+        1.0f, 0.0f, 0.0f, 0.0f, 0.0f,          1.0f,          0.0f,          0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f, translation.x, translation.y, translation.z, 1.0f,
+    };
 }
 
 constexpr float &Matrix4::operator[](std::size_t index)

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Lumen/Math/Math.hpp"
-
 struct Vector4;
 struct ImVec4;
 
@@ -59,3 +57,11 @@ public:
 } // namespace Lumen
 
 #include "Lumen/Math/Vector4.inl"
+
+namespace Lumen
+{
+
+inline constexpr Vector4 Vector4::One{1.0f, 1.0f, 1.0f, 1.0f};
+inline constexpr Vector4 Vector4::Zero{0.0f, 0.0f, 0.0f, 0.0f};
+
+} // namespace Lumen
