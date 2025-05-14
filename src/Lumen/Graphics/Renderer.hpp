@@ -164,11 +164,16 @@ public:
                          float fontSize, Color color);
     static void DrawText(const TransformComponent &transform, const std::string &text,
                          float fontSize, Color color, const Font &font);
+    static void DrawText(const Vector2 &position, const std::string &text, float fontSize,
+                         Color color);
+    static void DrawText(const Vector2 &position, const std::string &text, float rotation,
+                         float fontSize, float spacing, Color color, const Font &font);
     static void DrawText3D(const TransformComponent &transform, const std::string &text,
                            Color color);
 
 public:
     static void DrawFPS(const TransformComponent &transform, float fontSize, Color color);
+    static void DrawFPS(const Vector2 &position, float fontSize, Color color);
 };
 
 } // namespace Lumen

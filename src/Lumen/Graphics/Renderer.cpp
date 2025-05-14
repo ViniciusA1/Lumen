@@ -721,7 +721,9 @@ void Renderer::DrawMesh(const TransformComponent &transform, const Mesh &mesh,
 void Renderer::DrawMeshTransformed(const TransformComponent &transform, const Mesh &mesh,
                                    const Material &material)
 {
-    ::DrawMesh(mesh, material, Matrix4::Transform(transform));
+    ::DrawMesh(
+        mesh, material,
+        Matrix4::Transform(transform.Position, transform.Rotation, transform.Scale));
 }
 
 void Renderer::DrawModel(const TransformComponent &transform, const Model &model,
@@ -835,6 +837,19 @@ void Renderer::DrawText(const TransformComponent &transform, const std::string &
                   color);
 }
 
+void Renderer::DrawText(const Vector2 &position, const std::string &text, float fontSize,
+                        Color color)
+{
+    ::DrawText(text.c_str(), position.x, position.y, fontSize, color);
+}
+
+void Renderer::DrawText(const Vector2 &position, const std::string &text, float rotation,
+                        float fontSize, float spacing, Color color, const Font &font)
+{
+    ::DrawTextPro(font, text.c_str(), position, {0.0f, 0.0f}, rotation, fontSize, spacing,
+                  color);
+}
+
 void Renderer::DrawText3D(const TransformComponent &transform, const std::string &text,
                           Color color)
 {
@@ -843,6 +858,11 @@ void Renderer::DrawText3D(const TransformComponent &transform, const std::string
 void Renderer::DrawFPS(const TransformComponent &transform, float fontSize, Color color)
 {
     DrawText(transform, std::to_string(::GetFPS()), fontSize, color);
+}
+
+void Renderer::DrawFPS(const Vector2 &position, float fontSize, Color color)
+{
+    DrawText(position, std::to_string(::GetFPS()), fontSize, color);
 }
 
 } // namespace Lumen
