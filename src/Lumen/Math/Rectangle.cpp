@@ -1,20 +1,20 @@
 #include "Lumen/Math/Rectangle.hpp"
+#include "Lumen/Scene/Component/Core/TransformComponent.hpp"
+
 #include "raylib.h"
 
 namespace Lumen
 {
 
-Rectangle::Rectangle(float x, float y, float width, float height)
-    : x(x), y(y), Width(width), Height(height)
+Rectangle::Rectangle(const TransformComponent &transform)
 {
+    x = transform.Position.x - (transform.Scale.x / 2.0f);
+    y = transform.Position.y - (transform.Scale.y / 2.0f);
+    Width = transform.Scale.x;
+    Height = transform.Scale.y;
 }
 
-Rectangle::Rectangle(const Vector2 &position, const Vector2 &size)
-    : x(position.x), y(position.y), Width(size.x), Height(size.y)
-{
-}
-
-Rectangle::Rectangle(const ::Rectangle rectangle)
+Rectangle::Rectangle(const struct ::Rectangle &rectangle)
     : x(rectangle.x), y(rectangle.y), Width(rectangle.width), Height(rectangle.height)
 {
 }

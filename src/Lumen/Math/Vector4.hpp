@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Lumen/Math/Math.hpp"
+
 struct Vector4;
 struct ImVec4;
 
@@ -18,42 +20,42 @@ public:
 public:
     float x, y, z, w;
 
-    constexpr Vector4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f)
-        : x(x), y(y), z(z), w(w)
-    {
-    }
+    constexpr Vector4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f);
 
     Vector4(const Vector2 &vec);
     Vector4(const Vector3 &vec);
     Vector4(const ::Vector4 &vec);
     Vector4(const ::ImVec4 &vec);
 
-    friend Vector4 operator+(const Vector4 &lhs, const Vector4 &rhs);
-    friend Vector4 operator-(const Vector4 &lhs, const Vector4 &rhs);
-    friend Vector4 operator*(const Vector4 &vec, float scalar);
-    friend Vector4 operator*(float scalar, const Vector4 &vec);
-    friend Vector4 operator/(const Vector4 &vec, float scalar);
-    friend Vector4 operator/(float scalar, const Vector4 &vec);
-    friend Vector4 &operator+=(Vector4 &lhs, const Vector4 &rhs);
-    friend Vector4 &operator-=(Vector4 &lhs, const Vector4 &rhs);
-    friend Vector4 &operator*=(Vector4 &vec, float scalar);
-    friend Vector4 &operator/=(Vector4 &vec, float scalar);
-    friend bool operator==(const Vector4 &lhs, const Vector4 &rhs);
-    friend bool operator!=(const Vector4 &lhs, const Vector4 &rhs);
+    friend constexpr Vector4 operator+(const Vector4 &lhs, const Vector4 &rhs);
+    friend constexpr Vector4 operator-(const Vector4 &lhs, const Vector4 &rhs);
+    friend constexpr Vector4 operator*(const Vector4 &vec, float scalar);
+    friend constexpr Vector4 operator*(float scalar, const Vector4 &vec);
+    friend constexpr Vector4 operator/(const Vector4 &vec, float scalar);
+    friend constexpr Vector4 operator/(float scalar, const Vector4 &vec);
+    friend constexpr Vector4 &operator+=(Vector4 &lhs, const Vector4 &rhs);
+    friend constexpr Vector4 &operator-=(Vector4 &lhs, const Vector4 &rhs);
+    friend constexpr Vector4 &operator*=(Vector4 &vec, float scalar);
+    friend constexpr Vector4 &operator/=(Vector4 &vec, float scalar);
+    friend constexpr bool operator==(const Vector4 &lhs, const Vector4 &rhs);
+    friend constexpr bool operator!=(const Vector4 &lhs, const Vector4 &rhs);
     operator ::Vector4() const;
     operator ::ImVec4() const;
 
-    [[nodiscard]] float Length() const;
-    [[nodiscard]] float LengthSqr() const;
-    [[nodiscard]] Vector4 Normalized() const;
+    [[nodiscard]] constexpr float Length() const;
+    [[nodiscard]] constexpr float LengthSqr() const;
+    [[nodiscard]] constexpr Vector4 Normalized() const;
 
-    static float Distance(const Vector4 &v1, const Vector4 &v2);
-    static float DistanceSqr(const Vector4 &v1, const Vector4 &v2);
-    static float Dot(const Vector4 &v1, const Vector4 &v2);
-    static Vector4 Lerp(const Vector4 &v1, const Vector4 &v2, float amount);
-    static Vector4 Max(const Vector4 &v1, const Vector4 &v2);
-    static Vector4 Min(const Vector4 &v1, const Vector4 &v2);
-    static Vector4 MoveTowards(const Vector4 &v, const Vector4 &target, float maxDist);
+    static constexpr float Distance(const Vector4 &v1, const Vector4 &v2);
+    static constexpr float DistanceSqr(const Vector4 &v1, const Vector4 &v2);
+    static constexpr float Dot(const Vector4 &v1, const Vector4 &v2);
+    static constexpr Vector4 Lerp(const Vector4 &v1, const Vector4 &v2, float amount);
+    static constexpr Vector4 Max(const Vector4 &v1, const Vector4 &v2);
+    static constexpr Vector4 Min(const Vector4 &v1, const Vector4 &v2);
+    static constexpr Vector4 MoveTowards(const Vector4 &v, const Vector4 &target,
+                                         float maxDist);
 };
 
 } // namespace Lumen
+
+#include "Lumen/Math/Vector4.inl"
