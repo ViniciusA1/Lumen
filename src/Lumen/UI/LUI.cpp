@@ -6,6 +6,7 @@
 #include "imgui.h"
 
 #include "ImGuizmo.h"
+#include "extras/FA6FreeSolidFontData.h"
 #include "rlImGui.h"
 
 namespace Lumen::LUI
@@ -14,9 +15,13 @@ namespace Lumen::LUI
 static Lumen::LUIStyle s_Style;
 static std::vector<std::function<void()>> s_OverlayList;
 
+static void SetupFont();
+static void SetupIconFont();
+
 void Init()
 {
     rlImGuiSetup(true);
+    SetupFont();
     Lumen::LUIStyleSerializer serializer;
     if (serializer.Deserialize({"assets/UI/Style/Dark.json"}, s_Style))
     {
@@ -27,6 +32,39 @@ void Init()
 void Shutdown()
 {
     rlImGuiShutdown();
+}
+
+static void SetupFont()
+{
+    ImGuiIO &io = ImGui::GetIO();
+    io.Fonts->Clear();
+    io.Fonts->AddFontFromFileTTF("assets/UI/Font/RobotoMono.ttf", 18.0f);
+    SetupIconFont();
+    rlImGuiReloadFonts();
+}
+
+static void SetupIconFont()
+{
+    static const std::array<ImWchar, 3> icons_ranges{ICON_MIN_FA, ICON_MAX_FA, 0};
+    ImFontConfig icons_config;
+    icons_config.MergeMode = true;
+    icons_config.PixelSnapH = true;
+    icons_config.FontDataOwnedByAtlas = false;
+
+    icons_config.GlyphMinAdvanceX = 17.0f;
+    icons_config.GlyphMaxAdvanceX = std::numeric_limits<float>::max();
+    icons_config.RasterizerMultiply = 1.0f;
+    icons_config.OversampleH = 2;
+    icons_config.OversampleV = 1;
+    icons_config.GlyphOffset.y -= 1;
+
+    icons_config.GlyphRanges = icons_ranges.data();
+
+    ImGuiIO &io = ImGui::GetIO();
+
+    io.Fonts->AddFontFromMemoryCompressedTTF(
+        (void *)fa_solid_900_compressed_data, fa_solid_900_compressed_size,
+        FONT_AWESOME_ICON_SIZE * 2.0f / 3.0f, &icons_config, icons_ranges.data());
 }
 
 void BeginUI()
