@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include <initializer_list>
 #include <limits>
 
 namespace Lumen
@@ -17,45 +17,48 @@ public:
     static constexpr float NegativeInfinity = -std::numeric_limits<float>::infinity();
 
 public:
-    static float Abs(float f);
-    static float Max(float a, float b);
-    static float Min(float a, float b);
-    static float Pow(float base, float exponent);
-    static float Exp(float power);
-    static float Sqrt(float f);
+    static constexpr float Abs(float f);
+    static constexpr float Fmod(float a, float b);
+    static constexpr float Max(float a, float b);
+    static constexpr float Min(float a, float b);
+    static constexpr float Max(std::initializer_list<float> list);
+    static constexpr float Min(std::initializer_list<float> list);
+    static constexpr float Pow(float base, float exponent);
+    static constexpr float Exp(float power);
+    static constexpr float Sqrt(float f);
 
-    static float Ceil(float f);
-    static int CeilToInt(float f);
-    static float Floor(float f);
-    static int FloorToInt(float f);
-    static float Round(float f);
-    static int RoundToInt(float f);
+    static constexpr float Ceil(float f);
+    static constexpr int CeilToInt(float f);
+    static constexpr float Floor(float f);
+    static constexpr int FloorToInt(float f);
+    static constexpr float Round(float f);
+    static constexpr int RoundToInt(float f);
 
-    static float Cos(float angle);
-    static float Sin(float angle);
-    static float Tan(float angle);
-    static float Acos(float f);
-    static float Asin(float f);
-    static float Atan(float f);
-    static float Atan2(float y, float x);
+    static constexpr float Cos(float angle);
+    static constexpr float Sin(float angle);
+    static constexpr float Tan(float angle);
+    static constexpr float Acos(float f);
+    static constexpr float Asin(float f);
+    static constexpr float Atan(float f);
+    static constexpr float Atan2(float y, float x);
 
-    static float Lerp(float a, float b, float t);
-    static float LerpUnclamped(float a, float b, float t);
-    static float InverseLerp(float a, float b, float value);
-    static float MoveTowards(float current, float target, float maxDelta);
+    static constexpr float Lerp(float a, float b, float t);
+    static constexpr float LerpUnclamped(float a, float b, float t);
+    static constexpr float InverseLerp(float a, float b, float value);
+    static constexpr float MoveTowards(float current, float target, float maxDelta);
 
-    static float DeltaAngle(float current, float target);
+    static constexpr float DeltaAngle(float current, float target);
 
-    static float Clamp(float value, float min, float max);
-    static float Clamp01(float value);
-    static float Repeat(float t, float length);
+    static constexpr float Clamp(float value, float min, float max);
+    static constexpr float Clamp01(float value);
+    static constexpr float Repeat(float t, float length);
 
-    static bool Approximately(float a, float b);
-    static bool IsPowerOfTwo(int value);
-    static float Log(float value);
-    static float Log10(float value);
-    static float Sign(float f);
-    static float SmoothStep(float min, float max, float t);
+    static constexpr bool Approximately(float a, float b);
+    static constexpr bool IsPowerOfTwo(int value);
+    static constexpr float Log(float value);
+    static constexpr float Log10(float value);
+    static constexpr float Sign(float f);
+    static constexpr float SmoothStep(float min, float max, float t);
 };
 
 } // namespace Lumen
