@@ -15,7 +15,7 @@ Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
 {
     s_Instance = this;
 
-    ProjectSerializer().Deserialize(m_Project, ".");
+    ProjectSerializer().Deserialize(m_Project, "config/ProjectConfig.lproj");
     AssetManager::SetWorkingDirectory(m_Project.AssetDirectory);
 
     EventBus::Subscribe<WindowResizeEvent>(BIND_EVENT(OnWindowResize));
@@ -47,7 +47,7 @@ void Application::Run()
             }
         }
 
-        Renderer::DrawFPS({0, 0}, 20, Color::Green);
+        Renderer::DrawFPS(Vector2{0, 0}, 20, Color::Green);
         Renderer::EndDrawing();
     }
 }

@@ -10,7 +10,9 @@ Window::Window(WindowArgs args) : m_WinData(std::move(args))
 {
     if (s_InstanceAmount == 0)
     {
+        ::SetWindowState(Enum::ToInt(m_WinData.Flags));
         ::InitWindow(args.Width, args.Height, m_WinData.Title.c_str());
+        ::SetTargetFPS(m_WinData.TargetFPS);
     }
     s_InstanceAmount++;
 }
@@ -74,12 +76,12 @@ bool Window::IsRunning() const
     return !::WindowShouldClose();
 }
 
-bool Window::IsStateEnabled(WindowFlag flag) const
+bool Window::IsStateEnabled(WindowFlags flag) const
 {
     return ::IsWindowState(static_cast<unsigned>(flag));
 }
 
-Ref<Texture2D> Window::GetIcon() const
+Texture2D Window::GetIcon() const
 {
     return m_WinData.Icon;
 }
@@ -110,9 +112,9 @@ void Window::SetFocused()
     ::SetWindowFocused();
 }
 
-void Window::SetIcon(const Ref<Texture2D> &icon)
+void Window::SetIcon(const Texture2D &icon)
 {
-    Ref<Image> iconImage = CreateRef<Image>(::LoadImageFromTexture(*icon));
+    Ref<Image> iconImage = CreateRef<Image>(::LoadImageFromTexture(icon));
     ::SetWindowIcon(*iconImage);
     m_WinData.Icon = icon;
 }
@@ -144,7 +146,7 @@ void Window::SetSize(int width, int height)
     ::SetWindowSize(width, height);
 }
 
-void Window::SetState(WindowFlag flag)
+void Window::SetState(WindowFlags flag)
 {
     ::SetWindowState(static_cast<unsigned>(flag));
 }
@@ -155,7 +157,7 @@ void Window::SetTitle(const std::string &title)
     ::SetWindowTitle(title.c_str());
 }
 
-void Window::ClearWindowState(WindowFlag flag)
+void Window::ClearWindowState(WindowFlags flag)
 {
     ::ClearWindowState(static_cast<unsigned>(flag));
 }
