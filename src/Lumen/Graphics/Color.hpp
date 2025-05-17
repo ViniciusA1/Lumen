@@ -3,6 +3,8 @@
 #include "Lumen/Math/Vector3.hpp"
 #include "Lumen/Math/Vector4.hpp"
 
+#include <string>
+
 struct Color;
 
 namespace Lumen
@@ -48,6 +50,7 @@ public:
     Color(const ::Color &color);
 
     [[nodiscard]] constexpr Vector4 Normalize() const;
+    [[nodiscard]] constexpr std::string ToHex() const;
     [[nodiscard]] constexpr Vector3 ToHSV() const;
     [[nodiscard]] constexpr int ToInt() const;
 
@@ -58,6 +61,7 @@ public:
     static constexpr Color Contrast(const Color &color, float contrast);
     static constexpr Color Fade(const Color &color, float alpha);
     static constexpr Color FromHexa(unsigned int hexValue);
+    static constexpr Color FromHex(const std::string &hex);
     static constexpr Color FromHSV(float hue, float saturation, float value);
     static constexpr Color FromNormalized(const Vector4 &normalized);
     static constexpr Color Lerp(const Color &color1, const Color &color2, float factor);

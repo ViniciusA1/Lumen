@@ -28,6 +28,23 @@ constexpr Vector4 Color::Normalize() const
     };
 }
 
+constexpr std::string Color::ToHex() const
+{
+    constexpr char hexDigits[] = "0123456789ABCDEF";
+    std::string result;
+    result.reserve(9);
+    result += '#';
+    result += hexDigits[(r >> 4) & 0xF];
+    result += hexDigits[r & 0xF];
+    result += hexDigits[(g >> 4) & 0xF];
+    result += hexDigits[g & 0xF];
+    result += hexDigits[(b >> 4) & 0xF];
+    result += hexDigits[b & 0xF];
+    result += hexDigits[(a >> 4) & 0xF];
+    result += hexDigits[a & 0xF];
+    return result;
+}
+
 constexpr Vector3 Color::ToHSV() const
 {
     const Vector3 rgbNormalized{
@@ -179,6 +196,45 @@ constexpr Color Color::Fade(const Color &color, float alpha)
         color.b,
         static_cast<unsigned char>(alpha * 255),
     };
+}
+
+constexpr Color Color::FromHex(const std::string &hex)
+{
+    if (hex.empty() || hex[0] != '#' || (hex.size() != 7 && hex.size() != 9))
+        return {};
+
+    constexpr auto hexCharToValue = [](char c) -> unsigned char {
+        if (c >= '0' && c <= '9')
+            return c - '0';
+        if (c >= 'A' && c <= 'F')
+            return 10 + (c - 'A');
+        if (c >= 'a' && c <= 'f')
+            return 10 + (c - 'a');
+        return 0;
+    };
+
+    const auto hexToByte = [&](size_t offset) -> unsigned char {
+        return (hexCharToValue(hex[offset]) << 4 | hexCharToValue(hex[offset + 1]));
+    };
+
+    if (hex.size() == 7)
+    {
+        return {
+            hexToByte(1),
+            hexToByte(3),
+            hexToByte(5),
+            255,
+        };
+    }
+    else
+    {
+        return {
+            hexToByte(1),
+            hexToByte(3),
+            hexToByte(5),
+            hexToByte(7),
+        };
+    }
 }
 
 constexpr Color Color::FromHexa(unsigned int hexValue)
