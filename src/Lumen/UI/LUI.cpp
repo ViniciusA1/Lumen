@@ -233,6 +233,21 @@ void PopStyleColor(int count)
     ImGui::PopStyleColor(count);
 }
 
+void PushStyleVar(StyleFlags flag, float var)
+{
+    ImGui::PushStyleVar(static_cast<int>(flag), var);
+}
+
+void PushStyleVar(StyleFlags flag, const Vector2 &var)
+{
+    ImGui::PushStyleVar(static_cast<int>(flag), var);
+}
+
+void PopStyleVar(int count)
+{
+    ImGui::PopStyleVar(count);
+}
+
 void SetConfigFlags(ConfigFlags flags)
 {
     ImGui::GetIO().ConfigFlags |= static_cast<int>(flags);

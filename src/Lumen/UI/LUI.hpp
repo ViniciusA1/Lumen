@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Lumen/Core/InputCode.hpp"
 #include "Lumen/Graphics/Color.hpp"
+#include "Lumen/Input/MouseCode.hpp"
 #include "Lumen/Math/Vector2.hpp"
 #include "Lumen/UI/LUIStructures.hpp"
 #include "Lumen/UI/LUIStyle.hpp"
@@ -69,6 +69,10 @@ void PopOverlay();
 
 void PushStyleColor(ColorFlags flag, const Color &color);
 void PopStyleColor(int count = 1);
+
+void PushStyleVar(StyleFlags flag, float var);
+void PushStyleVar(StyleFlags flag, const Vector2 &var);
+void PopStyleVar(int count = 1);
 
 void SetConfigFlags(ConfigFlags flags);
 
