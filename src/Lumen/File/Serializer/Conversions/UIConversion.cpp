@@ -45,10 +45,8 @@ template <> Json Serialize(const LUIStyle &style)
 
     for (const auto &[name, field] : LUIStyle::ColorMap)
     {
-        json["Colors"][name] << Json{style.Colors[static_cast<int>(field)].r,
-                                     style.Colors[static_cast<int>(field)].g,
-                                     style.Colors[static_cast<int>(field)].b,
-                                     style.Colors[static_cast<int>(field)].a};
+        const auto &color = style.Colors[static_cast<int>(field)];
+        json["Colors"][name] << color.ToHex();
     }
 
     return json;
@@ -97,17 +95,20 @@ template <> void Deserialize(const Json &json, LUIStyle &style)
         if (!json["Colors"].Contains(name))
             continue;
 
-        const auto &colorArray = json["Colors"][name];
-
-        Vector4 color = {colorArray[0].Get<float>(), colorArray[1].Get<float>(),
-                         colorArray[2].Get<float>(), colorArray[3].Get<float>()};
-
-        style.Colors[static_cast<int>(field)] = {
-            static_cast<unsigned char>(color.x * 255),
-            static_cast<unsigned char>(color.y * 255),
-            static_cast<unsigned char>(color.z * 255),
-            static_cast<unsigned char>(color.w * 255),
-        };
+        if (json["Colors"][name].IsString())
+        {
+            const auto &hex = json["Colors"][name].Get<std::string>();
+            style.Colors[static_cast<int>(field)] = Color::FromHex(hex);
+        }
+        else
+        {
+            const auto &colorArray = json["Colors"][name];
+            style.Colors[static_cast<int>(field)] = {
+                static_cast<unsigned char>(colorArray[0].Get<float>() * 255),
+                static_cast<unsigned char>(colorArray[1].Get<float>() * 255),
+                static_cast<unsigned char>(colorArray[2].Get<float>() * 255),
+                static_cast<unsigned char>(colorArray[3].Get<float>() * 255)};
+        }
     }
 }
 
