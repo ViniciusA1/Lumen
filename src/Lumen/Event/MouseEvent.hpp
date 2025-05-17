@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lumen/Core/InputCode.hpp"
+#include "Lumen/Input/MouseCode.hpp"
 #include <string>
 
 namespace Lumen

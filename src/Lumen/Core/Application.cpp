@@ -1,9 +1,9 @@
 #include "Lumen/Core/Application.hpp"
 #include "Lumen/Asset/AssetManager.hpp"
-#include "Lumen/Core/Input.hpp"
 #include "Lumen/Core/Log.hpp"
 #include "Lumen/Event/EventBus.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
+#include "Lumen/Input/Input.hpp"
 #include "Lumen/Project/ProjectSerializer.hpp"
 
 namespace Lumen
@@ -47,7 +47,6 @@ void Application::Run()
             }
         }
 
-        Renderer::DrawFPS(Vector2{0, 0}, 20, Color::Green);
         Renderer::EndDrawing();
     }
 }
