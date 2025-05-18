@@ -1,25 +1,36 @@
 #include "Lumen/Asset/AssetManager.hpp"
+#include "Lumen/Asset/Importer/DefaultImporter.hpp"
+
+#define DEFINE_ASSET_STORAGE(Type)                                                       \
+    template <> std::unordered_map<AssetHandle, Type> AssetStorage<Type>::s_Map = {};    \
+    template <> Type DefaultAssetStorage<Type>::s_Asset = {};
 
 namespace Lumen
 {
 
-std::unordered_map<UUID, Ref<Asset>> AssetManager::s_AssetMap;
+template <typename T> std::unordered_map<AssetHandle, T> AssetStorage<T>::s_Map;
+template <typename T> T DefaultAssetStorage<T>::s_Asset;
+
+DEFINE_ASSET_STORAGE(Font)
+DEFINE_ASSET_STORAGE(Image)
+DEFINE_ASSET_STORAGE(Material)
+DEFINE_ASSET_STORAGE(Mesh)
+DEFINE_ASSET_STORAGE(Model)
+DEFINE_ASSET_STORAGE(Shader)
+DEFINE_ASSET_STORAGE(Texture2D)
+
 std::unordered_map<UUID, AssetMetadata> AssetManager::s_AssetMetadataMap;
-std::unordered_map<std::type_index, Ref<Asset>> AssetManager::s_DefaultAssetMap;
 Path AssetManager::s_WorkingDirectory;
 AssetManagerMode AssetManager::s_Mode = AssetManagerMode::Editor;
 
-bool AssetManager::IsLoaded(UUID uuid)
+void AssetManager::LoadDefaultAssets()
 {
-    return s_AssetMap.find(uuid) != s_AssetMap.end();
-}
-
-bool AssetManager::IsValid(UUID uuid)
-{
-    if (uuid == 0 || !IsLoaded(uuid))
-        return false;
-
-    return s_AssetMap.at(uuid)->IsValid();
+    DefaultAssetStorage<Font>::s_Asset = DefaultAssetImporter::Import<Font>();
+    DefaultAssetStorage<Image>::s_Asset = DefaultAssetImporter::Import<Image>();
+    DefaultAssetStorage<Material>::s_Asset = DefaultAssetImporter::Import<Material>();
+    DefaultAssetStorage<Mesh>::s_Asset = DefaultAssetImporter::Import<Mesh>();
+    DefaultAssetStorage<Shader>::s_Asset = DefaultAssetImporter::Import<Shader>();
+    DefaultAssetStorage<Texture2D>::s_Asset = DefaultAssetImporter::Import<Texture2D>();
 }
 
 std::unordered_map<UUID, AssetMetadata> &AssetManager::GetMetadataMap()
@@ -27,9 +38,9 @@ std::unordered_map<UUID, AssetMetadata> &AssetManager::GetMetadataMap()
     return s_AssetMetadataMap;
 }
 
-AssetMetadata AssetManager::GetMetadata(UUID uuid)
+AssetMetadata AssetManager::GetMetadata(const AssetHandle &handle)
 {
-    auto it = s_AssetMetadataMap.find(uuid);
+    auto it = s_AssetMetadataMap.find(handle);
     if (it == s_AssetMetadataMap.end())
         return {};
 
@@ -46,13 +57,13 @@ Path AssetManager::GetWorkingDirectory()
     return s_WorkingDirectory;
 }
 
-void AssetManager::SetMetadata(UUID uuid, const AssetMetadata &metadata)
+void AssetManager::SetMetadata(const AssetHandle &handle, const AssetMetadata &metadata)
 {
-    auto it = s_AssetMetadataMap.find(uuid);
+    auto it = s_AssetMetadataMap.find(handle);
     if (it == s_AssetMetadataMap.end())
         return;
 
-    s_AssetMetadataMap[uuid] = metadata;
+    s_AssetMetadataMap[handle] = metadata;
 }
 
 void AssetManager::SetMode(AssetManagerMode mode)
@@ -67,7 +78,14 @@ void AssetManager::SetWorkingDirectory(const Path &path)
 
 void AssetManager::Clear()
 {
-    s_AssetMap.clear();
+    AssetStorage<Font>::s_Map.clear();
+    AssetStorage<Image>::s_Map.clear();
+    AssetStorage<Material>::s_Map.clear();
+    AssetStorage<Mesh>::s_Map.clear();
+    AssetStorage<Model>::s_Map.clear();
+    AssetStorage<Shader>::s_Map.clear();
+    AssetStorage<Texture2D>::s_Map.clear();
+
     s_AssetMetadataMap.clear();
 }
 

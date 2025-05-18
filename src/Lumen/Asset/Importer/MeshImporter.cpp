@@ -5,19 +5,19 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Mesh> Import(UUID uuid, const AssetMetadata &metadata)
+template <> Mesh Import(const AssetHandle &handle, const AssetMetadata &metadata)
 {
     return nullptr;
 }
 
-template <> bool Export(const Ref<Mesh> &mesh)
+template <> bool Export(const Mesh &mesh)
 {
-    if (!mesh->IsValid())
-    {
+    if (!mesh.IsValid())
         return false;
-    }
 
-    ::UnloadMesh(*mesh);
+    ::Mesh *rayMesh = mesh;
+    ::UnloadMesh(*rayMesh);
+    delete rayMesh;
     return true;
 }
 

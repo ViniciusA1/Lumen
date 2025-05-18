@@ -114,8 +114,8 @@ void Window::SetFocused()
 
 void Window::SetIcon(const Texture2D &icon)
 {
-    Ref<Image> iconImage = CreateRef<Image>(::LoadImageFromTexture(icon));
-    ::SetWindowIcon(*iconImage);
+    Image iconImage(::LoadImageFromTexture(icon));
+    ::SetWindowIcon(iconImage);
     m_WinData.Icon = icon;
 }
 

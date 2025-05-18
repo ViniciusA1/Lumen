@@ -6,7 +6,7 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Shader> Import(UUID uuid, const AssetMetadata &metadata);
-template <> bool Export(const Ref<Shader> &shader);
+template <> Shader Import(const AssetHandle &handle, const AssetMetadata &metadata);
+template <> bool Export(const Shader &shader);
 
 } // namespace Lumen::AssetImporter

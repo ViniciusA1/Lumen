@@ -5,21 +5,27 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Image> Import(UUID uuid, const AssetMetadata &metadata)
+template <> Image Import(const AssetHandle &handle, const AssetMetadata &metadata)
 {
-    Ref<Image> image = CreateRef<Image>(uuid, LoadImage(metadata.Path.String().c_str()));
+    Image image = {handle, LoadImage(metadata.Path.String().c_str())};
     return image;
 }
 
-template <> bool Export(const Ref<Image> &image)
+template <> bool Export(const Image &image)
 {
-    if (!image->IsValid())
-    {
+    if (!image.IsValid())
         return false;
-    }
 
-    ::UnloadImage(*image);
+    ::Image *rayImage = image;
+    ::UnloadImage(*rayImage);
+    delete rayImage;
     return true;
+}
+
+Image LoadImageFromTexture(const Texture2D &texture)
+{
+    Image image = {texture.GetHandle(), ::LoadImageFromTexture(texture)};
+    return image;
 }
 
 } // namespace Lumen::AssetImporter

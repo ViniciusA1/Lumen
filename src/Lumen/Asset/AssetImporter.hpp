@@ -1,14 +1,13 @@
 #pragma once
 
+#include "Lumen/Asset/AssetHandle.hpp"
 #include "Lumen/Asset/AssetMetadata.hpp"
-#include "Lumen/Core/Memory.hpp"
-#include "Lumen/Core/UUID.hpp"
 
 namespace Lumen::AssetImporter
 {
 
-template <typename T> Ref<T> Import(UUID uuid, const AssetMetadata &metadata);
-template <typename T> bool Export(const Ref<T> &asset);
+template <typename T> T Import(const AssetHandle &uuid, const AssetMetadata &metadata);
+template <typename T> bool Export(const T &asset);
 
 } // namespace Lumen::AssetImporter
 

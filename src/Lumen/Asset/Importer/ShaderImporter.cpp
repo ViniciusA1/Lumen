@@ -5,22 +5,28 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Shader> Import(UUID uuid, const AssetMetadata &metadata)
+template <> Shader Import(const AssetHandle &handle, const AssetMetadata &metadata)
 {
-    Ref<Shader> shader = CreateRef<Shader>(
-        uuid, LoadShader((metadata.Path / "vert.glsl").String().c_str(),
-                         (metadata.Path / "frag.glsl").String().c_str()));
+    const std::string shaderName = metadata.Path.Stem().String();
+    const Path vertPath = metadata.Path / (shaderName + ".vert").c_str();
+    const Path fragPath = metadata.Path / (shaderName + ".frag").c_str();
+
+    Shader shader = {
+        handle,
+        LoadShader(vertPath.String().c_str(), fragPath.String().c_str()),
+    };
+
     return shader;
 }
 
-template <> bool Export(const Ref<Shader> &shader)
+template <> bool Export(const Shader &shader)
 {
-    if (!shader->IsValid())
-    {
+    if (!shader.IsValid())
         return false;
-    }
 
-    ::UnloadShader(*shader);
+    ::Shader *rayShader = shader;
+    ::UnloadShader(*rayShader);
+    delete rayShader;
     return true;
 }
 

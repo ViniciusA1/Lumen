@@ -1,11 +1,7 @@
 #pragma once
 
-#include "Lumen/Asset/Asset.hpp"
 #include "Lumen/Asset/AssetImporter.hpp"
-#include "Lumen/Core/Memory.hpp"
 
-#include <memory>
-#include <typeindex>
 #include <unordered_map>
 
 namespace Lumen
@@ -17,76 +13,114 @@ enum class AssetManagerMode
     Runtime
 };
 
+template <typename T> struct AssetStorage
+{
+    static std::unordered_map<AssetHandle, T> s_Map;
+};
+
+template <typename T> struct DefaultAssetStorage
+{
+    static T s_Asset;
+};
+
 class AssetManager
 {
 public:
     AssetManager() = delete;
 
 public:
-    static bool IsLoaded(UUID uuid);
-    static bool IsValid(UUID uuid);
+    static void LoadDefaultAssets();
 
-    static std::unordered_map<UUID, AssetMetadata> &GetMetadataMap();
-    static AssetMetadata GetMetadata(UUID uuid);
+public:
+    template <typename T> static inline bool IsLoaded(const AssetHandle &handle);
+    template <typename T> static inline bool IsValid(const AssetHandle &handle);
+
+    static std::unordered_map<AssetHandle, AssetMetadata> &GetMetadataMap();
+    static AssetMetadata GetMetadata(const AssetHandle &handle);
     static AssetManagerMode GetMode();
     static Path GetWorkingDirectory();
 
-    static void SetMetadata(UUID uuid, const AssetMetadata &metadata);
+    static void SetMetadata(const AssetHandle &handle, const AssetMetadata &metadata);
     static void SetMode(AssetManagerMode mode);
     static void SetWorkingDirectory(const Path &path);
 
     static void Clear();
 
-    template <typename T> static inline Ref<T> Get(UUID uuid);
-    template <typename T> static inline void Unload(UUID uuid);
+    template <typename T> static inline T Get(const AssetHandle &handle);
+    template <typename T> static inline T GetDefault();
+
+    template <typename T> static inline bool Unload(const AssetHandle &handle);
+    template <typename T> static inline bool Unload(const T &asset);
 
 private:
-    static std::unordered_map<UUID, Ref<Asset>> s_AssetMap;
-    static std::unordered_map<UUID, AssetMetadata> s_AssetMetadataMap;
-    static std::unordered_map<std::type_index, Ref<Asset>> s_DefaultAssetMap;
+    static std::unordered_map<AssetHandle, AssetMetadata> s_AssetMetadataMap;
     static Path s_WorkingDirectory;
     static AssetManagerMode s_Mode;
 };
 
-template <typename T> Ref<T> AssetManager::Get(UUID uuid)
+template <typename T> bool AssetManager::IsLoaded(const AssetHandle &handle)
 {
-    if (IsLoaded(uuid))
-    {
-        return std::dynamic_pointer_cast<T>(s_AssetMap.at(uuid));
-    }
+    auto &map = AssetStorage<T>::s_Map;
+    return map.contains(handle);
+}
 
-    Ref<T> asset = nullptr;
+template <typename T> bool AssetManager::IsValid(const AssetHandle &handle)
+{
+    auto &map = AssetStorage<T>::s_Map;
+    auto it = map.find(handle);
+    if (it == map.end())
+        return false;
 
-    if (s_Mode == AssetManagerMode::Editor)
-    {
-        AssetMetadata metadata = s_AssetMetadataMap.at(uuid);
-        AssetMetadata data = {s_WorkingDirectory / metadata.Path, metadata.Name};
-        asset = AssetImporter::Import<T>(uuid, data);
-        if (asset == nullptr || !asset->IsValid())
-        {
-            auto defaultIt = s_DefaultAssetMap.find(typeid(T));
-            if (defaultIt != s_DefaultAssetMap.end())
-            {
-                return std::dynamic_pointer_cast<T>(defaultIt->second);
-            }
+    return it->second.IsValid();
+}
 
-            return nullptr;
-        }
+template <typename T> T AssetManager::Get(const AssetHandle &handle)
+{
+    auto it = AssetStorage<T>::s_Map.find(handle);
+    if (it != AssetStorage<T>::s_Map.end())
+        return it->second;
 
-        s_AssetMap[uuid] = std::static_pointer_cast<Asset>(asset);
-    }
+    auto itMetadata = s_AssetMetadataMap.find(handle);
+    if (itMetadata == s_AssetMetadataMap.end())
+        return GetDefault<T>();
 
+    AssetMetadata metadata = {
+        s_WorkingDirectory / itMetadata->second.Path,
+        itMetadata->second.Name,
+    };
+
+    T asset = AssetImporter::Import<T>(handle, metadata);
+    if (!asset.IsValid())
+        GetDefault<T>();
+
+    AssetStorage<T>::s_Map[handle] = asset;
     return asset;
 }
 
-template <typename T> void AssetManager::Unload(UUID uuid)
+template <typename T> T AssetManager::GetDefault()
 {
-    auto it = s_AssetMap.find(uuid);
-    if (it != s_AssetMap.end())
-    {
-        AssetImporter::Export<T>(std::static_pointer_cast<T>(it->second));
-        s_AssetMap.erase(it);
-    }
+    return DefaultAssetStorage<T>::s_Asset;
+}
+
+template <typename T> bool AssetManager::Unload(const AssetHandle &handle)
+{
+    auto it = AssetStorage<T>::s_Map.find(handle);
+    if (it == AssetStorage<T>::s_Map.end())
+        return false;
+
+    bool isExported = AssetImporter::Export(it->second);
+    if (isExported)
+        AssetStorage<T>::s_Map.erase(it);
+
+    return isExported;
+}
+
+template <typename T> bool AssetManager::Unload(const T &asset)
+{
+    if (Unload<T>(asset.GetHandle()))
+        return true;
+
+    return AssetImporter::Export(asset);
 }
 
 } // namespace Lumen

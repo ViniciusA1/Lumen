@@ -5,20 +5,20 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Font> Import(UUID uuid, const AssetMetadata &metadata)
+template <> Font Import(const AssetHandle &handle, const AssetMetadata &metadata)
 {
-    Ref<Font> font = CreateRef<Font>(uuid, LoadFont(metadata.Path.String().c_str()));
+    Font font = {handle, LoadFont(metadata.Path.String().c_str())};
     return font;
 }
 
-template <> bool Export(const Ref<Font> &font)
+template <> bool Export(const Font &font)
 {
-    if (!font->IsValid())
-    {
+    if (!font.IsValid())
         return false;
-    }
 
-    ::UnloadFont(*font);
+    ::Font *rayFont = font;
+    ::UnloadFont(*rayFont);
+    delete rayFont;
     return true;
 }
 

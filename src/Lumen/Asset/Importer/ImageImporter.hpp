@@ -2,11 +2,14 @@
 
 #include "Lumen/Asset/AssetImporter.hpp"
 #include "Lumen/Graphics/Image.hpp"
+#include "Lumen/Graphics/Texture.hpp"
 
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Image> Import(UUID uuid, const AssetMetadata &metadata);
-template <> bool Export(const Ref<Image> &image);
+template <> Image Import(const AssetHandle &handle, const AssetMetadata &metadata);
+template <> bool Export(const Image &image);
+
+Image LoadImageFromTexture(const Texture2D &texture);
 
 } // namespace Lumen::AssetImporter

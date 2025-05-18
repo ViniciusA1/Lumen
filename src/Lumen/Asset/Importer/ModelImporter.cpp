@@ -5,20 +5,26 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Model> Import(UUID uuid, const AssetMetadata &metadata)
+template <> Model Import(const AssetHandle &handle, const AssetMetadata &metadata)
 {
-    Ref<Model> model = CreateRef<Model>(uuid, LoadModel(metadata.Path.String().c_str()));
+    int animationCount = 0;
+
+    ::Model rayModel = ::LoadModel(metadata.Path.String().c_str());
+    ::ModelAnimation *animations =
+        ::LoadModelAnimations(metadata.Path.String().c_str(), &animationCount);
+
+    Model model = {handle, rayModel, animations, animationCount};
     return model;
 }
 
-template <> bool Export(const Ref<Model> &model)
+template <> bool Export(const Model &model)
 {
-    if (!model->IsValid())
-    {
+    if (!model.IsValid())
         return false;
-    }
 
-    ::UnloadModel(*model);
+    ::Model *rayModel = model;
+    ::UnloadModel(*rayModel);
+    delete rayModel;
     return true;
 }
 

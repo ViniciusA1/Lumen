@@ -5,22 +5,30 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Texture2D> Import(UUID uuid, const AssetMetadata &metadata)
+template <> Texture2D Import(const AssetHandle &handle, const AssetMetadata &metadata)
 {
-    Ref<Texture2D> texture =
-        CreateRef<Texture2D>(uuid, LoadTexture(metadata.Path.String().c_str()));
-    return texture;
+    ::Texture2D texture = LoadTexture(metadata.Path.String().c_str());
+    ::SetTextureFilter(texture, TEXTURE_FILTER_POINT);
+    ::SetTextureWrap(texture, TEXTURE_WRAP_CLAMP);
+    ::GenTextureMipmaps(&texture);
+    return {handle, texture};
 }
 
-template <> bool Export(const Ref<Texture2D> &texture)
+template <> bool Export(const Texture2D &texture)
 {
-    if (!texture->IsValid())
-    {
+    if (!texture.IsValid())
         return false;
-    }
 
-    ::UnloadTexture(*texture);
+    ::Texture2D *rayTexture = texture;
+    ::UnloadTexture(*rayTexture);
+    delete rayTexture;
     return true;
+}
+
+Texture2D LoadTextureFromImage(const Image &image)
+{
+    Texture2D texture = {image.GetHandle(), ::LoadTextureFromImage(image)};
+    return texture;
 }
 
 } // namespace Lumen::AssetImporter

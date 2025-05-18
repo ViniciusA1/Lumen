@@ -3,12 +3,12 @@
 namespace Lumen::AssetImporter
 {
 
-template <typename T> Ref<T> Import(UUID uuid, const AssetMetadata &metadata)
+template <typename T> T Import(const AssetHandle &handle, const AssetMetadata &metadata)
 {
-    return nullptr;
+    return {};
 }
 
-template <typename T> bool Export(const Ref<T> &asset)
+template <typename T> bool Export(const T &asset)
 {
     return false;
 }

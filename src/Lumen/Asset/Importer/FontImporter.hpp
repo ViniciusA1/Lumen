@@ -6,7 +6,7 @@
 namespace Lumen::AssetImporter
 {
 
-template <> Ref<Font> Import(UUID uuid, const AssetMetadata &metadata);
-template <> bool Export(const Ref<Font> &font);
+template <> Font Import(const AssetHandle &handle, const AssetMetadata &metadata);
+template <> bool Export(const Font &font);
 
 } // namespace Lumen::AssetImporter

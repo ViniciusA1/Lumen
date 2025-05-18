@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Lumen/Core/Memory.hpp"
 #include "Lumen/Core/WindowArgs.hpp"
 #include "Lumen/Graphics/Texture.hpp"
 #include "Lumen/Math/Vector2.hpp"

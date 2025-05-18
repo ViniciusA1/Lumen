@@ -72,9 +72,9 @@ Texture2D::operator ::Texture() const
     return *m_Texture;
 }
 
-// Texture2D::operator ::Texture *() const
-// {
-//     return m_Texture;
-// }
+Texture2D::operator ::Texture *() const
+{
+    return m_Texture;
+}
 
 } // namespace Lumen
