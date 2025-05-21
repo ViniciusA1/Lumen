@@ -21,6 +21,7 @@ add_subdirectory(lib/nativefiledialog)
 add_subdirectory(lib/ImGuizmo)
 add_subdirectory(lib/Jolt/Build)
 add_subdirectory(lib/json)
+add_subdirectory(lib/miniaudio)
 add_subdirectory(lib/raylib)
 add_subdirectory(lib/rlImGui)
 add_subdirectory(lib/yaml)
@@ -42,6 +43,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 	Jolt
 	raylib
 	rlImGui
+	miniaudio
 	nlohmann_json::nlohmann_json
 	yaml-cpp::yaml-cpp
 )

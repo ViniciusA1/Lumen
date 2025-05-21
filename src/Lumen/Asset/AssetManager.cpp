@@ -11,6 +11,7 @@ namespace Lumen
 template <typename T> std::unordered_map<AssetHandle, T> AssetStorage<T>::s_Map;
 template <typename T> T DefaultAssetStorage<T>::s_Asset;
 
+DEFINE_ASSET_STORAGE(Audio)
 DEFINE_ASSET_STORAGE(Font)
 DEFINE_ASSET_STORAGE(Image)
 DEFINE_ASSET_STORAGE(Material)
@@ -25,6 +26,7 @@ AssetManagerMode AssetManager::s_Mode = AssetManagerMode::Editor;
 
 void AssetManager::LoadDefaultAssets()
 {
+    DefaultAssetStorage<Audio>::s_Asset = DefaultAssetImporter::Import<Audio>();
     DefaultAssetStorage<Font>::s_Asset = DefaultAssetImporter::Import<Font>();
     DefaultAssetStorage<Image>::s_Asset = DefaultAssetImporter::Import<Image>();
     DefaultAssetStorage<Material>::s_Asset = DefaultAssetImporter::Import<Material>();
@@ -78,6 +80,7 @@ void AssetManager::SetWorkingDirectory(const Path &path)
 
 void AssetManager::Clear()
 {
+    AssetStorage<Audio>::s_Map.clear();
     AssetStorage<Font>::s_Map.clear();
     AssetStorage<Image>::s_Map.clear();
     AssetStorage<Material>::s_Map.clear();

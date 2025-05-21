@@ -11,6 +11,7 @@ template <typename T> bool Export(const T &asset);
 
 } // namespace Lumen::AssetImporter
 
+#include "Lumen/Asset/Importer/AudioImporter.hpp"
 #include "Lumen/Asset/Importer/FontImporter.hpp"
 #include "Lumen/Asset/Importer/ImageImporter.hpp"
 #include "Lumen/Asset/Importer/MeshImporter.hpp"

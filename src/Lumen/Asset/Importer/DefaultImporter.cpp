@@ -5,6 +5,11 @@
 namespace Lumen::DefaultAssetImporter
 {
 
+template <> Audio Import()
+{
+    return {};
+}
+
 template <> Font Import()
 {
     return ::GetFontDefault();
