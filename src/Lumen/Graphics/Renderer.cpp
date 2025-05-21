@@ -249,6 +249,83 @@ void Renderer::DrawPixel(const Vector2 &position, Color color)
 
 void Renderer::DrawQuad(const TransformComponent &transform, Color color)
 {
+    rlPushMatrix();
+
+    rlTranslatef(transform.Position.x, transform.Position.y, transform.Position.z);
+    rlRotatef(transform.Rotation.z, 0.0f, 0.0f, 1.0f);
+    rlRotatef(transform.Rotation.y, 0.0f, 1.0f, 0.0f);
+    rlRotatef(transform.Rotation.x, 1.0f, 0.0f, 0.0f);
+    rlScalef(transform.Scale.x, transform.Scale.y, transform.Scale.z);
+
+    rlBegin(RL_QUADS);
+    rlColor4ub(color.r, color.g, color.b, color.a);
+    rlNormal3f(0.0f, 0.0f, 1.0f);
+    rlVertex3f(-0.5f, -0.5f, 0.0f);
+    rlVertex3f(0.5f, -0.5f, 0.0f);
+    rlVertex3f(0.5f, 0.5f, 0.0f);
+    rlVertex3f(-0.5f, 0.5f, 0.0f);
+    rlNormal3f(0.0f, 0.0f, -1.0f);
+    rlVertex3f(-0.5f, -0.5f, 0.0f);
+    rlVertex3f(-0.5f, 0.5f, 0.0f);
+    rlVertex3f(0.5f, 0.5f, 0.0f);
+    rlVertex3f(0.5f, -0.5f, 0.0f);
+    rlEnd();
+
+    rlPopMatrix();
+}
+
+void Renderer::DrawQuad(const TransformComponent &transform, const Texture2D &texture,
+                        const Vector4 &uv, Color color)
+{
+    const float x = transform.Position.x;
+    const float y = transform.Position.y;
+    const float z = transform.Position.z;
+
+    constexpr float epsilon = 0.001f;
+    const float w = transform.Scale.x * 0.5f;
+    const float h = transform.Scale.y * 0.5f;
+
+    const float u0 = uv.z;
+    const float v0 = uv.y;
+    const float u1 = uv.x;
+    const float v1 = uv.w;
+
+    ::rlPushMatrix();
+    ::rlTranslatef(x, y, z);
+    ::rlRotatef(transform.Rotation.z, 0.0f, 0.0f, 1.0f);
+    ::rlRotatef(transform.Rotation.y, 0.0f, 1.0f, 0.0f);
+    ::rlRotatef(transform.Rotation.x, 1.0f, 0.0f, 0.0f);
+    ::rlSetTexture(texture.GetRendererID());
+    ::rlBegin(RL_QUADS);
+    ::rlColor4ub(color.r, color.g, color.b, color.a);
+
+    ::rlNormal3f(0.0f, 0.0f, 1.0f);
+    ::rlTexCoord2f(u0, v0);
+    ::rlVertex3f(-w, -h, 0.0f);
+    ::rlTexCoord2f(u1, v0);
+    ::rlVertex3f(w, -h, 0.0f);
+    ::rlTexCoord2f(u1, v1);
+    ::rlVertex3f(w, h, 0.0f);
+    ::rlTexCoord2f(u0, v1);
+    ::rlVertex3f(-w, h, 0.0f);
+
+    ::rlNormal3f(0.0f, 0.0f, -1.0f);
+    ::rlTexCoord2f(u0, v0);
+    ::rlVertex3f(-w, -h, 0.0f);
+    ::rlTexCoord2f(u0, v1);
+    ::rlVertex3f(-w, h, 0.0f);
+    ::rlTexCoord2f(u1, v1);
+    ::rlVertex3f(w, h, 0.0f);
+    ::rlTexCoord2f(u1, v0);
+    ::rlVertex3f(w, -h, 0.0f);
+
+    ::rlEnd();
+    ::rlSetTexture(0);
+    ::rlPopMatrix();
+}
+
+void Renderer::DrawQuad2D(const TransformComponent &transform, Color color)
+{
     const Vector2 &origin = {
         transform.Scale.x * 0.5f,
         transform.Scale.y * 0.5f,
@@ -264,8 +341,8 @@ void Renderer::DrawQuad(const TransformComponent &transform, Color color)
         origin, transform.Rotation.z, color);
 }
 
-void Renderer::DrawQuad(const TransformComponent &transform, const Texture2D &texture,
-                        Color color)
+void Renderer::DrawQuad2D(const TransformComponent &transform, const Texture2D &texture,
+                          Color color)
 {
     const Vector2 &origin = {
         transform.Scale.x * 0.5f,
@@ -435,13 +512,9 @@ void Renderer::DrawCube(const TransformComponent &transform, const Texture2D &te
     const float y = transform.Position.y;
     const float z = transform.Position.z;
 
-    constexpr float epsilon = 0.001f;
-    const float w = transform.Scale.x * 0.5f + epsilon;
-    const float h = transform.Scale.y * 0.5f + epsilon;
-    const float l = transform.Scale.z * 0.5f + epsilon;
-
-    const float texWidth = texture.GetWidth();
-    const float texHeight = texture.GetHeight();
+    const float w = transform.Scale.x * 0.5f;
+    const float h = transform.Scale.y * 0.5f;
+    const float l = transform.Scale.z * 0.5f;
 
     const float u0 = uv.z;
     const float v0 = uv.y;
@@ -450,6 +523,9 @@ void Renderer::DrawCube(const TransformComponent &transform, const Texture2D &te
 
     ::rlPushMatrix();
     ::rlTranslatef(x, y, z);
+    ::rlRotatef(transform.Rotation.z, 0.0f, 0.0f, 1.0f);
+    ::rlRotatef(transform.Rotation.y, 0.0f, 1.0f, 0.0f);
+    ::rlRotatef(transform.Rotation.x, 1.0f, 0.0f, 0.0f);
     ::rlSetTexture(texture.GetRendererID());
     ::rlBegin(RL_QUADS);
     ::rlColor4ub(color.r, color.g, color.b, color.a);
@@ -473,46 +549,6 @@ void Renderer::DrawCube(const TransformComponent &transform, const Texture2D &te
     ::rlVertex3f(-w, h, -l);
     ::rlTexCoord2f(u0, v1);
     ::rlVertex3f(w, h, -l);
-
-    ::rlNormal3f(0.0f, 1.0f, 0.0f);
-    ::rlTexCoord2f(u0, v0);
-    ::rlVertex3f(-w, h, l);
-    ::rlTexCoord2f(u1, v0);
-    ::rlVertex3f(w, h, l);
-    ::rlTexCoord2f(u1, v1);
-    ::rlVertex3f(w, h, -l);
-    ::rlTexCoord2f(u0, v1);
-    ::rlVertex3f(-w, h, -l);
-
-    ::rlNormal3f(0.0f, -1.0f, 0.0f);
-    ::rlTexCoord2f(u0, v0);
-    ::rlVertex3f(-w, -h, -l);
-    ::rlTexCoord2f(u1, v0);
-    ::rlVertex3f(w, -h, -l);
-    ::rlTexCoord2f(u1, v1);
-    ::rlVertex3f(w, -h, l);
-    ::rlTexCoord2f(u0, v1);
-    ::rlVertex3f(-w, -h, l);
-
-    ::rlNormal3f(1.0f, 0.0f, 0.0f);
-    ::rlTexCoord2f(u0, v0);
-    ::rlVertex3f(w, -h, l);
-    ::rlTexCoord2f(u1, v0);
-    ::rlVertex3f(w, -h, -l);
-    ::rlTexCoord2f(u1, v1);
-    ::rlVertex3f(w, h, -l);
-    ::rlTexCoord2f(u0, v1);
-    ::rlVertex3f(w, h, l);
-
-    ::rlNormal3f(-1.0f, 0.0f, 0.0f);
-    ::rlTexCoord2f(u0, v0);
-    ::rlVertex3f(-w, -h, -l);
-    ::rlTexCoord2f(u1, v0);
-    ::rlVertex3f(-w, -h, l);
-    ::rlTexCoord2f(u1, v1);
-    ::rlVertex3f(-w, h, l);
-    ::rlTexCoord2f(u0, v1);
-    ::rlVertex3f(-w, h, -l);
 
     ::rlEnd();
     ::rlSetTexture(0);

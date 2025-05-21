@@ -100,9 +100,12 @@ public:
 
     static void DrawPixel(const Vector2 &position, Color color);
 
-    static void DrawQuad(const TransformComponent &transform, Color color);
+    static void DrawQuad(const TransformComponent &transform, Color color = Color::White);
     static void DrawQuad(const TransformComponent &transform, const Texture2D &texture,
-                         Color color);
+                         const Vector4 &uv = {0, 0, 1, 1}, Color color = Color::White);
+    static void DrawQuad2D(const TransformComponent &transform, Color color);
+    static void DrawQuad2D(const TransformComponent &transform, const Texture2D &texture,
+                           Color color);
     static void DrawQuadLines(const TransformComponent &transform, float lineThick,
                               Color color);
 
