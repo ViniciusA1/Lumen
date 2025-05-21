@@ -3,10 +3,10 @@
 #include "Lumen/Core/UUID.hpp"
 #include "Lumen/Event/EventBus.hpp"
 #include "Lumen/Event/SceneEvent.hpp"
-#include "Lumen/Scene/Component/Component.hpp"
+#include "Lumen/Scene/Component/ComponentGroup.hpp"
 #include "Lumen/Scene/Entity/Entity.hpp"
 
-#include <entt/entity/registry.hpp>
+#include "entt/entity/registry.hpp"
 #include <unordered_map>
 
 namespace Lumen

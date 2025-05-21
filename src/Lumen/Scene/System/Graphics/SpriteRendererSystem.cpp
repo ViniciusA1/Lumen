@@ -1,4 +1,4 @@
-#include "Lumen/Scene/System/SpriteRendererSystem.hpp"
+#include "Lumen/Scene/System/Graphics/SpriteRendererSystem.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
 #include "Lumen/Scene/World.hpp"
 

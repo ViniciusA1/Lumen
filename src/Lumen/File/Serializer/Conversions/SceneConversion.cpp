@@ -223,6 +223,33 @@ template <> void Deserialize(const Yaml &yaml, TransformComponent &transform)
     transformYaml["Scale"] >> transform.Scale;
 }
 
+template <> Yaml Serialize(const AudioListenerComponent &audioListener)
+{
+    Yaml yaml, audioListenerYaml;
+    yaml["AudioListener"] = audioListenerYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, AudioListenerComponent &audioListener)
+{
+    const Yaml &audioListenerYaml = yaml["AudioListener"];
+    audioListenerYaml >> audioListener;
+}
+
+template <> Yaml Serialize(const AudioSourceComponent &audioSource)
+{
+    Yaml yaml, audioSourceYaml;
+    audioSourceYaml["Audio"] << audioSource.Audio;
+    yaml["AudioSource"] = audioSourceYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, AudioSourceComponent &audioSource)
+{
+    const Yaml &audioSourceYaml = yaml["AudioSource"];
+    audioSourceYaml["Audio"] >> audioSource.Audio;
+}
+
 template <> Yaml Serialize(const CameraComponent &camera)
 {
     Yaml yaml, cameraYaml;
@@ -247,19 +274,48 @@ template <> void Deserialize(const Yaml &yaml, CameraComponent &camera)
     camera.Projection = static_cast<ProjectionType>(projection);
 }
 
-template <> Yaml Serialize(const SpriteRendererComponent &spriteRenderer)
+template <> Yaml Serialize(const MeshRendererComponent &mesh)
 {
-    Yaml yaml, spriteYaml;
-    spriteYaml["Color"] << spriteRenderer.Color;
-    // yaml["Texture"] << spriteRenderer.Texture;
-    yaml["SpriteRenderer"] = spriteYaml;
+    Yaml yaml, meshYaml;
+    meshYaml["Mesh"] << mesh.Mesh;
+    yaml["MeshRenderer"] = meshYaml;
     return yaml;
 }
 
-template <> void Deserialize(const Yaml &yaml, SpriteRendererComponent &spriteRenderer)
+template <> void Deserialize(const Yaml &yaml, MeshRendererComponent &mesh)
 {
-    const Yaml &spriteYaml = yaml["SpriteRenderer"];
-    spriteYaml["Color"] >> spriteRenderer.Color;
+    const Yaml &meshYaml = yaml["MeshRenderer"];
+    meshYaml["Mesh"] >> mesh.Mesh;
+}
+
+template <> Yaml Serialize(const ModelRendererComponent &model)
+{
+    Yaml yaml, modelYaml;
+    modelYaml["Model"] << model.Model;
+    yaml["ModelRenderer"] = modelYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, ModelRendererComponent &model)
+{
+    const Yaml &modelYaml = yaml["ModelRenderer"];
+    modelYaml["Model"] >> model.Model;
+}
+
+template <> Yaml Serialize(const SpriteRendererComponent &sprite)
+{
+    Yaml yaml, spriteYaml;
+    spriteYaml["Color"] << sprite.Color;
+    spriteYaml["Texture"] << sprite.Texture;
+    yaml["Sprite"] = spriteYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, SpriteRendererComponent &sprite)
+{
+    const Yaml &spriteYaml = yaml["Sprite"];
+    spriteYaml["Color"] >> sprite.Color;
+    spriteYaml["Texture"] >> sprite.Texture;
 }
 
 template <> Yaml Serialize(const VelocityComponent &velocity)
@@ -272,6 +328,84 @@ template <> Yaml Serialize(const VelocityComponent &velocity)
 template <> void Deserialize(const Yaml &yaml, VelocityComponent &velocity)
 {
     yaml["Velocity"] >> velocity.Velocity;
+}
+
+template <> Yaml Serialize(const UIComponentState &state)
+{
+    Yaml yaml;
+    yaml << static_cast<int>(state);
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, UIComponentState &state)
+{
+    int stateInt;
+    yaml >> stateInt;
+    state = static_cast<UIComponentState>(stateInt);
+}
+
+template <> Yaml Serialize(const std::array<Lumen::Color, 4> &colors)
+{
+    Yaml yaml, colorsYaml;
+
+    colorsYaml["Idle"] << colors[0];
+    colorsYaml["Hovered"] << colors[1];
+    colorsYaml["Pressed"] << colors[2];
+    colorsYaml["Disabled"] << colors[3];
+
+    yaml["Colors"] = colorsYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, std::array<Lumen::Color, 4> &colors)
+{
+    const Yaml &colorsYaml = yaml["Colors"];
+    colorsYaml["Idle"] >> colors[0];
+    colorsYaml["Hovered"] >> colors[1];
+    colorsYaml["Pressed"] >> colors[2];
+    colorsYaml["Disabled"] >> colors[3];
+}
+
+template <> Yaml Serialize(const ButtonComponent &button)
+{
+    Yaml yaml, buttonYaml;
+    buttonYaml["State"] << button.State;
+    buttonYaml << button.Colors;
+    buttonYaml << button.Label;
+    buttonYaml["Texture"] << button.Texture;
+    yaml["Button"] = buttonYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, ButtonComponent &button)
+{
+    const Yaml &buttonYaml = yaml["Button"];
+    buttonYaml["State"] >> button.State;
+    buttonYaml >> button.Colors;
+    buttonYaml >> button.Label;
+    buttonYaml["Texture"] >> button.Texture;
+}
+
+template <> Yaml Serialize(const LabelComponent &label)
+{
+    Yaml yaml, labelYaml;
+    labelYaml["State"] << label.State;
+    labelYaml << label.Colors;
+    labelYaml["Text"] << label.Text;
+    labelYaml["Font"] << label.Font;
+    labelYaml["FontSize"] << label.FontSize;
+    yaml["Label"] = labelYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, LabelComponent &label)
+{
+    const Yaml &labelYaml = yaml["Label"];
+    labelYaml["State"] >> label.State;
+    labelYaml >> label.Colors;
+    labelYaml["Text"] >> label.Text;
+    labelYaml["Font"] >> label.Font;
+    labelYaml["FontSize"] >> label.FontSize;
 }
 
 } // namespace Lumen::YamlSerializer

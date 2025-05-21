@@ -37,13 +37,37 @@ template <> void Deserialize(const Yaml &yaml, PlayerTagComponent &tag);
 template <> Yaml Serialize(const TransformComponent &transform);
 template <> void Deserialize(const Yaml &yaml, TransformComponent &transform);
 
+template <> Yaml Serialize(const AudioListenerComponent &audioListener);
+template <> void Deserialize(const Yaml &yaml, AudioListenerComponent &audioListener);
+
+template <> Yaml Serialize(const AudioSourceComponent &audioSource);
+template <> void Deserialize(const Yaml &yaml, AudioSourceComponent &audioSource);
+
 template <> Yaml Serialize(const CameraComponent &camera);
 template <> void Deserialize(const Yaml &yaml, CameraComponent &camera);
 
-template <> Yaml Serialize(const SpriteRendererComponent &spriteRenderer);
-template <> void Deserialize(const Yaml &yaml, SpriteRendererComponent &spriteRenderer);
+template <> Yaml Serialize(const MeshRendererComponent &mesh);
+template <> void Deserialize(const Yaml &yaml, MeshRendererComponent &mesh);
+
+template <> Yaml Serialize(const ModelRendererComponent &model);
+template <> void Deserialize(const Yaml &yaml, ModelRendererComponent &model);
+
+template <> Yaml Serialize(const SpriteRendererComponent &sprite);
+template <> void Deserialize(const Yaml &yaml, SpriteRendererComponent &sprite);
 
 template <> Yaml Serialize(const VelocityComponent &velocity);
 template <> void Deserialize(const Yaml &yaml, VelocityComponent &velocity);
+
+template <> Yaml Serialize(const UIComponentState &state);
+template <> void Deserialize(const Yaml &yaml, UIComponentState &state);
+
+template <> Yaml Serialize(const std::array<Lumen::Color, 4> &colors);
+template <> void Deserialize(const Yaml &yaml, std::array<Lumen::Color, 4> &colors);
+
+template <> Yaml Serialize(const ButtonComponent &button);
+template <> void Deserialize(const Yaml &yaml, ButtonComponent &button);
+
+template <> Yaml Serialize(const LabelComponent &label);
+template <> void Deserialize(const Yaml &yaml, LabelComponent &label);
 
 } // namespace Lumen::YamlSerializer
