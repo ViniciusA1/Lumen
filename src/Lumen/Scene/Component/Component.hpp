@@ -1,70 +1,46 @@
 #pragma once
 
+#include "Lumen/Scene/Component/Audio/AudioListenerComponent.hpp"
+#include "Lumen/Scene/Component/Audio/AudioSourceComponent.hpp"
+
 #include "Lumen/Scene/Component/Core/IDComponent.hpp"
 #include "Lumen/Scene/Component/Core/NameComponent.hpp"
 #include "Lumen/Scene/Component/Core/TagComponent.hpp"
 #include "Lumen/Scene/Component/Core/TransformComponent.hpp"
+
 #include "Lumen/Scene/Component/Graphics/CameraComponent.hpp"
+#include "Lumen/Scene/Component/Graphics/MeshRendererComponent.hpp"
+#include "Lumen/Scene/Component/Graphics/ModelRendererComponent.hpp"
 #include "Lumen/Scene/Component/Graphics/SpriteRendererComponent.hpp"
+
 #include "Lumen/Scene/Component/Physics/VelocityComponent.hpp"
 
-namespace Lumen
-{
+#include "Lumen/Scene/Component/UI/ButtonComponent.hpp"
+#include "Lumen/Scene/Component/UI/LabelComponent.hpp"
 
-template <typename... Component> struct ComponentGroup
-{
-    template <typename Callback> static void ForEachComponent(Callback callback)
-    {
-        ([&]() { callback.template operator()<Component>(); }(), ...);
-    }
-};
+#define AUDIO_COMPONENTS AudioListenerComponent, AudioSourceComponent
 
-using CoreComponentGroup =
-    ComponentGroup<IDComponent, NameComponent, UntaggedComponent, EnemyTagComponent,
-                   MainCameraTagComponent, PlayerTagComponent, TransformComponent>;
+#define TAG_COMPONENTS                                                                   \
+    UntaggedComponent, EnemyTagComponent, MainCameraTagComponent, PlayerTagComponent
 
-using TagComponentGroup = ComponentGroup<UntaggedComponent, EnemyTagComponent,
-                                         MainCameraTagComponent, PlayerTagComponent>;
+#define CORE_COMPONENTS IDComponent, NameComponent, TAG_COMPONENTS, TransformComponent
 
-using GraphicsComponentGroup = ComponentGroup<CameraComponent, SpriteRendererComponent>;
+#define GRAPHICS_COMPONENTS                                                              \
+    CameraComponent, MeshRendererComponent, ModelRendererComponent,                      \
+        SpriteRendererComponent
 
-using PhysicsComponentGroup = ComponentGroup<VelocityComponent>;
+#define PHYSICS_COMPONENTS VelocityComponent
 
-using UIComponentGroup = ComponentGroup<>;
+#define UI_COMPONENTS ButtonComponent, LabelComponent
 
-using AllComponentGroup =
-    ComponentGroup<IDComponent, NameComponent, UntaggedComponent, EnemyTagComponent,
-                   MainCameraTagComponent, PlayerTagComponent, TransformComponent,
-                   CameraComponent, SpriteRendererComponent, VelocityComponent>;
+#define ALL_COMPONENTS                                                                   \
+    CORE_COMPONENTS, AUDIO_COMPONENTS, GRAPHICS_COMPONENTS, PHYSICS_COMPONENTS,          \
+        UI_COMPONENTS
 
-using CopyableComponentGroup =
-    ComponentGroup<NameComponent, UntaggedComponent, EnemyTagComponent,
-                   MainCameraTagComponent, PlayerTagComponent, TransformComponent,
-                   CameraComponent, SpriteRendererComponent, VelocityComponent>;
+#define COPYABLE_COMPONENTS                                                              \
+    NameComponent, TAG_COMPONENTS, TransformComponent, AUDIO_COMPONENTS,                 \
+        GRAPHICS_COMPONENTS, PHYSICS_COMPONENTS, UI_COMPONENTS
 
-using DrawableComponentGroup = ComponentGroup<TransformComponent, CameraComponent,
-                                              SpriteRendererComponent, VelocityComponent>;
-
-template <typename... Group> struct ComponentGroupCollection
-{
-    template <typename Callback> static void ForEachGroupAndComponent(Callback callback)
-    {
-        ([&]() { Group::ForEachComponent(callback); }(), ...);
-    }
-
-    template <typename GroupCallback>
-    static void ForEachGroup(GroupCallback groupCallback)
-    {
-        ([&]() { groupCallback.template operator()<Group>(); }(), ...);
-    }
-};
-
-using AllGroupCollection =
-    ComponentGroupCollection<CoreComponentGroup, GraphicsComponentGroup,
-                             PhysicsComponentGroup, UIComponentGroup>;
-
-using IterableGroupCollection =
-    ComponentGroupCollection<GraphicsComponentGroup, PhysicsComponentGroup,
-                             UIComponentGroup>;
-
-} // namespace Lumen
+#define DRAWABLE_COMPONENTS                                                              \
+    TransformComponent, AUDIO_COMPONENTS, GRAPHICS_COMPONENTS, PHYSICS_COMPONENTS,       \
+        UI_COMPONENTS
