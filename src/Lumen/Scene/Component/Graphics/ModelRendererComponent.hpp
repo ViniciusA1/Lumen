@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Lumen/Core/UUID.hpp"
+#include "Lumen/Asset/AssetHandle.hpp"
 
 namespace Lumen
 {
 
 struct ModelRendererComponent
 {
-    UUID Model = 0;
+    AssetHandle Model;
 };
 
 } // namespace Lumen

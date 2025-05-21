@@ -5,9 +5,9 @@
 namespace Lumen
 {
 
-struct MeshRendererComponent
+struct AudioSourceComponent
 {
-    AssetHandle Mesh;
+    AssetHandle Audio;
 };
 
 } // namespace Lumen

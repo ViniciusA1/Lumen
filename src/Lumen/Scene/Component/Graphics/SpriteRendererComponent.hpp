@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lumen/Core/UUID.hpp"
+#include "Lumen/Asset/AssetHandle.hpp"
 #include "Lumen/Graphics/Color.hpp"
 
 namespace Lumen
@@ -8,8 +8,8 @@ namespace Lumen
 
 struct SpriteRendererComponent
 {
-    Color Color = Color::White;
-    UUID Texture = 0;
+    class Color Color = Color::White;
+    AssetHandle Texture;
 };
 
 } // namespace Lumen
