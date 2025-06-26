@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Lumen/File/FileSize.hpp"
 #include "Lumen/File/Path.hpp"
 
 namespace Lumen
@@ -25,7 +26,7 @@ public:
     static void ResizeFile(const Path &path, std::uintmax_t size);
 
     static bool Exists(const Path &path);
-    static std::uintmax_t FileSize(const Path &path);
+    static FileSize FileSize(const Path &path);
     static std::filesystem::perms GetPermissions(const Path &path);
     static Path GetCurrentPath();
     static std::filesystem::space_info GetSpace(const Path &path);

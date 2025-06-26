@@ -88,8 +88,11 @@ bool FileSystem::Exists(const Path &path)
     return std::filesystem::exists(path);
 }
 
-std::uintmax_t FileSystem::FileSize(const Path &path)
+FileSize FileSystem::FileSize(const Path &path)
 {
+    if (IsDirectory(path))
+        return 0;
+
     return std::filesystem::file_size(path);
 }
 
