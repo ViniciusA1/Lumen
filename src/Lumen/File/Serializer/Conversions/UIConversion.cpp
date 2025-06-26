@@ -3,7 +3,7 @@
 namespace Lumen::JsonSerializer
 {
 
-template <> Json Serialize(const LUIStyle &style)
+template <> Json Serialize(const LUI::Style &style)
 {
     Json json;
 
@@ -43,7 +43,7 @@ template <> Json Serialize(const LUIStyle &style)
     json["SeparatorTextPadding"] << style.SeparatorTextPadding;
     json["DockingSeparatorSize"] << style.DockingSeparatorSize;
 
-    for (const auto &[name, field] : LUIStyle::ColorMap)
+    for (const auto &[name, field] : LUI::Style::ColorMap)
     {
         const auto &color = style.Colors[static_cast<int>(field)];
         json["Colors"][name] << color.ToHex();
@@ -52,7 +52,7 @@ template <> Json Serialize(const LUIStyle &style)
     return json;
 }
 
-template <> void Deserialize(const Json &json, LUIStyle &style)
+template <> void Deserialize(const Json &json, LUI::Style &style)
 {
     json["Name"] >> style.Name;
     json["Alpha"] >> style.Alpha;
@@ -90,7 +90,7 @@ template <> void Deserialize(const Json &json, LUIStyle &style)
     json["SeparatorTextPadding"] >> style.SeparatorTextPadding;
     json["DockingSeparatorSize"] >> style.DockingSeparatorSize;
 
-    for (const auto &[name, field] : LUIStyle::ColorMap)
+    for (const auto &[name, field] : LUI::Style::ColorMap)
     {
         if (!json["Colors"].Contains(name))
             continue;
@@ -116,13 +116,13 @@ template <> void Deserialize(const Json &json, LUIStyle &style)
 namespace Lumen::YamlSerializer
 {
 
-template <> Yaml Serialize(const LUIStyle &style)
+template <> Yaml Serialize(const LUI::Style &style)
 {
     Yaml yaml;
     return yaml;
 }
 
-template <> void Deserialize(const Yaml &yaml, LUIStyle &style)
+template <> void Deserialize(const Yaml &yaml, LUI::Style &style)
 {
 }
 
