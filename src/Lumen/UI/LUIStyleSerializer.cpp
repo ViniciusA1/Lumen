@@ -4,7 +4,7 @@
 namespace Lumen
 {
 
-bool LUIStyleSerializer::Serialize(const Path &path, const LUIStyle &style)
+bool LUIStyleSerializer::Serialize(const Path &path, const LUI::Style &style)
 {
     Json json;
     json << style;
@@ -12,7 +12,7 @@ bool LUIStyleSerializer::Serialize(const Path &path, const LUIStyle &style)
     return result;
 }
 
-bool LUIStyleSerializer::Deserialize(const Path &path, LUIStyle &style)
+bool LUIStyleSerializer::Deserialize(const Path &path, LUI::Style &style)
 {
     Json json = Json::FromFile(path);
 

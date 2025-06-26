@@ -1,0 +1,29 @@
+#pragma once
+
+#include "Lumen/Core/Action.hpp"
+#include "Lumen/UI/LUIPopup.hpp"
+
+#include <string>
+
+namespace Lumen
+{
+
+class LUIConfirmPopup : public LUIPopup
+{
+public:
+    LUIConfirmPopup(std::string label, std::string message, Action onConfirm,
+                    Action onCancel = {});
+
+    void SetMessage(const std::string &message);
+    void SetCallbacks(Action onConfirm, Action onCancel = nullptr);
+
+protected:
+    void OnDraw() override;
+
+private:
+    std::string m_Message;
+    Action m_OnConfirm;
+    Action m_OnCancel;
+};
+
+} // namespace Lumen

@@ -2,17 +2,30 @@
 
 #include "Lumen/Graphics/Color.hpp"
 #include "Lumen/Math/Vector2.hpp"
-#include "Lumen/UI/LUIStructures.hpp"
+#include "Lumen/UI/Module/LUIStructures.hpp"
 
+#include <array>
 #include <map>
 #include <string>
 
-struct ImGuiStyle;
-
-namespace Lumen
+namespace Lumen::LUI
 {
 
-class LUIStyle
+class Style;
+
+void InitStyle();
+
+Style GetStyle();
+void SetStyle(const Style &style);
+
+} // namespace Lumen::LUI
+
+struct ImGuiStyle;
+
+namespace Lumen::LUI
+{
+
+class Style
 {
 public:
     static const std::map<std::string, LUI::StyleFlags> StyleMap;
@@ -67,12 +80,12 @@ public:
     bool AntiAliasedFill;
     float CurveTessellationTol;
     float CircleTessellationMaxError;
-    Color Colors[static_cast<int>(LUI::ColorFlags::Count)];
+    std::array<Color, static_cast<int>(LUI::ColorFlags::Count)> Colors;
 
 public:
-    LUIStyle();
+    Style();
 
     operator ImGuiStyle() const;
 };
 
-} // namespace Lumen
+} // namespace Lumen::LUI

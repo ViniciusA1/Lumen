@@ -6,10 +6,10 @@
 #include "Lumen/Scene/Component/Core/TransformComponent.hpp"
 #include "Lumen/Scene/Component/Graphics/CameraComponent.hpp"
 
-namespace Lumen
+namespace Lumen::LUI
 {
 
-class LUIGizmo
+class Gizmo
 {
 public:
     enum class TransformOperation
@@ -43,7 +43,7 @@ public:
     };
 
 public:
-    LUIGizmo() = delete;
+    Gizmo() = delete;
 
     static void DrawCubeView(CameraComponent &camera, float length,
                              const Vector2 &position, const Vector2 &size,
@@ -55,4 +55,4 @@ public:
                               const float *snap = nullptr);
 };
 
-} // namespace Lumen
+} // namespace Lumen::LUI

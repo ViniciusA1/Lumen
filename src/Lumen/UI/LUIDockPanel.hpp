@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lumen/UI/LUIStructures.hpp"
+#include "Lumen/UI/Module/LUIStructures.hpp"
 
 #include <string>
 

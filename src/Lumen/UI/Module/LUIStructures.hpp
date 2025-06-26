@@ -1,21 +1,9 @@
 #pragma once
 
-#include <type_traits>
+#include "Lumen/Core/Enum.hpp"
 
 namespace Lumen::LUI
 {
-
-#define DEFINE_ENUM_CLASS_BITMASK(Enum)                                                  \
-    inline constexpr Enum operator|(Enum Lhs, Enum Rhs)                                  \
-    {                                                                                    \
-        return static_cast<Enum>(static_cast<std::underlying_type_t<Enum>>(Lhs) |        \
-                                 static_cast<std::underlying_type_t<Enum>>(Rhs));        \
-    }                                                                                    \
-    inline constexpr Enum operator|=(Enum Lhs, Enum Rhs)                                 \
-    {                                                                                    \
-        return static_cast<Enum>(static_cast<std::underlying_type_t<Enum>>(Lhs) |        \
-                                 static_cast<std::underlying_type_t<Enum>>(Rhs));        \
-    }
 
 enum class ChildFlags
 {
@@ -31,7 +19,38 @@ enum class ChildFlags
     NavFlattened = 1 << 8
 };
 
-DEFINE_ENUM_CLASS_BITMASK(ChildFlags)
+ENUM_ENABLE_BITMASK(ChildFlags)
+
+enum class ColorEditFlags
+{
+    None = 0,
+    NoAlpha = 1 << 1,
+    NoPicker = 1 << 2,
+    NoOptions = 1 << 3,
+    NoSmallPreview = 1 << 4,
+    NoInputs = 1 << 5,
+    NoTooltip = 1 << 6,
+    NoLabel = 1 << 7,
+    NoSidePreview = 1 << 8,
+    NoDragDrop = 1 << 9,
+    NoBorder = 1 << 10,
+    AlphaBar = 1 << 16,
+    AlphaPreview = 1 << 17,
+    AlphaPreviewHalf = 1 << 18,
+    HDR = 1 << 19,
+    DisplayRGB = 1 << 20,
+    DisplayHSV = 1 << 21,
+    DisplayHex = 1 << 22,
+    Uint8 = 1 << 23,
+    Float = 1 << 24,
+    PickerHueBar = 1 << 25,
+    PickerHueWheel = 1 << 26,
+    InputRGB = 1 << 27,
+    InputHSV = 1 << 28,
+    DefaultOptions_ = Uint8 | DisplayRGB | InputRGB | PickerHueBar,
+};
+
+ENUM_ENABLE_BITMASK(ColorEditFlags)
 
 enum class ColorFlags
 {
@@ -96,7 +115,7 @@ enum class ColorFlags
     Count
 };
 
-DEFINE_ENUM_CLASS_BITMASK(ColorFlags)
+ENUM_ENABLE_BITMASK(ColorFlags)
 
 enum class CondFlags
 {
@@ -107,7 +126,7 @@ enum class CondFlags
     Appearing = 1 << 3
 };
 
-DEFINE_ENUM_CLASS_BITMASK(CondFlags)
+ENUM_ENABLE_BITMASK(CondFlags)
 
 enum class ConfigFlags
 {
@@ -127,7 +146,42 @@ enum class ConfigFlags
     IsTouchScreen = 1 << 21
 };
 
-DEFINE_ENUM_CLASS_BITMASK(ConfigFlags)
+ENUM_ENABLE_BITMASK(ConfigFlags)
+
+enum class DockNodeFlags
+{
+    None = 0,
+    KeepAliveOnly = 1 << 0,
+    // NoCentralNode              = 1 << 1,
+    NoDockingOverCentralNode = 1 << 2,
+    PassthruCentralNode = 1 << 3,
+    NoDockingSplit = 1 << 4,
+    NoResize = 1 << 5,
+    AutoHideTabBar = 1 << 6,
+    NoUndocking = 1 << 7,
+};
+
+ENUM_ENABLE_BITMASK(DockNodeFlags)
+
+enum class DragDropFlags
+{
+    None = 0,
+    SourceNoPreviewTooltip = 1 << 0,
+    SourceNoDisableHover = 1 << 1,
+    SourceNoHoldToOpenOthers = 1 << 2,
+    SourceAllowNullID = 1 << 3,
+    SourceExtern = 1 << 4,
+    PayloadAutoExpire = 1 << 5,
+    PayloadNoCrossContext = 1 << 6,
+    PayloadNoCrossProcess = 1 << 7,
+
+    AcceptBeforeDelivery = 1 << 10,
+    AcceptNoDrawDefaultRect = 1 << 11,
+    AcceptNoPreviewTooltip = 1 << 12,
+    AcceptPeekOnly = AcceptBeforeDelivery | AcceptNoDrawDefaultRect,
+};
+
+ENUM_ENABLE_BITMASK(DragDropFlags)
 
 enum class PopupFlags
 {
@@ -143,7 +197,7 @@ enum class PopupFlags
     AnyPopup = AnyPopupId | AnyPopupLevel
 };
 
-DEFINE_ENUM_CLASS_BITMASK(PopupFlags)
+ENUM_ENABLE_BITMASK(PopupFlags)
 
 enum class SelectableFlags
 {
@@ -156,7 +210,7 @@ enum class SelectableFlags
     Highlight = 1 << 5
 };
 
-DEFINE_ENUM_CLASS_BITMASK(SelectableFlags)
+ENUM_ENABLE_BITMASK(SelectableFlags)
 
 enum class SliderFlags
 {
@@ -171,7 +225,7 @@ enum class SliderFlags
     InvalidMask = 0x7000000F
 };
 
-DEFINE_ENUM_CLASS_BITMASK(SliderFlags)
+ENUM_ENABLE_BITMASK(SliderFlags)
 
 enum class StyleFlags
 {
@@ -212,7 +266,7 @@ enum class StyleFlags
     COUNT
 };
 
-DEFINE_ENUM_CLASS_BITMASK(StyleFlags)
+ENUM_ENABLE_BITMASK(StyleFlags)
 
 enum class TableFlags
 {
@@ -254,7 +308,7 @@ enum class TableFlags
     HighlightHoveredColumn = 1 << 28
 };
 
-DEFINE_ENUM_CLASS_BITMASK(TableFlags)
+ENUM_ENABLE_BITMASK(TableFlags)
 
 enum class TableColumnFlags
 {
@@ -284,7 +338,7 @@ enum class TableColumnFlags
     IsHovered = 1 << 27
 };
 
-DEFINE_ENUM_CLASS_BITMASK(TableColumnFlags)
+ENUM_ENABLE_BITMASK(TableColumnFlags)
 
 enum class TableRowFlags
 {
@@ -292,7 +346,7 @@ enum class TableRowFlags
     Headers = 1 << 0
 };
 
-DEFINE_ENUM_CLASS_BITMASK(TableRowFlags)
+ENUM_ENABLE_BITMASK(TableRowFlags)
 
 enum class TreeNodeFlags
 {
@@ -316,7 +370,7 @@ enum class TreeNodeFlags
     CollapsingHeader = Framed | NoTreePushOnOpen | NoAutoOpenOnLog
 };
 
-DEFINE_ENUM_CLASS_BITMASK(TreeNodeFlags)
+ENUM_ENABLE_BITMASK(TreeNodeFlags)
 
 enum class WindowFlags
 {
@@ -347,6 +401,6 @@ enum class WindowFlags
     NoInputs = NoMouseInputs | NoNavInputs | NoNavFocus
 };
 
-DEFINE_ENUM_CLASS_BITMASK(WindowFlags)
+ENUM_ENABLE_BITMASK(WindowFlags)
 
 } // namespace Lumen::LUI

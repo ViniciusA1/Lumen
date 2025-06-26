@@ -1,13 +1,39 @@
-#include "Lumen/UI/LUIStyle.hpp"
-#include "Lumen/Math/Math.hpp"
-#include "Lumen/UI/LUIStructures.hpp"
+#include "Lumen/UI/Module/LUIStyle.hpp"
+#include "Lumen/UI/LUIStyleSerializer.hpp"
 
 #include "imgui.h"
 
-namespace Lumen
+namespace Lumen::LUI
 {
 
-const std::map<std::string, LUI::StyleFlags> LUIStyle::StyleMap = {
+static Style s_Style;
+
+void InitStyle()
+{
+    LUIStyleSerializer serializer;
+    if (serializer.Deserialize("assets/UI/Style/Dark.json", s_Style))
+    {
+        SetStyle(s_Style);
+    }
+}
+
+Style GetStyle()
+{
+    return s_Style;
+}
+
+void SetStyle(const Style &style)
+{
+    s_Style = style;
+    ImGui::GetStyle() = style;
+}
+
+} // namespace Lumen::LUI
+
+namespace Lumen::LUI
+{
+
+const std::map<std::string, LUI::StyleFlags> Style::StyleMap = {
     {"Alpha", LUI::StyleFlags::Alpha},
     {"DisabledAlpha", LUI::StyleFlags::DisabledAlpha},
     {"WindowPadding", LUI::StyleFlags::WindowPadding},
@@ -44,7 +70,7 @@ const std::map<std::string, LUI::StyleFlags> LUIStyle::StyleMap = {
     {"DockingSeparatorSize", LUI::StyleFlags::DockingSeparatorSize},
 };
 
-const std::map<std::string, LUI::ColorFlags> LUIStyle::ColorMap = {
+const std::map<std::string, LUI::ColorFlags> Style::ColorMap = {
     {"Text", LUI::ColorFlags::Text},
     {"TextDisabled", LUI::ColorFlags::TextDisabled},
     {"WindowBg", LUI::ColorFlags::WindowBg},
@@ -105,7 +131,7 @@ const std::map<std::string, LUI::ColorFlags> LUIStyle::ColorMap = {
     {"ModalWindowDimBg", LUI::ColorFlags::ModalWindowDimBg},
 };
 
-LUIStyle::LUIStyle()
+Style::Style()
 {
     Alpha = 1.0f;
     DisabledAlpha = 0.60f;
@@ -165,7 +191,7 @@ LUIStyle::LUIStyle()
     }
 }
 
-LUIStyle::operator ImGuiStyle() const
+Style::operator ImGuiStyle() const
 {
     ImGuiStyle style;
 
@@ -226,4 +252,4 @@ LUIStyle::operator ImGuiStyle() const
     return style;
 }
 
-} // namespace Lumen
+} // namespace Lumen::LUI

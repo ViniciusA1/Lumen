@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Lumen/File/Path.hpp"
-#include "Lumen/UI/LUIStyle.hpp"
+#include "Lumen/UI/Module/LUIStyle.hpp"
 
 namespace Lumen
 {
@@ -9,8 +9,8 @@ namespace Lumen
 class LUIStyleSerializer
 {
 public:
-    bool Serialize(const Path &path, const LUIStyle &style);
-    bool Deserialize(const Path &path, LUIStyle &style);
+    bool Serialize(const Path &path, const LUI::Style &style);
+    bool Deserialize(const Path &path, LUI::Style &style);
 };
 
 } // namespace Lumen
