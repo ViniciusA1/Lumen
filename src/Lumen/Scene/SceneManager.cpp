@@ -1,5 +1,8 @@
 #include "Lumen/Scene/SceneManager.hpp"
 #include "Lumen/Scene/SceneSerializer.hpp"
+#include "Lumen/Scene/System/Core/TransformUpdateSystem.hpp"
+#include "Lumen/Scene/System/Graphics/ModelRendererSystem.hpp"
+#include "Lumen/Scene/System/Graphics/SpriteRendererSystem.hpp"
 
 namespace Lumen
 {
@@ -10,12 +13,17 @@ std::unordered_map<UUID, Ref<Scene>> SceneManager::s_LoadedScene;
 void SceneManager::CreateScene(const Path &path, const std::string &name, SceneType type)
 {
     Ref<Scene> newScene = CreateRef<Scene>(UUID(), name, path, type);
+    AddDefaultEntities(newScene);
+    AddDefaultSystems(newScene);
     SaveScene(newScene);
 }
 
 void SceneManager::LoadScene(const Path &path, SceneType type)
 {
     Ref<Scene> loadedScene = CreateRef<Scene>(type);
+    AddDefaultEntities(loadedScene);
+    AddDefaultSystems(loadedScene);
+
     SceneSerializer serializer;
     if (serializer.Deserialize(loadedScene, path))
     {
@@ -109,6 +117,20 @@ Ref<Scene> SceneManager::GetSceneAt(int index)
     auto it = s_LoadedScene.begin();
     std::advance(it, index);
     return it->second;
+}
+
+void SceneManager::AddDefaultEntities(const Ref<Scene> &scene)
+{
+}
+
+void SceneManager::AddDefaultSystems(const Ref<Scene> &scene)
+{
+    World &world = scene->GetWorld();
+
+    world.AddSystem<TransformUpdateSystem>();
+
+    world.AddSystem<ModelRendererSystem>();
+    world.AddSystem<SpriteRendererSystem>();
 }
 
 } // namespace Lumen

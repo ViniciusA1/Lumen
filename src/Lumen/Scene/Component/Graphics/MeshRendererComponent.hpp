@@ -8,6 +8,7 @@ namespace Lumen
 struct MeshRendererComponent
 {
     AssetHandle Mesh;
+    AssetHandle Material;
 };
 
 } // namespace Lumen

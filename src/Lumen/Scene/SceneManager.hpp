@@ -24,6 +24,10 @@ public:
     static Ref<Scene> GetSceneAt(int index);
 
 private:
+    static void AddDefaultEntities(const Ref<Scene> &scene);
+    static void AddDefaultSystems(const Ref<Scene> &scene);
+
+private:
     static Ref<Scene> s_ActiveScene;
     static std::unordered_map<UUID, Ref<Scene>> s_LoadedScene;
 };
