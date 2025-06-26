@@ -28,6 +28,26 @@ bool Shader::IsValid() const
     return m_Shader && ::IsShaderValid(*m_Shader);
 }
 
+bool Shader::HasAttribute(const std::string &attribute) const
+{
+    return GetLocationAttribute(attribute) != -1;
+}
+
+bool Shader::HasUniform(const std::string &uniform) const
+{
+    return GetLocation(uniform) != -1;
+}
+
+int Shader::GetLocation(const std::string &uniform) const
+{
+    return ::GetShaderLocation(*m_Shader, uniform.c_str());
+}
+
+int Shader::GetLocationAttribute(const std::string &attribute) const
+{
+    return ::GetShaderLocationAttrib(*m_Shader, attribute.c_str());
+}
+
 int *Shader::GetLocations() const
 {
     return m_Shader->locs;
@@ -71,6 +91,69 @@ void Shader::SetValue(int locIndex, const Vector3 &vec)
 void Shader::SetValue(int locIndex, const Vector4 &vec)
 {
     ::SetShaderValueV(*m_Shader, locIndex, &vec, SHADER_UNIFORM_VEC4, 4);
+}
+
+void Shader::SetValue(int locIndex, float value)
+{
+    SetValue(locIndex, &value, ShaderUniformType::Float);
+}
+
+void Shader::SetValue(int locIndex, int value)
+{
+    SetValue(locIndex, &value, ShaderUniformType::Int);
+}
+
+void Shader::SetValue(const std::string &uniform, const void *value,
+                      ShaderUniformType type)
+{
+    int loc = GetLocation(uniform);
+    if (loc != -1)
+        SetValue(loc, value, type);
+}
+
+void Shader::SetValue(const std::string &uniform, const Matrix4 &matrix)
+{
+    int loc = GetLocation(uniform);
+    if (loc != -1)
+        SetValue(loc, matrix);
+}
+
+void Shader::SetValue(const std::string &uniform, const Texture2D &texture)
+{
+    int loc = GetLocation(uniform);
+    if (loc != -1)
+        SetValue(loc, texture);
+}
+
+void Shader::SetValue(const std::string &uniform, const Vector2 &vec)
+{
+    int loc = GetLocation(uniform);
+    if (loc != -1)
+        SetValue(loc, vec);
+}
+
+void Shader::SetValue(const std::string &uniform, const Vector3 &vec)
+{
+    int loc = GetLocation(uniform);
+    if (loc != -1)
+        SetValue(loc, vec);
+}
+
+void Shader::SetValue(const std::string &uniform, const Vector4 &vec)
+{
+    int loc = GetLocation(uniform);
+    if (loc != -1)
+        SetValue(loc, vec);
+}
+
+void Shader::SetValue(const std::string &uniform, float value)
+{
+    SetValue(uniform, &value, ShaderUniformType::Float);
+}
+
+void Shader::SetValue(const std::string &uniform, int value)
+{
+    SetValue(uniform, &value, ShaderUniformType::Int);
 }
 
 Shader::operator ::Shader() const

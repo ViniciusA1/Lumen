@@ -1,5 +1,6 @@
 #include "Lumen/Graphics/Texture.hpp"
-#include <raylib.h>
+
+#include "raylib.h"
 
 namespace Lumen
 {
@@ -47,7 +48,7 @@ unsigned int Texture2D::GetRendererID() const
     return m_Texture->id;
 }
 
-unsigned int *Texture2D::GetRendererID()
+unsigned int *Texture2D::GetRendererIDPtr() const
 {
     return &m_Texture->id;
 }
@@ -65,6 +66,26 @@ AssetType Texture2D::GetType() const
 int Texture2D::GetWidth() const
 {
     return m_Texture->width;
+}
+
+void Texture2D::SetFilter(TextureFilter filter)
+{
+    ::SetTextureFilter(*m_Texture, static_cast<int>(filter));
+}
+
+void Texture2D::SetWrap(TextureWrap wrap)
+{
+    ::SetTextureWrap(*m_Texture, static_cast<int>(wrap));
+}
+
+void Texture2D::UpdateData(const void *data)
+{
+    ::UpdateTexture(*m_Texture, data);
+}
+
+void Texture2D::UpdateDataRect(const void *data, const Rectangle &rect)
+{
+    ::UpdateTextureRec(*m_Texture, rect, data);
 }
 
 Texture2D::operator ::Texture() const

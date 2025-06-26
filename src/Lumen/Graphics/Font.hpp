@@ -4,6 +4,8 @@
 #include "Lumen/Graphics/Texture.hpp"
 
 struct Font;
+struct GlyphInfo;
+struct Rectangle;
 
 namespace Lumen
 {
@@ -19,6 +21,11 @@ public:
 
     [[nodiscard]] bool IsValid() const final;
 
+    [[nodiscard]] int GetBaseSize() const;
+    [[nodiscard]] ::GlyphInfo *GetGlyphs() const;
+    [[nodiscard]] int GetGlyphCount() const;
+    [[nodiscard]] int GetGlyphPadding() const;
+    [[nodiscard]] ::Rectangle *GetRects() const;
     [[nodiscard]] Texture2D GetTexture() const;
     [[nodiscard]] AssetType GetType() const final;
 

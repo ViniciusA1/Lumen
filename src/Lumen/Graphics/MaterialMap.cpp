@@ -29,6 +29,21 @@ float MaterialMap::GetValue() const
     return m_MaterialMap->value;
 }
 
+void MaterialMap::SetColor(Color color)
+{
+    m_MaterialMap->color = color;
+}
+
+void MaterialMap::SetTexture(const Texture &texture)
+{
+    m_MaterialMap->texture = texture;
+}
+
+void MaterialMap::SetValue(float value)
+{
+    m_MaterialMap->value = value;
+}
+
 MaterialMap::operator ::MaterialMap() const
 {
     return *m_MaterialMap;

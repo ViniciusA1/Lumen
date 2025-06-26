@@ -27,6 +27,31 @@ bool Font::IsValid() const
     return m_Font && ::IsFontValid(*m_Font);
 }
 
+int Font::GetBaseSize() const
+{
+    return m_Font->baseSize;
+}
+
+::GlyphInfo *Font::GetGlyphs() const
+{
+    return m_Font->glyphs;
+}
+
+int Font::GetGlyphCount() const
+{
+    return m_Font->glyphCount;
+}
+
+int Font::GetGlyphPadding() const
+{
+    return m_Font->glyphPadding;
+}
+
+::Rectangle *Font::GetRects() const
+{
+    return m_Font->recs;
+}
+
 Texture2D Font::GetTexture() const
 {
     return &m_Font->texture;
