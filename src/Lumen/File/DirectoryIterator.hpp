@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Lumen/File/DirectoryEntry.hpp"
+
 #include <optional>
 
 namespace Lumen
@@ -9,19 +10,19 @@ namespace Lumen
 class DirectoryIterator
 {
 public:
-    DirectoryIterator();
-    explicit DirectoryIterator(const std::string &path);
+    DirectoryIterator() = default;
+    explicit DirectoryIterator(const Path &path);
 
-    const DirectoryEntry operator*() const;
-    const DirectoryEntry operator->() const;
+    DirectoryEntry operator*() const;
+    DirectoryEntry operator->() const;
 
     DirectoryIterator &operator++();
 
     bool operator==(const DirectoryIterator &other) const;
     bool operator!=(const DirectoryIterator &other) const;
 
-    DirectoryIterator begin();
-    DirectoryIterator end();
+    [[nodiscard]] DirectoryIterator begin() const;
+    [[nodiscard]] DirectoryIterator end() const;
 
 private:
     std::optional<std::filesystem::directory_iterator> m_Iterator;
@@ -30,19 +31,19 @@ private:
 class RecursiveDirectoryIterator
 {
 public:
-    RecursiveDirectoryIterator();
-    explicit RecursiveDirectoryIterator(const std::string &path);
+    RecursiveDirectoryIterator() = default;
+    explicit RecursiveDirectoryIterator(const Path &path);
 
-    const DirectoryEntry operator*() const;
-    const DirectoryEntry operator->() const;
+    DirectoryEntry operator*() const;
+    DirectoryEntry operator->() const;
 
     RecursiveDirectoryIterator &operator++();
 
     bool operator==(const RecursiveDirectoryIterator &other) const;
     bool operator!=(const RecursiveDirectoryIterator &other) const;
 
-    RecursiveDirectoryIterator begin();
-    RecursiveDirectoryIterator end();
+    [[nodiscard]] RecursiveDirectoryIterator begin() const;
+    [[nodiscard]] RecursiveDirectoryIterator end() const;
 
 private:
     std::optional<std::filesystem::recursive_directory_iterator> m_Iterator;

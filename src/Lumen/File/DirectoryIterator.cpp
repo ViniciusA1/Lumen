@@ -3,11 +3,7 @@
 namespace Lumen
 {
 
-DirectoryIterator::DirectoryIterator() : m_Iterator(std::nullopt)
-{
-}
-
-DirectoryIterator::DirectoryIterator(const std::string &path)
+DirectoryIterator::DirectoryIterator(const Path &path)
 {
     try
     {
@@ -19,19 +15,25 @@ DirectoryIterator::DirectoryIterator(const std::string &path)
     }
 }
 
-const DirectoryEntry DirectoryIterator::operator*() const
+DirectoryEntry DirectoryIterator::operator*() const
 {
-    return DirectoryEntry(**m_Iterator);
+    if (!m_Iterator || *m_Iterator == std::filesystem::directory_iterator{})
+        return {};
+
+    return **m_Iterator;
 }
 
-const DirectoryEntry DirectoryIterator::operator->() const
+DirectoryEntry DirectoryIterator::operator->() const
 {
-    return DirectoryEntry(**m_Iterator);
+    if (!m_Iterator || *m_Iterator == std::filesystem::directory_iterator{})
+        return {};
+
+    return **this;
 }
 
 DirectoryIterator &DirectoryIterator::operator++()
 {
-    if (m_Iterator && *m_Iterator != std::filesystem::end(*m_Iterator))
+    if (m_Iterator)
     {
         try
         {
@@ -41,13 +43,17 @@ DirectoryIterator &DirectoryIterator::operator++()
         {
             m_Iterator = std::nullopt;
         }
+
+        if (*m_Iterator == std::filesystem::directory_iterator{})
+            m_Iterator = std::nullopt;
     }
     return *this;
 }
 
 bool DirectoryIterator::operator==(const DirectoryIterator &other) const
 {
-    return m_Iterator == other.m_Iterator;
+    return (!m_Iterator && !other.m_Iterator) ||
+           (m_Iterator && other.m_Iterator && *m_Iterator == *other.m_Iterator);
 }
 
 bool DirectoryIterator::operator!=(const DirectoryIterator &other) const
@@ -55,21 +61,17 @@ bool DirectoryIterator::operator!=(const DirectoryIterator &other) const
     return !(*this == other);
 }
 
-DirectoryIterator DirectoryIterator::begin()
+DirectoryIterator DirectoryIterator::begin() const
 {
     return *this;
 }
 
-DirectoryIterator DirectoryIterator::end()
+DirectoryIterator DirectoryIterator::end() const
 {
     return {};
 }
 
-RecursiveDirectoryIterator::RecursiveDirectoryIterator() : m_Iterator(std::nullopt)
-{
-}
-
-RecursiveDirectoryIterator::RecursiveDirectoryIterator(const std::string &path)
+RecursiveDirectoryIterator::RecursiveDirectoryIterator(const Path &path)
 {
     try
     {
@@ -81,19 +83,25 @@ RecursiveDirectoryIterator::RecursiveDirectoryIterator(const std::string &path)
     }
 }
 
-const DirectoryEntry RecursiveDirectoryIterator::operator*() const
+DirectoryEntry RecursiveDirectoryIterator::operator*() const
 {
-    return DirectoryEntry(**m_Iterator);
+    if (!m_Iterator || *m_Iterator == std::filesystem::recursive_directory_iterator{})
+        return {};
+
+    return **m_Iterator;
 }
 
-const DirectoryEntry RecursiveDirectoryIterator::operator->() const
+DirectoryEntry RecursiveDirectoryIterator::operator->() const
 {
-    return DirectoryEntry(**m_Iterator);
+    if (!m_Iterator || *m_Iterator == std::filesystem::recursive_directory_iterator{})
+        return {};
+
+    return **this;
 }
 
 RecursiveDirectoryIterator &RecursiveDirectoryIterator::operator++()
 {
-    if (m_Iterator && *m_Iterator != std::filesystem::end(*m_Iterator))
+    if (m_Iterator)
     {
         try
         {
@@ -103,26 +111,30 @@ RecursiveDirectoryIterator &RecursiveDirectoryIterator::operator++()
         {
             m_Iterator = std::nullopt;
         }
+
+        if (*m_Iterator == std::filesystem::recursive_directory_iterator{})
+            m_Iterator = std::nullopt;
     }
     return *this;
 }
 
 bool RecursiveDirectoryIterator::operator==(const RecursiveDirectoryIterator &other) const
 {
-    return m_Iterator == other.m_Iterator;
+    return (!m_Iterator && !other.m_Iterator) ||
+           (m_Iterator && other.m_Iterator && *m_Iterator == *other.m_Iterator);
 }
 
 bool RecursiveDirectoryIterator::operator!=(const RecursiveDirectoryIterator &other) const
 {
-    return m_Iterator != other.m_Iterator;
+    return !(*this == other);
 }
 
-RecursiveDirectoryIterator RecursiveDirectoryIterator::begin()
+RecursiveDirectoryIterator RecursiveDirectoryIterator::begin() const
 {
     return *this;
 }
 
-RecursiveDirectoryIterator RecursiveDirectoryIterator::end()
+RecursiveDirectoryIterator RecursiveDirectoryIterator::end() const
 {
     return {};
 }

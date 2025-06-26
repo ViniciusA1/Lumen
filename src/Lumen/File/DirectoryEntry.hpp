@@ -8,7 +8,7 @@ namespace Lumen
 class DirectoryEntry
 {
 public:
-    explicit DirectoryEntry(std::filesystem::directory_entry entry);
+    DirectoryEntry(std::filesystem::directory_entry entry = {});
 
     void ReplaceFilename(const std::string &filename);
     void Refresh();
