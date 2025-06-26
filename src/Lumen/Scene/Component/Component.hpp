@@ -3,8 +3,10 @@
 #include "Lumen/Scene/Component/Audio/AudioListenerComponent.hpp"
 #include "Lumen/Scene/Component/Audio/AudioSourceComponent.hpp"
 
+#include "Lumen/Scene/Component/Core/ChildrenComponent.hpp"
 #include "Lumen/Scene/Component/Core/IDComponent.hpp"
 #include "Lumen/Scene/Component/Core/NameComponent.hpp"
+#include "Lumen/Scene/Component/Core/ParentComponent.hpp"
 #include "Lumen/Scene/Component/Core/TagComponent.hpp"
 #include "Lumen/Scene/Component/Core/TransformComponent.hpp"
 
@@ -23,7 +25,9 @@
 #define TAG_COMPONENTS                                                                   \
     UntaggedComponent, EnemyTagComponent, MainCameraTagComponent, PlayerTagComponent
 
-#define CORE_COMPONENTS IDComponent, NameComponent, TAG_COMPONENTS, TransformComponent
+#define CORE_COMPONENTS                                                                  \
+    IDComponent, NameComponent, TAG_COMPONENTS, ParentComponent, ChildrenComponent,      \
+        TransformComponent
 
 #define GRAPHICS_COMPONENTS                                                              \
     CameraComponent, MeshRendererComponent, ModelRendererComponent,                      \

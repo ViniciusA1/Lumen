@@ -25,6 +25,7 @@ public:
     std::unordered_map<UUID, Entity> &GetEntityMap();
 
     Entity CreateEntity();
+    Entity CreateEntity(const std::string &name);
     Entity CreateEntity(UUID uuid, const std::string &name = "");
     Entity CopyEntity(Entity entity);
     void DestroyEntity(UUID uuid);

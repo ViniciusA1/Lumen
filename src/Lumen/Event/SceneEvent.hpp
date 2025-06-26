@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Lumen/Core/UUID.hpp"
 #include "Lumen/Scene/Entity/Entity.hpp"
 
 namespace Lumen
@@ -29,6 +30,27 @@ public:
         : Entity(entity), Component(component)
     {
     }
+};
+
+class AddChildEvent
+{
+public:
+    UUID ParentID;
+    UUID ChildID;
+};
+
+class RemoveChildEvent
+{
+public:
+    UUID ParentID;
+    UUID ChildID;
+};
+
+class ReparentEvent
+{
+public:
+    UUID NewParentID;
+    UUID ChildID;
 };
 
 } // namespace Lumen

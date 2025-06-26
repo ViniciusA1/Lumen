@@ -3,6 +3,7 @@
 #include "Lumen/File/Serializer/Conversions/CoreConversion.hpp"
 #include "Lumen/File/Serializer/Conversions/GraphicsConversion.hpp"
 #include "Lumen/File/Serializer/Conversions/MathConversion.hpp"
+#include "yaml-cpp/exceptions.h"
 
 namespace Lumen::YamlSerializer
 {
@@ -203,6 +204,45 @@ template <> Yaml Serialize(const PlayerTagComponent &tag)
 template <> void Deserialize(const Yaml &yaml, PlayerTagComponent &tag)
 {
     yaml["PlayerTag"] >> tag.Name;
+}
+
+template <> Yaml Serialize(const ParentComponent &parent)
+{
+    Yaml yaml;
+    yaml["Parent"] << parent.ParentID;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, ParentComponent &parent)
+{
+    yaml["Parent"] >> parent.ParentID;
+}
+
+template <> Yaml Serialize(const ChildrenComponent &children)
+{
+    Yaml yaml, childrenYaml;
+
+    for (const auto &childrenID : children.ChildrenID)
+        childrenYaml.PushBack((uint64_t)childrenID);
+
+    yaml["Children"] = childrenYaml;
+
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, ChildrenComponent &children)
+{
+    const Yaml &childrenYaml = yaml["Children"];
+
+    if (childrenYaml.IsNull())
+        throw YAML::Exception({}, "");
+
+    for (const auto &childrenIDYaml : childrenYaml)
+    {
+        UUID id;
+        childrenIDYaml >> id;
+        children.ChildrenID.push_back(id);
+    }
 }
 
 template <> Yaml Serialize(const TransformComponent &transform)

@@ -34,6 +34,12 @@ template <> void Deserialize(const Yaml &yaml, MainCameraTagComponent &tag);
 template <> Yaml Serialize(const PlayerTagComponent &tag);
 template <> void Deserialize(const Yaml &yaml, PlayerTagComponent &tag);
 
+template <> Yaml Serialize(const ParentComponent &parent);
+template <> void Deserialize(const Yaml &yaml, ParentComponent &parent);
+
+template <> Yaml Serialize(const ChildrenComponent &children);
+template <> void Deserialize(const Yaml &yaml, ChildrenComponent &children);
+
 template <> Yaml Serialize(const TransformComponent &transform);
 template <> void Deserialize(const Yaml &yaml, TransformComponent &transform);
 
