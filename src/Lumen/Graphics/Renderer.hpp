@@ -43,6 +43,9 @@ public:
 public:
     static void ClearBackground(Color color);
 
+    static RenderTexture CreateRenderTexture(const Vector2 &size);
+    static void UnloadRenderTexture(const RenderTexture &texture);
+
     static void CreateDefaultRenderTexture();
     static RenderTexture &GetDefaultRenderTexture();
     static void ResizeRenderTexture(int width, int height);
@@ -103,14 +106,15 @@ public:
     static void DrawQuad(const TransformComponent &transform, Color color = Color::White);
     static void DrawQuad(const TransformComponent &transform, const Texture2D &texture,
                          const Vector4 &uv = {0, 0, 1, 1}, Color color = Color::White);
-    static void DrawQuad2D(const TransformComponent &transform, Color color);
+    static void DrawQuad2D(const TransformComponent &transform,
+                           Color color = Color::White);
     static void DrawQuad2D(const TransformComponent &transform, const Texture2D &texture,
-                           Color color);
+                           Color color = Color::White);
     static void DrawQuadLines(const TransformComponent &transform, float lineThick,
-                              Color color);
+                              Color color = Color::White);
 
     static void DrawTriangle(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3,
-                             Color color);
+                             Color color = Color::White);
 
 public:
     static void DrawBillboard(const TransformComponent &transform,

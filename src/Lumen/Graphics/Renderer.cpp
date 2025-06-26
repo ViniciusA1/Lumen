@@ -136,6 +136,16 @@ void Renderer::ClearBackground(const Image &dst, Color color)
     ::ImageClearBackground(dst, color);
 }
 
+RenderTexture Renderer::CreateRenderTexture(const Vector2 &size)
+{
+    return ::LoadRenderTexture(size.x, size.y);
+}
+
+void Renderer::UnloadRenderTexture(const RenderTexture &texture)
+{
+    ::UnloadRenderTexture(texture);
+}
+
 void Renderer::DrawCircle(const Image &dst, Vector2 center, int radius, Color color)
 {
     ::ImageDrawCircleV(dst, center, radius, color);
@@ -326,7 +336,7 @@ void Renderer::DrawQuad(const TransformComponent &transform, const Texture2D &te
 
 void Renderer::DrawQuad2D(const TransformComponent &transform, Color color)
 {
-    const Vector2 &origin = {
+    Vector2 origin = {
         transform.Scale.x * 0.5f,
         transform.Scale.y * 0.5f,
     };
@@ -344,7 +354,7 @@ void Renderer::DrawQuad2D(const TransformComponent &transform, Color color)
 void Renderer::DrawQuad2D(const TransformComponent &transform, const Texture2D &texture,
                           Color color)
 {
-    const Vector2 &origin = {
+    Vector2 origin = {
         transform.Scale.x * 0.5f,
         transform.Scale.y * 0.5f,
     };
