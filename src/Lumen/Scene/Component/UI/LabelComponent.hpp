@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Lumen/Asset/AssetHandle.hpp"
+#include "Lumen/Graphics/Color.hpp"
 #include "Lumen/Scene/Component/UI/UIComponentBase.hpp"
 
 #include <string>
@@ -13,6 +14,7 @@ struct LabelComponent : public UIComponentBase
     std::string Text;
     AssetHandle Font;
     int FontSize = 16;
+    Color Color = Color::White;
 };
 
 } // namespace Lumen
