@@ -18,14 +18,6 @@ template <> Yaml Serialize(const Ref<Scene> &scene)
     sceneNode["Type"] << static_cast<int>(scene->GetType());
 
     auto &world = scene->GetWorld();
-    auto &entityManager = world.GetEntityManager();
-
-    Entity mainCamera = scene->GetMainCameraEntity();
-    if (mainCamera && entityManager.HasComponent<CameraComponent>(mainCamera))
-    {
-        sceneNode["MainCamera"] << entityManager.GetComponent<IDComponent>(mainCamera);
-    }
-
     sceneNode["World"] << world;
 
     return sceneNode;
@@ -50,14 +42,6 @@ template <> void Deserialize(const Yaml &yaml, Ref<Scene> &scene)
     auto &entityManager = world.GetEntityManager();
 
     yaml["World"] >> world;
-
-    if (yaml.Contains("MainCamera"))
-    {
-        UUID mainCameraID;
-        yaml["MainCamera"] >> mainCameraID;
-        Entity mainCamera = entityManager.GetEntity(mainCameraID);
-        scene->SetMainCamera(mainCamera);
-    }
 }
 
 template <> Yaml Serialize(const World &world)
@@ -293,9 +277,6 @@ template <> void Deserialize(const Yaml &yaml, AudioSourceComponent &audioSource
 template <> Yaml Serialize(const CameraComponent &camera)
 {
     Yaml yaml, cameraYaml;
-    cameraYaml["Position"] << camera.Position;
-    cameraYaml["Target"] << camera.Target;
-    cameraYaml["Up"] << camera.Up;
     cameraYaml["Fov"] << camera.Fov;
     cameraYaml["Projection"] << static_cast<int>(camera.Projection);
     yaml["Camera"] = cameraYaml;
@@ -305,9 +286,6 @@ template <> Yaml Serialize(const CameraComponent &camera)
 template <> void Deserialize(const Yaml &yaml, CameraComponent &camera)
 {
     const Yaml &cameraYaml = yaml["Camera"];
-    cameraYaml["Position"] >> camera.Position;
-    cameraYaml["Target"] >> camera.Target;
-    cameraYaml["Up"] >> camera.Up;
     cameraYaml["Fov"] >> camera.Fov;
     int projection;
     cameraYaml["Projection"] >> projection;

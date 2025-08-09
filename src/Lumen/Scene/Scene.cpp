@@ -1,5 +1,6 @@
 #include "Lumen/Scene/Scene.hpp"
 #include "Lumen/Event/EventBus.hpp"
+#include "Lumen/Graphics/Renderer.hpp"
 
 namespace Lumen
 {
@@ -12,9 +13,6 @@ template <>
 void Scene::OnComponentAdded(const ComponentAddEvent<MainCameraTagComponent> &event);
 template <>
 void Scene::OnComponentAdded(const ComponentAddEvent<PlayerTagComponent> &event);
-
-template <>
-void Scene::OnComponentRemoved(const ComponentRemoveEvent<CameraComponent> &event);
 
 Scene::Scene(SceneType type) : m_Type(type)
 {
@@ -35,12 +33,13 @@ UUID Scene::GetID() const
 
 CameraComponent &Scene::GetMainCamera()
 {
-    return m_World.GetEntityManager().GetComponent<CameraComponent>(m_MainCamera);
+    return m_World.GetEntityManager()
+        .GetEntityComponentWith<CameraComponent, MainCameraTagComponent>();
 }
 
 Entity Scene::GetMainCameraEntity() const
 {
-    return m_MainCamera;
+    return m_World.GetEntityManager().GetEntityWith<MainCameraTagComponent>();
 }
 
 std::string Scene::GetName() const
@@ -66,11 +65,6 @@ void Scene::SetID(UUID uuid)
 void Scene::SetName(const std::string &name)
 {
     m_Name = name;
-}
-
-void Scene::SetMainCamera(Entity camera)
-{
-    m_MainCamera = camera;
 }
 
 void Scene::SetPath(const Path &path)
@@ -101,9 +95,23 @@ void Scene::OnUpdate()
     m_World.OnUpdate();
 }
 
-void Scene::OnDraw()
+void Scene::OnDraw(bool withCamera)
 {
-    m_World.OnDraw();
+    if (!withCamera)
+    {
+        m_World.OnDraw();
+        return;
+    }
+
+    auto &registry = m_World.GetEntityManager().GetRegistry();
+
+    for (const auto &[entity, transform, camera] :
+         registry.view<TransformComponent, CameraComponent>().each())
+    {
+        Renderer::BeginCameraMode(camera);
+        m_World.OnDraw();
+        Renderer::EndCameraMode();
+    }
 }
 
 void Scene::BindEvents()
@@ -167,27 +175,6 @@ void Scene::OnComponentAdded(const ComponentAddEvent<PlayerTagComponent> &event)
         if (typeid(PlayerTagComponent) != typeid(Component))
             manager.RemoveComponent<Component>(event.Entity);
     });
-}
-
-template <>
-void Scene::OnComponentRemoved(const ComponentRemoveEvent<CameraComponent> &event)
-{
-    Entity eventEntity = event.Entity;
-
-    if (eventEntity != m_MainCamera)
-    {
-        return;
-    }
-
-    m_MainCamera = {};
-    auto view = m_World.GetEntityManager().GetRegistry().view<CameraComponent>();
-    for (auto entity : view)
-    {
-        if (eventEntity != Entity(entity))
-        {
-            m_MainCamera = eventEntity;
-        }
-    }
 }
 
 } // namespace Lumen

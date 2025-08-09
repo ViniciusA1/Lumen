@@ -7,7 +7,8 @@ enum class SceneState
 {
     Edit,
     Play,
-    Pause
+    Pause,
+    Step
 };
 
 } // namespace Lumen
