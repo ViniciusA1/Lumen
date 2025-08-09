@@ -1,5 +1,4 @@
 #include "Lumen/UI/Module/LUIContext.hpp"
-#include "Lumen/Graphics/Renderer.hpp"
 #include "Lumen/UI/Module/LUIFont.hpp"
 #include "Lumen/UI/Module/LUIStyle.hpp"
 
@@ -29,7 +28,6 @@ void BeginUI()
 {
     rlImGuiBegin();
     ImGuizmo::BeginFrame();
-    Lumen::Renderer::BeginTextureMode();
 }
 
 void EndUI()
@@ -39,7 +37,6 @@ void EndUI()
         overlay();
     }
 
-    Lumen::Renderer::EndTextureMode();
     rlImGuiEnd();
 }
 

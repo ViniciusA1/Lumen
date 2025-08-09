@@ -54,6 +54,10 @@ void SetTooltip(const std::string &text);
 bool Button(const std::string &label, const Vector2 &size = Vector2(0, 0),
             bool showBg = true);
 bool ButtonInvisible(const std::string &label, const Vector2 &size = Vector2(0, 0));
+bool ButtonPopup();
+bool ButtonToggle(const std::string &label, bool &value,
+                  const Vector2 &size = Vector2(0, 0),
+                  const std::string &toggledLabel = "");
 // bool ButtonSwitch(const std::string &label, bool &value);
 
 bool Checkbox(const std::string &label, bool *value);
@@ -77,14 +81,14 @@ void DragFloat3(const std::string &label, float *value, float speed = 1.0f,
                 SliderFlags flags = SliderFlags::None);
 
 void DragVec2(const std::string &label, Vector2 &vec, float speed = 1.0f,
-              float min = 0.0f, float max = 0.0f, const std::string &format = "%.3f",
-              SliderFlags flags = SliderFlags::None);
+              float min = 0.0f, float max = 0.0f, const Vector2 &reset = {},
+              const std::string &format = "%.3f", SliderFlags flags = SliderFlags::None);
 void DragVec3(const std::string &label, Vector3 &vec, float speed = 1.0f,
-              float min = 0.0f, float max = 0.0f, const std::string &format = "%.3f",
-              SliderFlags flags = SliderFlags::None);
+              float min = 0.0f, float max = 0.0f, const Vector3 &reset = {},
+              const std::string &format = "%.3f", SliderFlags flags = SliderFlags::None);
 void DragVec4(const std::string &label, Vector4 &vec, float speed = 1.0f,
-              float min = 0.0f, float max = 0.0f, const std::string &format = "%.3f",
-              SliderFlags flags = SliderFlags::None);
+              float min = 0.0f, float max = 0.0f, const Vector4 &reset = {},
+              const std::string &format = "%.3f", SliderFlags flags = SliderFlags::None);
 
 bool Filter(const std::vector<std::string> &filters, int &currentFilter);
 bool FilterButton(const std::vector<std::string> &filters, int &currentFilter);

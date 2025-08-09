@@ -85,6 +85,25 @@ bool ButtonInvisible(const std::string &label, const Vector2 &size)
     return ImGui::InvisibleButton(label.c_str(), size);
 }
 
+bool ButtonToggle(const std::string &label, bool &value, const Vector2 &size,
+                  const std::string &toggledLabel)
+{
+    const std::string &displayLabel =
+        toggledLabel.empty() ? label : (value ? toggledLabel : label);
+
+    if (value)
+        ImGui::PushStyleColor(ImGuiCol_Button,
+                              ImGui::GetStyleColorVec4(ImGuiCol_ButtonActive));
+    else
+        ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyleColorVec4(ImGuiCol_Button));
+
+    bool pressed = Button(displayLabel.c_str(), size);
+    value ^= pressed;
+
+    ImGui::PopStyleColor();
+    return pressed;
+}
+
 // bool ButtonSwitch(const std::string &label, bool &value)
 // {
 //     ImGuiWindow *window = ImGui::GetCurrentWindow();
@@ -227,7 +246,7 @@ void DragFloat3(const std::string &label, float *value, float speed, float min, 
 }
 
 void DragVec2(const std::string &label, Vector2 &vec, float speed, float min, float max,
-              const std::string &format, SliderFlags flags)
+              const Vector2 &reset, const std::string &format, SliderFlags flags)
 {
     ImGui::PushID(label.c_str());
 
@@ -243,7 +262,7 @@ void DragVec2(const std::string &label, Vector2 &vec, float speed, float min, fl
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.8f, 0.1f, 0.15f, 1.0f});
     if (ImGui::Button("X", ImVec2{ImGui::GetFrameHeight(), ImGui::GetFrameHeight()}))
-        vec.x = 0.0f;
+        vec.x = reset.x;
     ImGui::PopStyleColor();
     ImGui::SameLine();
     ImGui::SetNextItemWidth(dragWidth);
@@ -252,7 +271,7 @@ void DragVec2(const std::string &label, Vector2 &vec, float speed, float min, fl
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.2f, 0.7f, 0.2f, 1.0f});
     if (ImGui::Button("Y", ImVec2{ImGui::GetFrameHeight(), ImGui::GetFrameHeight()}))
-        vec.y = 0.0f;
+        vec.y = reset.y;
     ImGui::PopStyleColor();
     ImGui::SameLine();
     ImGui::SetNextItemWidth(dragWidth);
@@ -263,7 +282,7 @@ void DragVec2(const std::string &label, Vector2 &vec, float speed, float min, fl
 }
 
 void DragVec3(const std::string &label, Vector3 &vec, float speed, float min, float max,
-              const std::string &format, SliderFlags flags)
+              const Vector3 &reset, const std::string &format, SliderFlags flags)
 {
     ImGui::PushID(label.c_str());
 
@@ -276,7 +295,7 @@ void DragVec3(const std::string &label, Vector3 &vec, float speed, float min, fl
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.8f, 0.1f, 0.15f, 1.0f});
     if (ImGui::Button("X", ImVec2{ImGui::GetFrameHeight(), ImGui::GetFrameHeight()}))
-        vec.x = 0.0f;
+        vec.x = reset.x;
     ImGui::PopStyleColor();
     ImGui::SameLine();
     ImGui::SetNextItemWidth(dragWidth);
@@ -285,7 +304,7 @@ void DragVec3(const std::string &label, Vector3 &vec, float speed, float min, fl
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.2f, 0.7f, 0.2f, 1.0f});
     if (ImGui::Button("Y", ImVec2{ImGui::GetFrameHeight(), ImGui::GetFrameHeight()}))
-        vec.y = 0.0f;
+        vec.y = reset.y;
     ImGui::PopStyleColor();
     ImGui::SameLine();
     ImGui::SetNextItemWidth(dragWidth);
@@ -294,7 +313,7 @@ void DragVec3(const std::string &label, Vector3 &vec, float speed, float min, fl
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.1f, 0.25f, 0.8f, 1.0f});
     if (ImGui::Button("Z", ImVec2{ImGui::GetFrameHeight(), ImGui::GetFrameHeight()}))
-        vec.z = 0.0f;
+        vec.z = reset.z;
     ImGui::PopStyleColor();
     ImGui::SameLine();
     ImGui::SetNextItemWidth(dragWidth);
@@ -305,7 +324,7 @@ void DragVec3(const std::string &label, Vector3 &vec, float speed, float min, fl
 }
 
 void DragVec4(const std::string &label, Vector4 &vec, float speed, float min, float max,
-              const std::string &format, SliderFlags flags)
+              const Vector4 &reset, const std::string &format, SliderFlags flags)
 {
     ImGui::PushID(label.c_str());
 
@@ -321,7 +340,7 @@ void DragVec4(const std::string &label, Vector4 &vec, float speed, float min, fl
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.8f, 0.1f, 0.15f, 1.0f});
     if (ImGui::Button("X", ImVec2{ImGui::GetFrameHeight(), ImGui::GetFrameHeight()}))
-        vec.x = 0.0f;
+        vec.x = reset.x;
     ImGui::PopStyleColor();
     ImGui::SameLine();
     ImGui::SetNextItemWidth(dragWidth);
@@ -330,7 +349,7 @@ void DragVec4(const std::string &label, Vector4 &vec, float speed, float min, fl
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.2f, 0.7f, 0.2f, 1.0f});
     if (ImGui::Button("Y", ImVec2{ImGui::GetFrameHeight(), ImGui::GetFrameHeight()}))
-        vec.y = 0.0f;
+        vec.y = reset.y;
     ImGui::PopStyleColor();
     ImGui::SameLine();
     ImGui::SetNextItemWidth(dragWidth);
@@ -339,7 +358,7 @@ void DragVec4(const std::string &label, Vector4 &vec, float speed, float min, fl
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.1f, 0.25f, 0.8f, 1.0f});
     if (ImGui::Button("Z", ImVec2{ImGui::GetFrameHeight(), ImGui::GetFrameHeight()}))
-        vec.z = 0.0f;
+        vec.z = reset.z;
     ImGui::PopStyleColor();
     ImGui::SameLine();
     ImGui::SetNextItemWidth(dragWidth);
@@ -348,7 +367,7 @@ void DragVec4(const std::string &label, Vector4 &vec, float speed, float min, fl
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.1f, 0.25f, 0.8f, 1.0f});
     if (ImGui::Button("W", ImVec2{ImGui::GetFrameHeight(), ImGui::GetFrameHeight()}))
-        vec.w = 0.0f;
+        vec.w = reset.w;
     ImGui::PopStyleColor();
     ImGui::SameLine();
     ImGui::SetNextItemWidth(dragWidth);
