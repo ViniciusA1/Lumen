@@ -18,6 +18,23 @@ void TransformUpdateSystem::OnCreate()
 
 void TransformUpdateSystem::OnUpdate()
 {
+    SyncCamera();
+}
+
+void TransformUpdateSystem::SyncCamera()
+{
+    const auto query = Query<TransformComponent, CameraComponent>();
+
+    for (const auto &[entity, transform, camera] : query.Each())
+    {
+        const Vector3 right = Vector3::Right(transform.Rotation);
+        const Vector3 forward = Vector3::Forward(transform.Rotation);
+        const Vector3 up = Vector3::Up(forward, right);
+
+        camera.Position = transform.Position;
+        camera.Target = transform.Position + forward;
+        camera.Up = up;
+    }
 }
 
 void TransformUpdateSystem::OnAddChild(const AddChildEvent &event)

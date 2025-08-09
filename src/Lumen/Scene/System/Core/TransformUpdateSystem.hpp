@@ -15,6 +15,9 @@ public:
     void OnUpdate() final;
 
 private:
+    void SyncCamera();
+
+private:
     void OnAddChild(const AddChildEvent &event);
     void OnRemoveChild(const RemoveChildEvent &event);
     void OnReparent(const ReparentEvent &event);
