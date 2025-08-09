@@ -28,8 +28,6 @@ Application::Application(const ApplicationArgs &args) : m_Window(args.WinArgs)
 
 void Application::Run()
 {
-    Renderer::CreateDefaultRenderTexture();
-
     while (m_IsRunning)
     {
         Input::PollEvents();
