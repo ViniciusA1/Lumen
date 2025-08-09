@@ -4,236 +4,205 @@
 #include "raylib.h"
 #include "rlgl.h"
 
-namespace Lumen
+namespace Lumen::Renderer
 {
 
-static RenderTexture s_RenderTexture;
-
-void Renderer::BeginBlendMode()
+void BeginBlendMode()
 {
     ::BeginBlendMode(0);
 }
 
-void Renderer::BeginCameraMode(const CameraComponent &camera)
+void BeginCameraMode(const CameraComponent &camera)
 {
+    ::rlSetClipPlanes(camera.Near, camera.Far);
     ::BeginMode3D({
         camera.Position,
         camera.Target,
         camera.Up,
-        camera.Fov,
+        camera.Projection == ProjectionType::Perspective ? camera.Fov
+                                                         : camera.OrthographicSize * 2.0f,
         static_cast<int>(camera.Projection),
     });
 }
 
-void Renderer::BeginDrawing()
+void BeginDrawing()
 {
     ::BeginDrawing();
 }
 
-void Renderer::BeginScissorMode(const Rectangle &region)
+void BeginScissorMode(const Rectangle &region)
 {
     ::BeginScissorMode(region.x, region.y, region.Width, region.Height);
 }
 
-void Renderer::BeginShaderMode(const Shader &shader)
+void BeginShaderMode(const Shader &shader)
 {
     ::BeginShaderMode(shader);
 }
 
-void Renderer::BeginTextureMode(const RenderTexture &texture)
+void BeginTextureMode(const RenderTexture &texture)
 {
-    ::BeginTextureMode(texture.IsValid() ? texture : s_RenderTexture);
+    ::BeginTextureMode(texture);
 }
 
-void Renderer::EndBlendMode()
+void EndBlendMode()
 {
     ::EndBlendMode();
 }
 
-void Renderer::EndCameraMode()
+void EndCameraMode()
 {
     ::EndMode3D();
 }
 
-void Renderer::EndDrawing()
+void EndDrawing()
 {
     ::EndDrawing();
 }
 
-void Renderer::EndScissorMode()
+void EndScissorMode()
 {
     ::EndScissorMode();
 }
 
-void Renderer::EndShaderMode()
+void EndShaderMode()
 {
     ::EndShaderMode();
 }
 
-void Renderer::EndTextureMode()
+void EndTextureMode()
 {
     ::EndTextureMode();
 }
 
-void Renderer::ClearBackground(Color color)
+void ClearBackground(Color color)
 {
     ::ClearBackground(color);
 }
 
-void Renderer::CreateDefaultRenderTexture()
-{
-    s_RenderTexture = ::LoadRenderTexture(0, 0);
-}
-
-RenderTexture &Renderer::GetDefaultRenderTexture()
-{
-    return s_RenderTexture;
-}
-
-void Renderer::ResizeRenderTexture(int width, int height)
-{
-    Texture2D texture = s_RenderTexture.GetColorTexture();
-
-    if (texture.GetWidth() != width || texture.GetHeight() != height)
-    {
-        ::UnloadRenderTexture(s_RenderTexture);
-        s_RenderTexture = LoadRenderTexture(width, height);
-    }
-}
-
-void Renderer::SetDefaultRenderTexture(const ::RenderTexture &texture)
-{
-    s_RenderTexture = texture;
-}
-
-void Renderer::DisableBackfaceCulling()
+void DisableBackfaceCulling()
 {
     ::rlDisableBackfaceCulling();
 }
 
-void Renderer::EnableBackfaceCulling()
+void EnableBackfaceCulling()
 {
     ::rlEnableBackfaceCulling();
 }
 
-void Renderer::DisableDepthMask()
+void DisableDepthMask()
 {
     ::rlDisableDepthMask();
 }
 
-void Renderer::EnableDepthMask()
+void EnableDepthMask()
 {
     ::rlEnableDepthMask();
 }
 
-void Renderer::Viewport(const Rectangle &viewport)
+void Viewport(const Rectangle &viewport)
 {
     ::rlViewport(viewport.x, viewport.y, viewport.Width, viewport.Height);
 }
 
-void Renderer::ClearBackground(const Image &dst, Color color)
+void ClearBackground(const Image &dst, Color color)
 {
     ::ImageClearBackground(dst, color);
 }
 
-RenderTexture Renderer::CreateRenderTexture(const Vector2 &size)
+RenderTexture CreateRenderTexture(const Vector2 &size)
 {
     return ::LoadRenderTexture(size.x, size.y);
 }
 
-void Renderer::UnloadRenderTexture(const RenderTexture &texture)
+void UnloadRenderTexture(const RenderTexture &texture)
 {
     ::UnloadRenderTexture(texture);
 }
 
-void Renderer::DrawCircle(const Image &dst, Vector2 center, int radius, Color color)
+void DrawCircle(const Image &dst, Vector2 center, int radius, Color color)
 {
     ::ImageDrawCircleV(dst, center, radius, color);
 }
 
-void Renderer::DrawCircleLines(const Image &dst, Vector2 center, int radius, Color color)
+void DrawCircleLines(const Image &dst, Vector2 center, int radius, Color color)
 {
     ::ImageDrawCircleLinesV(dst, center, radius, color);
 }
 
-void Renderer::DrawImage(const Image &dst, const Image &src, const Rectangle &srcRec,
-                         const Rectangle &dstRec, Color tint)
+void DrawImage(const Image &dst, const Image &src, const Rectangle &srcRec,
+               const Rectangle &dstRec, Color tint)
 {
     ::ImageDraw(dst, src, srcRec, dstRec, tint);
 }
 
-void Renderer::DrawLine(const Image &dst, Vector2 start, Vector2 end, Color color)
+void DrawLine(const Image &dst, Vector2 start, Vector2 end, Color color)
 {
     ::ImageDrawLineV(dst, start, end, color);
 }
 
-void Renderer::DrawLine(const Image &dst, Vector2 start, Vector2 end, int thick,
-                        Color color)
+void DrawLine(const Image &dst, Vector2 start, Vector2 end, int thick, Color color)
 {
     ::ImageDrawLineEx(dst, start, end, thick, color);
 }
 
-void Renderer::DrawPixel(const Image &dst, Vector2 position, Color color)
+void DrawPixel(const Image &dst, Vector2 position, Color color)
 {
     ::ImageDrawPixelV(dst, position, color);
 }
 
-void Renderer::DrawRectangle(const Image &dst, Rectangle rec, Color color)
+void DrawRectangle(const Image &dst, Rectangle rec, Color color)
 {
     ::ImageDrawRectangleRec(dst, rec, color);
 }
 
-void Renderer::DrawRectangleLines(const Image &dst, Rectangle rec, int thick, Color color)
+void DrawRectangleLines(const Image &dst, Rectangle rec, int thick, Color color)
 {
     ::ImageDrawRectangleLines(dst, rec, thick, color);
 }
 
-void Renderer::DrawText(const Image &dst, const std::string &text, Vector2 position,
-                        int fontSize, Color color)
+void DrawText(const Image &dst, const std::string &text, Vector2 position, int fontSize,
+              Color color)
 {
     ::ImageDrawText(dst, text.c_str(), static_cast<int>(position.x),
                     static_cast<int>(position.y), fontSize, color);
 }
 
-void Renderer::DrawText(const Image &dst, const std::string &text, Vector2 position,
-                        float fontSize, const Font &font, float spacing, Color color)
+void DrawText(const Image &dst, const std::string &text, Vector2 position, float fontSize,
+              const Font &font, float spacing, Color color)
 {
     ::ImageDrawTextEx(dst, font, text.c_str(), position, fontSize, spacing, color);
 }
 
-void Renderer::DrawTriangle(const Image &dst, Vector2 v1, Vector2 v2, Vector2 v3,
-                            Color color)
+void DrawTriangle(const Image &dst, Vector2 v1, Vector2 v2, Vector2 v3, Color color)
 {
     ::ImageDrawTriangle(dst, v1, v2, v3, color);
 }
 
-void Renderer::DrawTriangle(const Image &dst, Vector2 v1, Vector2 v2, Vector2 v3,
-                            Color c1, Color c2, Color c3)
+void DrawTriangle(const Image &dst, Vector2 v1, Vector2 v2, Vector2 v3, Color c1,
+                  Color c2, Color c3)
 {
     ::ImageDrawTriangleEx(dst, v1, v2, v3, c1, c2, c3);
 }
 
-void Renderer::DrawTriangleFan(const Image &dst, std::vector<Vector2> &points,
-                               Color color)
+void DrawTriangleFan(const Image &dst, std::vector<Vector2> &points, Color color)
 {
     ::ImageDrawTriangleFan(dst, reinterpret_cast<::Vector2 *>(points.data()),
                            points.size(), color);
 }
 
-void Renderer::DrawTriangleLines(const Image &dst, Vector2 v1, Vector2 v2, Vector2 v3,
-                                 Color color)
+void DrawTriangleLines(const Image &dst, Vector2 v1, Vector2 v2, Vector2 v3, Color color)
 {
     ::ImageDrawTriangleLines(dst, v1, v2, v3, color);
 }
 
-void Renderer::DrawTriangleStrip(const Image &dst, std::vector<Vector2> &points,
-                                 Color color)
+void DrawTriangleStrip(const Image &dst, std::vector<Vector2> &points, Color color)
 {
     ::ImageDrawTriangleStrip(dst, reinterpret_cast<::Vector2 *>(points.data()),
                              points.size(), color);
 }
 
-void Renderer::DrawCircle(const TransformComponent &transform, Color color)
+void DrawCircle(const TransformComponent &transform, Color color)
 {
     ::rlPushMatrix();
 
@@ -247,17 +216,17 @@ void Renderer::DrawCircle(const TransformComponent &transform, Color color)
     ::rlPopMatrix();
 }
 
-void Renderer::DrawLine(const Vector3 &startPos, const Vector3 &endPos, Color color)
+void DrawLine(const Vector3 &startPos, const Vector3 &endPos, Color color)
 {
     ::DrawLine3D(startPos, endPos, color);
 }
 
-void Renderer::DrawPixel(const Vector2 &position, Color color)
+void DrawPixel(const Vector2 &position, Color color)
 {
     ::DrawPixelV(position, color);
 }
 
-void Renderer::DrawQuad(const TransformComponent &transform, Color color)
+void DrawQuad(const TransformComponent &transform, Color color)
 {
     rlPushMatrix();
 
@@ -284,8 +253,8 @@ void Renderer::DrawQuad(const TransformComponent &transform, Color color)
     rlPopMatrix();
 }
 
-void Renderer::DrawQuad(const TransformComponent &transform, const Texture2D &texture,
-                        const Vector4 &uv, Color color)
+void DrawQuad(const TransformComponent &transform, const Texture2D &texture,
+              const Vector4 &uv, Color color)
 {
     const float x = transform.Position.x;
     const float y = transform.Position.y;
@@ -334,7 +303,7 @@ void Renderer::DrawQuad(const TransformComponent &transform, const Texture2D &te
     ::rlPopMatrix();
 }
 
-void Renderer::DrawQuad2D(const TransformComponent &transform, Color color)
+void DrawQuad2D(const TransformComponent &transform, Color color)
 {
     Vector2 origin = {
         transform.Scale.x * 0.5f,
@@ -351,8 +320,8 @@ void Renderer::DrawQuad2D(const TransformComponent &transform, Color color)
         origin, transform.Rotation.z, color);
 }
 
-void Renderer::DrawQuad2D(const TransformComponent &transform, const Texture2D &texture,
-                          Color color)
+void DrawQuad2D(const TransformComponent &transform, const Texture2D &texture,
+                Color color)
 {
     Vector2 origin = {
         transform.Scale.x * 0.5f,
@@ -375,8 +344,7 @@ void Renderer::DrawQuad2D(const TransformComponent &transform, const Texture2D &
                      origin, transform.Rotation.z, color);
 }
 
-void Renderer::DrawQuadLines(const TransformComponent &transform, float lineThick,
-                             Color color)
+void DrawQuadLines(const TransformComponent &transform, float lineThick, Color color)
 {
     const Vector2 &topLeft = transform.Position - (transform.Scale * 0.5f);
     const Rectangle &rect = {
@@ -389,15 +357,13 @@ void Renderer::DrawQuadLines(const TransformComponent &transform, float lineThic
     ::DrawRectangleLinesEx(rect, lineThick, color);
 }
 
-void Renderer::DrawTriangle(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3,
-                            Color color)
+void DrawTriangle(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3, Color color)
 {
     ::DrawTriangle3D(v1, v2, v3, color);
 }
 
-void Renderer::DrawBillboard(const TransformComponent &transform,
-                             const CameraComponent &camera, const Texture2D &texture,
-                             const Vector4 &uv, Color tint)
+void DrawBillboard(const TransformComponent &transform, const CameraComponent &camera,
+                   const Texture2D &texture, const Vector4 &uv, Color tint)
 {
     Camera rayCamera = {
         .position = camera.Position,
@@ -418,7 +384,7 @@ void Renderer::DrawBillboard(const TransformComponent &transform,
                        {transform.Scale.x, transform.Scale.y}, tint);
 }
 
-void Renderer::DrawBoundingBox(const BoundingBox &box, float thickness, Color color)
+void DrawBoundingBox(const BoundingBox &box, float thickness, Color color)
 {
     const Vector3 &v0 = {box.Min.x, box.Min.y, box.Min.z};
     const Vector3 &v1 = {box.Max.x, box.Min.y, box.Min.z};
@@ -448,8 +414,7 @@ void Renderer::DrawBoundingBox(const BoundingBox &box, float thickness, Color co
     ::DrawCylinderEx(v3, v7, radius, radius, cylinderSides, color);
 }
 
-void Renderer::DrawCapsule(const TransformComponent &transform, int slices, int rings,
-                           Color color)
+void DrawCapsule(const TransformComponent &transform, int slices, int rings, Color color)
 {
     ::rlPushMatrix();
 
@@ -475,8 +440,8 @@ void Renderer::DrawCapsule(const TransformComponent &transform, int slices, int 
     ::rlPopMatrix();
 }
 
-void Renderer::DrawCapsuleWire(const TransformComponent &transform, int slices, int rings,
-                               Color color)
+void DrawCapsuleWire(const TransformComponent &transform, int slices, int rings,
+                     Color color)
 {
     ::rlPushMatrix();
 
@@ -502,7 +467,7 @@ void Renderer::DrawCapsuleWire(const TransformComponent &transform, int slices, 
     ::rlPopMatrix();
 }
 
-void Renderer::DrawCube(const TransformComponent &transform, Color color)
+void DrawCube(const TransformComponent &transform, Color color)
 {
     ::rlPushMatrix();
 
@@ -515,8 +480,8 @@ void Renderer::DrawCube(const TransformComponent &transform, Color color)
     ::rlPopMatrix();
 }
 
-void Renderer::DrawCube(const TransformComponent &transform, const Texture2D &texture,
-                        const Vector4 &uv, Color color)
+void DrawCube(const TransformComponent &transform, const Texture2D &texture,
+              const Vector4 &uv, Color color)
 {
     const float x = transform.Position.x;
     const float y = transform.Position.y;
@@ -565,8 +530,8 @@ void Renderer::DrawCube(const TransformComponent &transform, const Texture2D &te
     ::rlPopMatrix();
 }
 
-void Renderer::DrawCube(const TransformComponent &transform, const Texture2D &texture,
-                        const std::array<Vector4, 6> &uvs, Color color)
+void DrawCube(const TransformComponent &transform, const Texture2D &texture,
+              const std::array<Vector4, 6> &uvs, Color color)
 {
     const float x = transform.Position.x;
     const float y = transform.Position.y;
@@ -634,7 +599,7 @@ void Renderer::DrawCube(const TransformComponent &transform, const Texture2D &te
     ::rlPopMatrix();
 }
 
-void Renderer::DrawCubeWire(const TransformComponent &transform, Color color)
+void DrawCubeWire(const TransformComponent &transform, Color color)
 {
     ::rlPushMatrix();
 
@@ -647,7 +612,7 @@ void Renderer::DrawCubeWire(const TransformComponent &transform, Color color)
     ::rlPopMatrix();
 }
 
-void Renderer::DrawCylinder(const TransformComponent &transform, int slices, Color color)
+void DrawCylinder(const TransformComponent &transform, int slices, Color color)
 {
     ::rlPushMatrix();
 
@@ -662,8 +627,8 @@ void Renderer::DrawCylinder(const TransformComponent &transform, int slices, Col
     ::rlPopMatrix();
 }
 
-void Renderer::DrawCylinder(const TransformComponent &transform, float radiusTop,
-                            float radiusBottom, int slices, Color color)
+void DrawCylinder(const TransformComponent &transform, float radiusTop,
+                  float radiusBottom, int slices, Color color)
 {
     ::rlPushMatrix();
 
@@ -677,8 +642,7 @@ void Renderer::DrawCylinder(const TransformComponent &transform, float radiusTop
     ::rlPopMatrix();
 }
 
-void Renderer::DrawCylinderWire(const TransformComponent &transform, int slices,
-                                Color color)
+void DrawCylinderWire(const TransformComponent &transform, int slices, Color color)
 {
     ::rlPushMatrix();
 
@@ -692,8 +656,8 @@ void Renderer::DrawCylinderWire(const TransformComponent &transform, int slices,
     ::rlPopMatrix();
 }
 
-void Renderer::DrawCylinderWire(const TransformComponent &transform, float radiusTop,
-                                float radiusBottom, int slices, Color color)
+void DrawCylinderWire(const TransformComponent &transform, float radiusTop,
+                      float radiusBottom, int slices, Color color)
 {
     ::rlPushMatrix();
 
@@ -707,40 +671,70 @@ void Renderer::DrawCylinderWire(const TransformComponent &transform, float radiu
     ::rlPopMatrix();
 }
 
-void Renderer::DrawGrid(Vector3 cameraPosition, float minorSpacing, int majorDivisions,
-                        int gridLines)
+void DrawGrid(Vector3 cameraPosition, float minorSpacing, int majorDivisions,
+              int gridLines, Color minorColor, Color majorColor, bool xyPlane)
 {
     float halfGridSize = minorSpacing * gridLines;
 
     minorSpacing = Math::Clamp((int)cameraPosition.y / 50, 1, majorDivisions);
     majorDivisions += minorSpacing;
 
-    float startX =
-        Math::Floor((cameraPosition.x - halfGridSize) / minorSpacing) * minorSpacing;
-    float endX =
-        Math::Floor((cameraPosition.x + halfGridSize) / minorSpacing) * minorSpacing;
-    float startZ =
-        Math::Floor((cameraPosition.z - halfGridSize) / minorSpacing) * minorSpacing;
-    float endZ =
-        Math::Floor((cameraPosition.z + halfGridSize) / minorSpacing) * minorSpacing;
+    float start1, end1, start2, end2;
 
-    for (float x = startX; x <= endX; x += minorSpacing)
+    if (xyPlane)
     {
-        bool isMajorLine = ((int)(x / minorSpacing) % majorDivisions) == 0;
-        Color lineColor = isMajorLine ? LIGHTGRAY : DARKGRAY;
-        DrawLine3D((Vector3){x, 0, startZ}, (Vector3){x, 0, endZ}, lineColor);
+        start1 =
+            Math::Floor((cameraPosition.x - halfGridSize) / minorSpacing) * minorSpacing;
+        end1 =
+            Math::Floor((cameraPosition.x + halfGridSize) / minorSpacing) * minorSpacing;
+        start2 =
+            Math::Floor((cameraPosition.y - halfGridSize) / minorSpacing) * minorSpacing;
+        end2 =
+            Math::Floor((cameraPosition.y + halfGridSize) / minorSpacing) * minorSpacing;
+
+        for (float x = start1; x <= end1; x += minorSpacing)
+        {
+            bool isMajor = ((int)(x / minorSpacing) % majorDivisions) == 0;
+            Color c = isMajor ? majorColor : minorColor;
+            DrawLine3D({x, start2, 0.0f}, {x, end2, 0.0f}, c);
+        }
+
+        for (float y = start2; y <= end2; y += minorSpacing)
+        {
+            bool isMajor = ((int)(y / minorSpacing) % majorDivisions) == 0;
+            Color c = isMajor ? majorColor : minorColor;
+            DrawLine3D({start1, y, 0.0f}, {end1, y, 0.0f}, c);
+        }
     }
-
-    for (float z = startZ; z <= endZ; z += minorSpacing)
+    else
     {
-        bool isMajorLine = ((int)(z / minorSpacing) % majorDivisions) == 0;
-        Color lineColor = isMajorLine ? LIGHTGRAY : DARKGRAY;
-        DrawLine3D((Vector3){startX, 0, z}, (Vector3){endX, 0, z}, lineColor);
+        start1 =
+            Math::Floor((cameraPosition.x - halfGridSize) / minorSpacing) * minorSpacing;
+        end1 =
+            Math::Floor((cameraPosition.x + halfGridSize) / minorSpacing) * minorSpacing;
+        start2 =
+            Math::Floor((cameraPosition.z - halfGridSize) / minorSpacing) * minorSpacing;
+        end2 =
+            Math::Floor((cameraPosition.z + halfGridSize) / minorSpacing) * minorSpacing;
+
+        for (float x = start1; x <= end1; x += minorSpacing)
+        {
+            bool isMajor = ((int)(x / minorSpacing) % majorDivisions) == 0;
+            Color c = isMajor ? majorColor : minorColor;
+            DrawLine3D({x, 0, start2}, {x, 0, end2}, c);
+        }
+
+        for (float z = start2; z <= end2; z += minorSpacing)
+        {
+            bool isMajor = ((int)(z / minorSpacing) % majorDivisions) == 0;
+            Color c = isMajor ? majorColor : minorColor;
+            DrawLine3D({start1, 0, z}, {end1, 0, z}, c);
+        }
     }
 }
 
-void Renderer::DrawMesh(const TransformComponent &transform, const Mesh &mesh,
-                        const Material &material)
+void DrawMesh(const TransformComponent &transform, const Mesh &mesh,
+              const Material &material)
 {
     ::rlPushMatrix();
 
@@ -764,16 +758,15 @@ void Renderer::DrawMesh(const TransformComponent &transform, const Mesh &mesh,
     ::rlPopMatrix();
 }
 
-void Renderer::DrawMeshTransformed(const TransformComponent &transform, const Mesh &mesh,
-                                   const Material &material)
+void DrawMeshTransformed(const TransformComponent &transform, const Mesh &mesh,
+                         const Material &material)
 {
     ::DrawMesh(
         mesh, material,
         Matrix4::Transform(transform.Position, transform.Rotation, transform.Scale));
 }
 
-void Renderer::DrawModel(const TransformComponent &transform, const Model &model,
-                         Color tint)
+void DrawModel(const TransformComponent &transform, const Model &model, Color tint)
 {
     ::rlPushMatrix();
 
@@ -793,7 +786,7 @@ void Renderer::DrawModel(const TransformComponent &transform, const Model &model
     ::rlPopMatrix();
 }
 
-void Renderer::DrawPlane(const TransformComponent &transform, Color color)
+void DrawPlane(const TransformComponent &transform, Color color)
 {
     ::rlPushMatrix();
 
@@ -806,12 +799,12 @@ void Renderer::DrawPlane(const TransformComponent &transform, Color color)
     ::rlPopMatrix();
 }
 
-void Renderer::DrawPoint(const Vector3 &position, Color color)
+void DrawPoint(const Vector3 &position, Color color)
 {
     ::DrawPoint3D(position, color);
 }
 
-void Renderer::DrawSphere(const TransformComponent &transform, Color color)
+void DrawSphere(const TransformComponent &transform, Color color)
 {
     ::rlPushMatrix();
 
@@ -825,8 +818,7 @@ void Renderer::DrawSphere(const TransformComponent &transform, Color color)
     ::rlPopMatrix();
 }
 
-void Renderer::DrawSphere(const TransformComponent &transform, int rings, int slices,
-                          Color color)
+void DrawSphere(const TransformComponent &transform, int rings, int slices, Color color)
 {
     ::rlPushMatrix();
 
@@ -840,8 +832,8 @@ void Renderer::DrawSphere(const TransformComponent &transform, int rings, int sl
     ::rlPopMatrix();
 }
 
-void Renderer::DrawSphereWires(const TransformComponent &transform, int rings, int slices,
-                               Color color)
+void DrawSphereWires(const TransformComponent &transform, int rings, int slices,
+                     Color color)
 {
     ::rlPushMatrix();
 
@@ -855,8 +847,8 @@ void Renderer::DrawSphereWires(const TransformComponent &transform, int rings, i
     ::rlPopMatrix();
 }
 
-void Renderer::DrawText(const TransformComponent &transform, const std::string &text,
-                        float fontSize, Color color)
+void DrawText(const TransformComponent &transform, const std::string &text,
+              float fontSize, Color color)
 {
     const Vector2 &position = {transform.Position.x, transform.Position.y};
     const float rotation = transform.Rotation.z;
@@ -869,8 +861,8 @@ void Renderer::DrawText(const TransformComponent &transform, const std::string &
                   color);
 }
 
-void Renderer::DrawText(const TransformComponent &transform, const std::string &text,
-                        float fontSize, Color color, const Font &font)
+void DrawText(const TransformComponent &transform, const std::string &text,
+              float fontSize, Color color, const Font &font)
 {
     const Vector2 &position = {transform.Position.x, transform.Position.y};
     const float rotation = transform.Rotation.z;
@@ -883,32 +875,31 @@ void Renderer::DrawText(const TransformComponent &transform, const std::string &
                   color);
 }
 
-void Renderer::DrawText(const Vector2 &position, const std::string &text, float fontSize,
-                        Color color)
+void DrawText(const Vector2 &position, const std::string &text, float fontSize,
+              Color color)
 {
     ::DrawText(text.c_str(), position.x, position.y, fontSize, color);
 }
 
-void Renderer::DrawText(const Vector2 &position, const std::string &text, float rotation,
-                        float fontSize, float spacing, Color color, const Font &font)
+void DrawText(const Vector2 &position, const std::string &text, float rotation,
+              float fontSize, float spacing, Color color, const Font &font)
 {
     ::DrawTextPro(font, text.c_str(), position, {0.0f, 0.0f}, rotation, fontSize, spacing,
                   color);
 }
 
-void Renderer::DrawText3D(const TransformComponent &transform, const std::string &text,
-                          Color color)
+void DrawText3D(const TransformComponent &transform, const std::string &text, Color color)
 {
 }
 
-void Renderer::DrawFPS(const TransformComponent &transform, float fontSize, Color color)
+void DrawFPS(const TransformComponent &transform, float fontSize, Color color)
 {
     DrawText(transform, std::to_string(::GetFPS()), fontSize, color);
 }
 
-void Renderer::DrawFPS(const Vector2 &position, float fontSize, Color color)
+void DrawFPS(const Vector2 &position, float fontSize, Color color)
 {
     DrawText(position, std::to_string(::GetFPS()), fontSize, color);
 }
 
-} // namespace Lumen
+} // namespace Lumen::Renderer
