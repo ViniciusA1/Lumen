@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(BUILD_SHARED_LIBS ON)
+set(BUILD_SHARED_LIBS OFF)
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(BUILD_GAMES OFF CACHE BOOL "" FORCE)
 
@@ -15,15 +15,18 @@ include_directories(
 )
 
 add_subdirectory(lib/box2d)
+add_subdirectory(lib/enet)
 add_subdirectory(lib/entt)
 add_subdirectory(lib/imgui)
-add_subdirectory(lib/nativefiledialog)
 add_subdirectory(lib/ImGuizmo)
 add_subdirectory(lib/Jolt/Build)
 add_subdirectory(lib/json)
-add_subdirectory(lib/miniaudio)
+add_subdirectory(lib/lua)
+add_subdirectory(lib/nativefiledialog)
 add_subdirectory(lib/raylib)
 add_subdirectory(lib/rlImGui)
+add_subdirectory(lib/sol2)
+add_subdirectory(lib/spdlog)
 add_subdirectory(lib/yaml)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
@@ -36,14 +39,17 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
 	box2d
+	enet_static
 	EnTT
 	imgui
-	nfd
 	ImGuizmo
 	Jolt
+	nlohmann_json::nlohmann_json
+	lua
+	nfd
 	raylib
 	rlImGui
-	miniaudio
-	nlohmann_json::nlohmann_json
+	sol2
+	spdlog::spdlog
 	yaml-cpp::yaml-cpp
 )

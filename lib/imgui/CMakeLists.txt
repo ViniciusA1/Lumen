@@ -5,7 +5,7 @@ project(imgui)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_library(imgui SHARED
+add_library(imgui STATIC
 	imgui.cpp
 	imgui_demo.cpp
 	imgui_draw.cpp
