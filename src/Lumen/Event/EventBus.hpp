@@ -1,7 +1,10 @@
 #pragma once
 
+#include "Lumen/Event/PublishMode.hpp"
+
 #include <any>
 #include <functional>
+#include <mutex>
 #include <queue>
 #include <typeindex>
 
@@ -11,16 +14,11 @@
 namespace Lumen
 {
 
-using EventCallbackFunction = std::function<void(const std::any &)>;
-
-enum class PublishMode
-{
-    Immediate,
-    Queue
-};
-
 class EventBus
 {
+public:
+    using CallbackFunction = std::function<void(const std::any &)>;
+
 public:
     template <typename EventType>
     static void Subscribe(std::function<void(const EventType &)> callback);
@@ -30,39 +28,15 @@ public:
     static void ProcessEvents();
 
 private:
-    static std::unordered_map<std::type_index, std::vector<EventCallbackFunction>>
+    static std::unordered_map<std::type_index, std::vector<CallbackFunction>>
         m_Subscribers;
 
     static std::queue<std::pair<std::type_index, std::any>> m_EventQueue;
+
+    static std::mutex m_SubscriberMutex;
+    static std::mutex m_QueueMutex;
 };
 
-template <typename EventType>
-void EventBus::Subscribe(std::function<void(const EventType &)> callback)
-{
-    auto &subscribers = m_Subscribers[typeid(EventType)];
-    subscribers.emplace_back([callback](const std::any &event) {
-        callback(std::any_cast<const EventType &>(event));
-    });
-}
-
-template <typename EventType>
-void EventBus::Publish(const EventType &event, PublishMode mode)
-{
-    if (mode == PublishMode::Queue)
-    {
-        m_EventQueue.emplace(typeid(EventType), event);
-    }
-    else
-    {
-        auto it = m_Subscribers.find(typeid(EventType));
-        if (it != m_Subscribers.end())
-        {
-            for (auto &subscriber : it->second)
-            {
-                subscriber(event);
-            }
-        }
-    }
-}
-
 } // namespace Lumen
+
+#include "Lumen/Event/EventBus.inl"
