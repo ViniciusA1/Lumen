@@ -3,7 +3,7 @@
 #include "Lumen/File/Serializer/JsonSerializer.hpp"
 #include "Lumen/File/Serializer/YamlSerializer.hpp"
 
-#include "Lumen/Core/UUID.hpp"
+#include "Lumen/System/UUID.hpp"
 
 namespace Lumen::JsonSerializer
 {

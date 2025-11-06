@@ -1,5 +1,7 @@
 #include "Lumen/Scene/System/UI/UIDrawSystem.hpp"
 #include "Lumen/Scene/Component/ComponentGroup.hpp"
+#include "Lumen/Scene/System/UI/UIComponentFunc.hpp"
+#include "Lumen/Scene/World.hpp"
 
 namespace Lumen
 {
@@ -10,13 +12,24 @@ UIDrawSystem::UIDrawSystem(World &world) : DrawSystem(world)
 
 void UIDrawSystem::OnDraw()
 {
-    UIComponentGroup::ForEachComponent([this]<typename Component> {
-        const auto query = Query<TransformComponent, Component>();
-        for (const auto &[entity, transform, component] : query.Each())
+    auto query = Query<TransformComponent, CanvasComponent, ChildrenComponent>();
+
+    for (const auto &[entity, transform, canvas, children] : query.Each())
+    {
+        for (const auto &childEntityID : children.ChildrenID)
         {
-            DrawUIComponent<Component>(transform, component);
+            auto &manager = m_ParentWorld.GetEntityManager();
+            auto childEntity = manager.GetEntity(childEntityID);
+
+            UIComponentGroup::ForEachComponent([&]<typename Component> {
+                if (manager.HasComponent<Component>(childEntity))
+                {
+                    DrawUIComponent<Component>(
+                        transform, manager.GetComponent<Component>(childEntity));
+                }
+            });
         }
-    });
+    }
 }
 
 } // namespace Lumen

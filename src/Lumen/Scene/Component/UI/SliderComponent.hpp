@@ -7,8 +7,8 @@ namespace Lumen
 
 struct SliderComponent : public UIComponentBase
 {
-    float Min = 0.0f;
-    float Max = 1.0f;
+    float MinValue = 0.0f;
+    float MaxValue = 1.0f;
     float Value = 0.0f;
 };
 

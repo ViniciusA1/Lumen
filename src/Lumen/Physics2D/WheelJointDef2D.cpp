@@ -33,8 +33,8 @@ WheelJointDef2D::operator b2WheelJointDef() const
 {
     b2WheelJointDef def = b2DefaultWheelJointDef();
 
-    def.bodyIdA = BodyA.GetBodyID();
-    def.bodyIdB = BodyB.GetBodyID();
+    def.bodyIdA = BodyA.GetID();
+    def.bodyIdB = BodyB.GetID();
     def.collideConnected = CollideConnected;
     def.dampingRatio = DampingRatio;
     def.enableLimit = EnableLimit;

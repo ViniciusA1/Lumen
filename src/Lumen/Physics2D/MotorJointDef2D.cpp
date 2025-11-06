@@ -27,8 +27,8 @@ MotorJointDef2D::operator b2MotorJointDef() const
     b2MotorJointDef def = b2DefaultMotorJointDef();
 
     def.angularOffset = AngularOffset;
-    def.bodyIdA = BodyA.GetBodyID();
-    def.bodyIdB = BodyB.GetBodyID();
+    def.bodyIdA = BodyA.GetID();
+    def.bodyIdB = BodyB.GetID();
     def.collideConnected = CollideConnected;
     def.correctionFactor = CorrectionFactor;
     def.linearOffset = LinearOffset;

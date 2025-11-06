@@ -1,56 +1,45 @@
 #pragma once
 
-#include "Lumen/Core/UUID.hpp"
 #include "Lumen/Scene/Entity/Entity.hpp"
+#include "Lumen/System/UUID.hpp"
+
 
 namespace Lumen
 {
 
-template <typename T> class ComponentAddEvent
+template <typename T> struct ComponentAddEvent
 {
-public:
     Entity Entity;
     T &Component;
-
-public:
-    ComponentAddEvent(class Entity entity, T &component)
-        : Entity(entity), Component(component)
-    {
-    }
 };
 
-template <typename T> class ComponentRemoveEvent
+template <typename T> struct ComponentRemoveEvent
 {
-public:
     Entity Entity;
     T &Component;
-
-public:
-    ComponentRemoveEvent(class Entity entity, T &component)
-        : Entity(entity), Component(component)
-    {
-    }
 };
 
-class AddChildEvent
+struct AddChildEvent
 {
-public:
     UUID ParentID;
     UUID ChildID;
 };
 
-class RemoveChildEvent
+struct RemoveChildEvent
 {
-public:
     UUID ParentID;
     UUID ChildID;
 };
 
-class ReparentEvent
+struct ReparentEvent
 {
-public:
     UUID NewParentID;
     UUID ChildID;
+};
+
+struct FocusEntityEvent
+{
+    UUID EntityID;
 };
 
 } // namespace Lumen

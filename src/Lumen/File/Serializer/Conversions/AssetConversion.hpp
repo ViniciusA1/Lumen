@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Lumen/Asset/AssetMetadata.hpp"
-#include "Lumen/Core/UUID.hpp"
 #include "Lumen/File/Serializer/YamlSerializer.hpp"
+#include "Lumen/System/UUID.hpp"
+
 
 namespace Lumen::YamlSerializer
 {

@@ -348,47 +348,34 @@ template <> void Deserialize(const Yaml &yaml, VelocityComponent &velocity)
     yaml["Velocity"] >> velocity.Velocity;
 }
 
-template <> Yaml Serialize(const UIComponentState &state)
-{
-    Yaml yaml;
-    yaml << static_cast<int>(state);
-    return yaml;
-}
-
-template <> void Deserialize(const Yaml &yaml, UIComponentState &state)
-{
-    int stateInt;
-    yaml >> stateInt;
-    state = static_cast<UIComponentState>(stateInt);
-}
-
-template <> Yaml Serialize(const std::array<Lumen::Color, 4> &colors)
+template <> Yaml Serialize(const UIComponentBase &base)
 {
     Yaml yaml, colorsYaml;
-
-    colorsYaml["Idle"] << colors[0];
-    colorsYaml["Hovered"] << colors[1];
-    colorsYaml["Pressed"] << colors[2];
-    colorsYaml["Disabled"] << colors[3];
-
+    yaml["State"] << static_cast<int>(base.State);
+    colorsYaml["Idle"] << base.Colors[0];
+    colorsYaml["Hovered"] << base.Colors[1];
+    colorsYaml["Pressed"] << base.Colors[2];
+    colorsYaml["Disabled"] << base.Colors[3];
     yaml["Colors"] = colorsYaml;
     return yaml;
 }
 
-template <> void Deserialize(const Yaml &yaml, std::array<Lumen::Color, 4> &colors)
+template <> void Deserialize(const Yaml &yaml, UIComponentBase &base)
 {
     const Yaml &colorsYaml = yaml["Colors"];
-    colorsYaml["Idle"] >> colors[0];
-    colorsYaml["Hovered"] >> colors[1];
-    colorsYaml["Pressed"] >> colors[2];
-    colorsYaml["Disabled"] >> colors[3];
+    int stateInt;
+    yaml["State"] >> stateInt;
+    base.State = static_cast<UIComponentState>(stateInt);
+    colorsYaml["Idle"] >> base.Colors[0];
+    colorsYaml["Hovered"] >> base.Colors[1];
+    colorsYaml["Pressed"] >> base.Colors[2];
+    colorsYaml["Disabled"] >> base.Colors[3];
 }
 
 template <> Yaml Serialize(const ButtonComponent &button)
 {
     Yaml yaml, buttonYaml;
-    buttonYaml["State"] << button.State;
-    buttonYaml << button.Colors;
+    buttonYaml = Serialize(static_cast<const UIComponentBase &>(button));
     buttonYaml << button.Label;
     buttonYaml["Texture"] << button.Texture;
     yaml["Button"] = buttonYaml;
@@ -398,17 +385,107 @@ template <> Yaml Serialize(const ButtonComponent &button)
 template <> void Deserialize(const Yaml &yaml, ButtonComponent &button)
 {
     const Yaml &buttonYaml = yaml["Button"];
-    buttonYaml["State"] >> button.State;
-    buttonYaml >> button.Colors;
+    Deserialize(buttonYaml, static_cast<UIComponentBase &>(button));
     buttonYaml >> button.Label;
     buttonYaml["Texture"] >> button.Texture;
+}
+
+template <> Yaml Serialize(const CanvasComponent &canvas)
+{
+    Yaml yaml, canvasYaml;
+    canvasYaml["Mode"] << static_cast<int>(canvas.Mode);
+    canvasYaml["Camera"] << canvas.CameraID;
+    canvasYaml["ScaleFactor"] << canvas.ScaleFactor;
+    canvasYaml["SortOrder"] << canvas.SortingOrder;
+    yaml["Canvas"] = canvasYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, CanvasComponent &canvas)
+{
+    const Yaml &canvasYaml = yaml["Canvas"];
+    int modeInt;
+    canvasYaml["Mode"] >> modeInt;
+    canvas.Mode = static_cast<CanvasRenderMode>(modeInt);
+    canvasYaml["Camera"] >> canvas.CameraID;
+    canvasYaml["ScaleFactor"] >> canvas.ScaleFactor;
+    canvasYaml["SortOrder"] >> canvas.SortingOrder;
+}
+
+template <> Yaml Serialize(const CheckboxComponent &checkbox)
+{
+    Yaml yaml, checkboxYaml;
+    checkboxYaml = Serialize(static_cast<const UIComponentBase &>(checkbox));
+    checkboxYaml["Value"] << checkbox.Value;
+    yaml["Checkbox"] = checkboxYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, CheckboxComponent &checkbox)
+{
+    const Yaml &checkboxYaml = yaml["Checkbox"];
+    Deserialize(checkboxYaml, static_cast<UIComponentBase &>(checkbox));
+    checkboxYaml["Value"] >> checkbox.Value;
+}
+
+template <> Yaml Serialize(const DropdownComponent &dropdown)
+{
+    Yaml yaml, dropdownYaml;
+    dropdownYaml = Serialize(static_cast<const UIComponentBase &>(dropdown));
+    dropdownYaml << dropdown.Options;
+    dropdownYaml["SelectedIndex"] << dropdown.SelectedIndex;
+    dropdownYaml["IsExpanded"] << dropdown.IsExpanded;
+    dropdownYaml["MaxVisibleItems"] << dropdown.MaxVisibleItems;
+    yaml["Dropdown"] = dropdownYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, DropdownComponent &dropdown)
+{
+    const Yaml &dropdownYaml = yaml["Dropdown"];
+    Deserialize(dropdownYaml, static_cast<UIComponentBase &>(dropdown));
+    dropdownYaml >> dropdown.Options;
+    dropdownYaml["SelectedIndex"] >> dropdown.SelectedIndex;
+    dropdownYaml["IsExpanded"] >> dropdown.IsExpanded;
+    dropdownYaml["MaxVisibleItems"] >> dropdown.MaxVisibleItems;
+}
+
+template <> Yaml Serialize(const ImageComponent &image)
+{
+    Yaml yaml, imageYaml;
+    imageYaml = Serialize(static_cast<const UIComponentBase &>(image));
+    imageYaml["Texture"] << image.Texture;
+    yaml["Image"] = imageYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, ImageComponent &image)
+{
+    const Yaml &imageYaml = yaml["Image"];
+    Deserialize(imageYaml, static_cast<UIComponentBase &>(image));
+    imageYaml["Texture"] >> image.Texture;
+}
+
+template <> Yaml Serialize(const InputFieldComponent &inputField)
+{
+    Yaml yaml, inputFieldYaml;
+    inputFieldYaml = Serialize(static_cast<const UIComponentBase &>(inputField));
+    inputFieldYaml << inputField.Text;
+    yaml["InputField"] = inputFieldYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, InputFieldComponent &inputField)
+{
+    const Yaml &inputFieldYaml = yaml["InputField"];
+    Deserialize(inputFieldYaml, static_cast<UIComponentBase &>(inputField));
+    inputFieldYaml >> inputField.Text;
 }
 
 template <> Yaml Serialize(const LabelComponent &label)
 {
     Yaml yaml, labelYaml;
-    labelYaml["State"] << label.State;
-    labelYaml << label.Colors;
+    labelYaml = Serialize(static_cast<const UIComponentBase &>(label));
     labelYaml["Text"] << label.Text;
     labelYaml["Font"] << label.Font;
     labelYaml["FontSize"] << label.FontSize;
@@ -419,11 +496,50 @@ template <> Yaml Serialize(const LabelComponent &label)
 template <> void Deserialize(const Yaml &yaml, LabelComponent &label)
 {
     const Yaml &labelYaml = yaml["Label"];
-    labelYaml["State"] >> label.State;
-    labelYaml >> label.Colors;
+    Deserialize(labelYaml, static_cast<UIComponentBase &>(label));
     labelYaml["Text"] >> label.Text;
     labelYaml["Font"] >> label.Font;
     labelYaml["FontSize"] >> label.FontSize;
+}
+
+template <> Yaml Serialize(const ProgressBarComponent &progressBar)
+{
+    Yaml yaml, progressBarYaml;
+    progressBarYaml = Serialize(static_cast<const UIComponentBase &>(progressBar));
+    progressBarYaml["MaxValue"] << progressBar.MaxValue;
+    progressBarYaml["Value"] << progressBar.Value;
+    progressBarYaml["BackgroundColor"] << progressBar.BackgroundColor;
+    yaml["ProgressBar"] = progressBarYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, ProgressBarComponent &progressBar)
+{
+    const Yaml &progressBarYaml = yaml["ProgressBar"];
+    Deserialize(progressBarYaml, static_cast<UIComponentBase &>(progressBar));
+    progressBarYaml["MaxValue"] >> progressBar.MaxValue;
+    progressBarYaml["Value"] >> progressBar.Value;
+    progressBarYaml["BackgroundColor"] >> progressBar.BackgroundColor;
+}
+
+template <> Yaml Serialize(const SliderComponent &slider)
+{
+    Yaml yaml, sliderYaml;
+    sliderYaml = Serialize(static_cast<const UIComponentBase &>(slider));
+    sliderYaml["MinValue"] << slider.MinValue;
+    sliderYaml["MaxValue"] << slider.MaxValue;
+    sliderYaml["Value"] << slider.Value;
+    yaml["Slider"] = sliderYaml;
+    return yaml;
+}
+
+template <> void Deserialize(const Yaml &yaml, SliderComponent &slider)
+{
+    const Yaml &sliderYaml = yaml["Slider"];
+    Deserialize(sliderYaml, static_cast<UIComponentBase &>(slider));
+    sliderYaml["MinValue"] >> slider.MinValue;
+    sliderYaml["MaxValue"] >> slider.MaxValue;
+    sliderYaml["Value"] >> slider.Value;
 }
 
 } // namespace Lumen::YamlSerializer

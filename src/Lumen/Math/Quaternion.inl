@@ -86,9 +86,11 @@ constexpr Vector3 Quaternion::ToEuler() const
     return result;
 }
 
-constexpr void Quaternion::ToAxisAngle(Vector3 &outAxis, float &outAngle)
+constexpr std::tuple<Vector3, float> Quaternion::ToAxisAngle() const
 {
     Quaternion q = *this;
+    Vector3 outAxis;
+    float outAngle;
 
     if (std::fabs(q.w) > 1.0f)
     {
@@ -108,6 +110,8 @@ constexpr void Quaternion::ToAxisAngle(Vector3 &outAxis, float &outAngle)
     {
         outAxis = Vector3(1.0f, 0.0f, 0.0f);
     }
+
+    return {outAxis, outAngle};
 }
 
 constexpr Quaternion Quaternion::Transformed(const Matrix4 &mat) const

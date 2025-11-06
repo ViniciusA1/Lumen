@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lumen/Core/Memory.hpp"
+#include "Lumen/Memory/Memory.hpp"
 #include "Lumen/Scene/Entity/EntityManager.hpp"
 #include "Lumen/Scene/System/DrawSystem.hpp"
 #include "Lumen/Scene/System/System.hpp"

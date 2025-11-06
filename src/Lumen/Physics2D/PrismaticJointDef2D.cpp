@@ -35,8 +35,8 @@ PrismaticJointDef2D::operator b2PrismaticJointDef() const
 {
     b2PrismaticJointDef def = b2DefaultPrismaticJointDef();
 
-    def.bodyIdA = BodyA.GetBodyID();
-    def.bodyIdB = BodyB.GetBodyID();
+    def.bodyIdA = BodyA.GetID();
+    def.bodyIdB = BodyB.GetID();
     def.collideConnected = CollideConnected;
     def.dampingRatio = DampingRatio;
     def.enableLimit = EnableLimit;

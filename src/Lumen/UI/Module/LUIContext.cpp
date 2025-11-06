@@ -10,17 +10,25 @@
 namespace Lumen::LUI
 {
 
+static bool s_IsInitialized = false;
 static std::vector<Function<void()>> s_OverlayList;
 
 void Init()
 {
+    if (s_IsInitialized)
+        return;
+
     rlImGuiSetup(true);
     InitFont();
     InitStyle();
+    s_IsInitialized = true;
 }
 
 void Shutdown()
 {
+    if (!s_IsInitialized)
+        return;
+
     rlImGuiShutdown();
 }
 
@@ -33,9 +41,7 @@ void BeginUI()
 void EndUI()
 {
     for (const auto &overlay : s_OverlayList)
-    {
         overlay();
-    }
 
     rlImGuiEnd();
 }

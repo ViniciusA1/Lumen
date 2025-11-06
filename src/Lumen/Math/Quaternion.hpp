@@ -1,5 +1,6 @@
 #pragma once
 
+#include <tuple>
 struct Vector4;
 
 namespace Lumen
@@ -25,7 +26,7 @@ public:
     [[nodiscard]] constexpr Quaternion Normalized() const;
     [[nodiscard]] constexpr Matrix4 ToMatrix() const;
     [[nodiscard]] constexpr Vector3 ToEuler() const;
-    constexpr void ToAxisAngle(Vector3 &outAxis, float &outAngle);
+    [[nodiscard]] constexpr std::tuple<Vector3, float> ToAxisAngle() const;
     [[nodiscard]] constexpr Quaternion Transformed(const Matrix4 &mat) const;
 
     static constexpr Quaternion FromAxisAngle(const Vector3 &axis, float angle);

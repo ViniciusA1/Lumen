@@ -200,11 +200,4 @@ template <typename T> void Deserialize(const Json &json, T &obj)
 
 } // namespace Lumen::JsonSerializer
 
-#include "Lumen/File/Serializer/Conversions/AssetConversion.hpp"
-#include "Lumen/File/Serializer/Conversions/CoreConversion.hpp"
-#include "Lumen/File/Serializer/Conversions/FileConversion.hpp"
-#include "Lumen/File/Serializer/Conversions/GraphicsConversion.hpp"
-#include "Lumen/File/Serializer/Conversions/MathConversion.hpp"
-#include "Lumen/File/Serializer/Conversions/ProjectConversion.hpp"
-#include "Lumen/File/Serializer/Conversions/SceneConversion.hpp"
-#include "Lumen/File/Serializer/Conversions/UIConversion.hpp"
+#include "Lumen/File/Serializer/Conversions/Conversions.hpp"

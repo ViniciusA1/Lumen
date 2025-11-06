@@ -31,8 +31,8 @@ void InitFont()
     {
         float scaleFactor = GetFontScaleFactor(scale);
         float scaledSize = baseSize * scaleFactor;
-        ImFont *font = io.Fonts->AddFontFromFileTTF("assets/UI/Font/OpenSans-Regular.ttf",
-                                                    scaledSize);
+        ImFont *font = io.Fonts->AddFontFromFileTTF(
+            "assets/LUI/Font/OpenSans-Regular.ttf", scaledSize);
         s_FontMap[scaleFactor] = font;
 
         InitIconFont(scaledSize);

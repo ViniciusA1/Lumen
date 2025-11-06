@@ -3,6 +3,7 @@
 #include "Lumen/Scene/Entity/EntityQuery.hpp"
 
 #include <entt/entity/registry.hpp>
+#include <string>
 
 namespace Lumen
 {
@@ -12,7 +13,7 @@ class World;
 class System
 {
 public:
-    System(World &world);
+    System(World &world, std::string name = "System");
 
     [[nodiscard]] bool IsEnabled() const;
 
@@ -28,6 +29,7 @@ public:
     template <typename... Components> [[nodiscard]] EntityQuery<Components...> Query();
 
 protected:
+    std::string m_Name;
     World &m_ParentWorld;
     bool m_IsEnabled;
 };

@@ -11,7 +11,12 @@ enum class MouseCode
     ButtonSide = 3,
     ButtonExtra = 4,
     ButtonForward = 5,
-    ButtonBack = 6
+    ButtonBack = 6,
+
+    AxisX = 1000,
+    AxisY,
+    AxisWheelX,
+    AxisWheelY
 };
 
 } // namespace Lumen

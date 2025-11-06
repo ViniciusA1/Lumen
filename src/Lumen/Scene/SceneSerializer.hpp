@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Lumen/Core/Memory.hpp"
 #include "Lumen/File/Path.hpp"
+#include "Lumen/Memory/Memory.hpp"
 #include "Lumen/Scene/Scene.hpp"
 
 namespace Lumen

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Lumen/Scene/Entity/EntityManager.hpp"
+#include "Lumen/System/Function.hpp"
+
 
 namespace Lumen
 {
@@ -8,19 +10,16 @@ namespace Lumen
 class EntityFactory
 {
 public:
-    EntityFactory() = delete;
+    using Creator = Function<Entity(EntityManager &)>;
 
-public:
-    static Entity CreateEmpty(EntityManager &manager);
+    static void Register(const std::string &name, const Creator &creator);
 
-    static Entity CreateCamera(EntityManager &manager);
+    static Entity Create(const std::string &name, EntityManager &manager);
 
-    static Entity CreateSprite(EntityManager &manager);
+    static void RegisterDefaultCreators();
 
-    static Entity CreateButton(EntityManager &manager);
-    static Entity CreateLabel(EntityManager &manager);
-
-    static Entity CreateAudioSource(EntityManager &manager);
+private:
+    static std::unordered_map<std::string, Creator> s_Registry;
 };
 
 } // namespace Lumen

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lumen/Core/Action.hpp"
+#include "Lumen/System/Action.hpp"
 #include "Lumen/UI/LUIPopup.hpp"
 
 #include <string>

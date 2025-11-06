@@ -34,8 +34,8 @@ RevoluteJointDef2D::operator b2RevoluteJointDef() const
 {
     b2RevoluteJointDef def = b2DefaultRevoluteJointDef();
 
-    def.bodyIdA = BodyA.GetBodyID();
-    def.bodyIdB = BodyB.GetBodyID();
+    def.bodyIdA = BodyA.GetID();
+    def.bodyIdB = BodyB.GetID();
     def.collideConnected = CollideConnected;
     def.dampingRatio = DampingRatio;
     def.drawSize = DrawSize;

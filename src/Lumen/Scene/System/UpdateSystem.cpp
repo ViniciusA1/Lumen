@@ -3,7 +3,8 @@
 namespace Lumen
 {
 
-UpdateSystem::UpdateSystem(World &world) : System(world)
+UpdateSystem::UpdateSystem(World &world, std::string name)
+    : System(world, std::move(name))
 {
 }
 

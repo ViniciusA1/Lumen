@@ -7,28 +7,32 @@
 namespace Lumen
 {
 
+Path SceneManager::s_WorkingDirectory = "assets/Scene";
 Ref<Scene> SceneManager::s_ActiveScene;
 std::unordered_map<UUID, Ref<Scene>> SceneManager::s_LoadedScene;
 
-void SceneManager::CreateScene(const Path &path, const std::string &name, SceneType type)
+Ref<Scene> SceneManager::CreateScene(const Path &path, const std::string &name,
+                                     SceneType type)
 {
-    Ref<Scene> newScene = CreateRef<Scene>(UUID(), name, path, type);
+    Ref<Scene> newScene = CreateRef<Scene>(UUID(), name, s_WorkingDirectory / path, type);
     AddDefaultEntities(newScene);
     AddDefaultSystems(newScene);
-    SaveScene(newScene);
+    return newScene;
 }
 
-void SceneManager::LoadScene(const Path &path, SceneType type)
+Ref<Scene> SceneManager::LoadScene(const Path &path)
 {
-    Ref<Scene> loadedScene = CreateRef<Scene>(type);
+    Ref<Scene> loadedScene = CreateRef<Scene>(SceneType::Type3D);
     AddDefaultEntities(loadedScene);
     AddDefaultSystems(loadedScene);
 
     SceneSerializer serializer;
-    if (serializer.Deserialize(loadedScene, path))
-    {
-        s_LoadedScene[loadedScene->GetID()] = std::move(loadedScene);
-    }
+    if (serializer.Deserialize(loadedScene, s_WorkingDirectory / path))
+        s_LoadedScene[loadedScene->GetID()] = loadedScene;
+    else
+        loadedScene = nullptr;
+
+    return loadedScene;
 }
 
 void SceneManager::SaveScene(const Ref<Scene> &scene)
@@ -37,9 +41,7 @@ void SceneManager::SaveScene(const Ref<Scene> &scene)
         return;
 
     SceneSerializer serializer;
-    if (serializer.Serialize(scene, scene->GetPath()))
-    {
-    }
+    serializer.Serialize(scene, scene->GetPath());
 }
 
 void SceneManager::UnloadScene(UUID uuid)
@@ -84,7 +86,25 @@ void SceneManager::SetActiveScene(const std::string &name)
     }
 }
 
+void SceneManager::SetActiveScene(const Ref<Scene> &scene)
+{
+    if (scene == nullptr)
+        return;
+
+    s_ActiveScene = scene;
+}
+
+void SceneManager::SetWorkingDirectory(const Path &path)
+{
+    s_WorkingDirectory = path;
+}
+
 Ref<Scene> SceneManager::GetActiveScene()
+{
+    return s_ActiveScene;
+}
+
+Ref<Scene> &SceneManager::GetActiveSceneRef()
 {
     return s_ActiveScene;
 }
@@ -117,6 +137,11 @@ Ref<Scene> SceneManager::GetSceneAt(int index)
     auto it = s_LoadedScene.begin();
     std::advance(it, index);
     return it->second;
+}
+
+Path SceneManager::GetWorkingDirectory()
+{
+    return s_WorkingDirectory;
 }
 
 void SceneManager::AddDefaultEntities(const Ref<Scene> &scene)

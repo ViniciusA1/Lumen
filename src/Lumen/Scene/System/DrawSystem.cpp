@@ -3,7 +3,7 @@
 namespace Lumen
 {
 
-DrawSystem::DrawSystem(World &world) : System(world)
+DrawSystem::DrawSystem(World &world, std::string name) : System(world, std::move(name))
 {
 }
 

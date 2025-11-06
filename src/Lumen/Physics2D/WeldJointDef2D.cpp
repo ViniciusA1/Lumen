@@ -30,8 +30,8 @@ WeldJointDef2D::operator b2WeldJointDef() const
 
     def.angularDampingRatio = AngularDampingRatio;
     def.angularHertz = AngularHertz;
-    def.bodyIdA = BodyA.GetBodyID();
-    def.bodyIdB = BodyB.GetBodyID();
+    def.bodyIdA = BodyA.GetID();
+    def.bodyIdB = BodyB.GetID();
     def.collideConnected = CollideConnected;
     def.linearDampingRatio = LinearDampingRatio;
     def.linearHertz = LinearHertz;

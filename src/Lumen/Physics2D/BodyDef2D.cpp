@@ -53,4 +53,9 @@ BodyDef2D::operator b2BodyDef() const
     return def;
 }
 
+Transform2D::Transform2D(const b2Transform &transform)
+    : Position(transform.p), Rotation(b2Rot_GetAngle(transform.q))
+{
+}
+
 } // namespace Lumen

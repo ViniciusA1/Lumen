@@ -22,14 +22,10 @@ public:
     Path WorkingDirectory;
     Path ConfigDirectory;
     Path AssetDirectory;
+    Path SceneDirectory;
     Path StartScene;
 
 public:
-    Project() = default;
-    Project(std::string name, std::string lastModified, SceneType type,
-            Path rootDirectory, Path workingDirectory, Path configDirectory,
-            Path assetDirectory, Path startScene);
-
     [[nodiscard]] bool IsValid() const;
 
     bool operator==(const Project &other) const;

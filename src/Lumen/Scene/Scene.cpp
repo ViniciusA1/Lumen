@@ -89,7 +89,7 @@ void Scene::SetState(SceneState state)
 
 void Scene::OnUpdate()
 {
-    if (m_State == SceneState::Pause)
+    if (m_State != SceneState::Play)
         return;
 
     m_World.OnUpdate();

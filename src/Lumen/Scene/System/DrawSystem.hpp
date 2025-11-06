@@ -8,7 +8,7 @@ namespace Lumen
 class DrawSystem : public System
 {
 public:
-    DrawSystem(World &world);
+    DrawSystem(World &world, std::string name = "DrawSystem");
 
     virtual void OnDraw() = 0;
 };

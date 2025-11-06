@@ -1,15 +1,11 @@
 #include "Lumen/Physics2D/Body2D.hpp"
 #include "Lumen/Math/Math.hpp"
+#include "Lumen/Physics2D/Joint2D.hpp"
 
 #include "box2d/box2d.h"
 
 namespace Lumen
 {
-
-Transform2D::Transform2D(const b2Transform &transform)
-    : Position(transform.p), Rotation(b2Rot_GetAngle(transform.q))
-{
-}
 
 Body2D::Body2D(const b2BodyId &bodyID) : m_BodyID(bodyID)
 {
@@ -60,7 +56,7 @@ bool Body2D::GetAutomaticMass() const
     return b2Body_GetAutomaticMass(m_BodyID);
 }
 
-b2BodyId Body2D::GetBodyID() const
+b2BodyId Body2D::GetID() const
 {
     return m_BodyID;
 }
@@ -78,6 +74,23 @@ float Body2D::GetGravityScale() const
 int32_t Body2D::GetJointCount() const
 {
     return b2Body_GetJointCount(m_BodyID);
+}
+
+std::vector<Joint2D> Body2D::GetJoints(std::size_t count) const
+{
+    count = Math::Min(count == 0 ? GetJointCount() : count,
+                      static_cast<std::size_t>(GetJointCount()));
+
+    std::vector<b2JointId> idVec;
+    idVec.reserve(count);
+    int size = b2Body_GetJoints(m_BodyID, idVec.data(), count);
+
+    std::vector<Joint2D> shapeVec;
+    shapeVec.reserve(size);
+    for (int i = 0; i < size; i++)
+        shapeVec[i] = idVec[i];
+
+    return shapeVec;
 }
 
 float Body2D::GetLinearDamping() const
@@ -134,6 +147,9 @@ int32_t Body2D::GetShapeCount() const
 
 std::vector<Shape2D> Body2D::GetShapes(std::size_t count) const
 {
+    count = Math::Min(count == 0 ? GetShapeCount() : count,
+                      static_cast<std::size_t>(GetShapeCount()));
+
     std::vector<b2ShapeId> idVec;
     idVec.reserve(count);
     int size = b2Body_GetShapes(m_BodyID, idVec.data(), count);
@@ -141,9 +157,7 @@ std::vector<Shape2D> Body2D::GetShapes(std::size_t count) const
     std::vector<Shape2D> shapeVec;
     shapeVec.reserve(size);
     for (int i = 0; i < size; i++)
-    {
         shapeVec[i] = idVec[i];
-    }
 
     return shapeVec;
 }
@@ -225,8 +239,11 @@ void Body2D::SetLinearVelocity(const Vector2 &velocity)
 
 void Body2D::SetMassData(const MassData2D &massData)
 {
-    b2Body_SetMassData(m_BodyID,
-                       {massData.Mass, massData.Center, massData.RotationalInertia});
+    b2Body_SetMassData(m_BodyID, {
+                                     massData.Mass,
+                                     massData.Center,
+                                     massData.RotationalInertia,
+                                 });
 }
 
 void Body2D::SetSleepThreshold(float threshold)
@@ -249,28 +266,28 @@ Shape2D Body2D::CreateCapsuleShape(const ShapeDef2D &def, const CapsuleShape2D &
 {
     b2ShapeDef shapeDef = def;
     b2Capsule capsule = shape;
-    return {b2CreateCapsuleShape(m_BodyID, &shapeDef, &capsule)};
+    return b2CreateCapsuleShape(m_BodyID, &shapeDef, &capsule);
 }
 
 Shape2D Body2D::CreateCircleShape(const ShapeDef2D &def, const CircleShape2D &shape)
 {
     b2ShapeDef shapeDef = def;
     b2Circle circle = shape;
-    return {b2CreateCircleShape(m_BodyID, &shapeDef, &circle)};
+    return b2CreateCircleShape(m_BodyID, &shapeDef, &circle);
 }
 
 Shape2D Body2D::CreatePolygonShape(const ShapeDef2D &def, const PolygonShape2D &shape)
 {
     b2ShapeDef shapeDef = def;
     b2Polygon polygon = shape;
-    return {b2CreatePolygonShape(m_BodyID, &shapeDef, &polygon)};
+    return b2CreatePolygonShape(m_BodyID, &shapeDef, &polygon);
 }
 
 Shape2D Body2D::CreateSegmentShape(const ShapeDef2D &def, const SegmentShape2D &shape)
 {
     b2ShapeDef shapeDef = def;
     b2Segment segment = shape;
-    return {b2CreateSegmentShape(m_BodyID, &shapeDef, &segment)};
+    return b2CreateSegmentShape(m_BodyID, &shapeDef, &segment);
 }
 
 void Body2D::DestroyShape(const Shape2D &shape)
