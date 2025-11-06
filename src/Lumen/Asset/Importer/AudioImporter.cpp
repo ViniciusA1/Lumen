@@ -1,26 +1,55 @@
 #include "Lumen/Asset/Importer/AudioImporter.hpp"
-#include "Lumen/Audio/AudioEngine.hpp"
 
-#include "miniaudio.h"
+#include "raylib.h"
 
 namespace Lumen::AssetImporter
 {
 
-template <> Audio Import(const AssetHandle &handle, const AssetMetadata &metadata)
+template <> Music Import(const AssetHandle &handle, const AssetMetadata &metadata)
 {
-    Audio audio = AudioEngine::LoadAudio(metadata.Path);
-    return audio;
+    return ::LoadMusicStream(metadata.Path.String().c_str());
 }
 
-template <> bool Export(const Audio &audio)
+template <> bool Export(const Music &music)
 {
-    if (!audio.IsValid())
+    if (!music.IsValid())
         return false;
 
-    ma_sound sound = audio;
-    AudioEngine::UnloadAudio(sound);
-    ma_sound *soundPtr = audio;
-    delete soundPtr;
+    ::Music *rayMusic = music;
+    ::UnloadMusicStream(*rayMusic);
+    delete rayMusic;
+    return true;
+}
+
+template <> Sound Import(const AssetHandle &handle, const AssetMetadata &metadata)
+{
+    return ::LoadSound(metadata.Path.String().c_str());
+}
+
+template <> bool Export(const Sound &sound)
+{
+    if (!sound.IsValid())
+        return false;
+
+    ::Sound *raySound = sound;
+    ::UnloadSound(*raySound);
+    delete raySound;
+    return true;
+}
+
+template <> Wave Import(const AssetHandle &handle, const AssetMetadata &metadata)
+{
+    return ::LoadWave(metadata.Path.String().c_str());
+}
+
+template <> bool Export(const Wave &wave)
+{
+    if (!wave.IsValid())
+        return false;
+
+    ::Wave *rayWave = wave;
+    ::UnloadWave(*rayWave);
+    delete rayWave;
     return true;
 }
 

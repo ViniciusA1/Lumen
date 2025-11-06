@@ -9,12 +9,12 @@ bool AssetManagerSerializer::Serialize(const Path &path)
 {
     Yaml yaml;
     yaml << AssetManager::GetMetadataMap();
-    return yaml.ToFile(path / "AssetRegistry.lasset");
+    return yaml.ToFile(path);
 }
 
 bool AssetManagerSerializer::Deserialize(const Path &path)
 {
-    Yaml yaml = Yaml::FromFile(path / "AssetRegistry.lasset");
+    Yaml yaml = Yaml::FromFile(path);
     if (yaml.IsNull())
         return false;
 

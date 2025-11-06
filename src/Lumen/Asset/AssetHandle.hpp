@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lumen/Core/UUID.hpp"
+#include "Lumen/System/UUID.hpp"
 
 namespace Lumen
 {
