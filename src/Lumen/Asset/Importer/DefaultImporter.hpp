@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Lumen/Audio/Audio.hpp"
+#include "Lumen/Audio/Music.hpp"
+#include "Lumen/Audio/Sound.hpp"
+#include "Lumen/Audio/Wave.hpp"
 #include "Lumen/Graphics/Font.hpp"
 #include "Lumen/Graphics/Image.hpp"
 #include "Lumen/Graphics/Material.hpp"
@@ -16,12 +19,14 @@ template <typename T> T Import()
     return {};
 }
 
-template <> Audio Import();
 template <> Font Import();
 template <> Image Import();
 template <> Material Import();
 template <> Mesh Import();
+template <> Music Import();
 template <> Shader Import();
+template <> Sound Import();
 template <> Texture2D Import();
+template <> Wave Import();
 
 } // namespace Lumen::DefaultAssetImporter

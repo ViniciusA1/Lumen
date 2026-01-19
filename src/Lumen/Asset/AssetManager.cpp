@@ -11,14 +11,16 @@ namespace Lumen
 template <typename T> std::unordered_map<AssetHandle, T> AssetStorage<T>::s_Map;
 template <typename T> T DefaultAssetStorage<T>::s_Asset;
 
-DEFINE_ASSET_STORAGE(Audio)
 DEFINE_ASSET_STORAGE(Font)
 DEFINE_ASSET_STORAGE(Image)
 DEFINE_ASSET_STORAGE(Material)
 DEFINE_ASSET_STORAGE(Mesh)
 DEFINE_ASSET_STORAGE(Model)
+DEFINE_ASSET_STORAGE(Music)
 DEFINE_ASSET_STORAGE(Shader)
+DEFINE_ASSET_STORAGE(Sound)
 DEFINE_ASSET_STORAGE(Texture2D)
+DEFINE_ASSET_STORAGE(Wave)
 
 std::unordered_map<UUID, AssetMetadata> AssetManager::s_AssetMetadataMap;
 Path AssetManager::s_WorkingDirectory;
@@ -26,13 +28,15 @@ AssetManagerMode AssetManager::s_Mode = AssetManagerMode::Editor;
 
 void AssetManager::LoadDefaultAssets()
 {
-    DefaultAssetStorage<Audio>::s_Asset = DefaultAssetImporter::Import<Audio>();
     DefaultAssetStorage<Font>::s_Asset = DefaultAssetImporter::Import<Font>();
     DefaultAssetStorage<Image>::s_Asset = DefaultAssetImporter::Import<Image>();
     DefaultAssetStorage<Material>::s_Asset = DefaultAssetImporter::Import<Material>();
     DefaultAssetStorage<Mesh>::s_Asset = DefaultAssetImporter::Import<Mesh>();
+    DefaultAssetStorage<Music>::s_Asset = DefaultAssetImporter::Import<Music>();
     DefaultAssetStorage<Shader>::s_Asset = DefaultAssetImporter::Import<Shader>();
+    DefaultAssetStorage<Sound>::s_Asset = DefaultAssetImporter::Import<Sound>();
     DefaultAssetStorage<Texture2D>::s_Asset = DefaultAssetImporter::Import<Texture2D>();
+    DefaultAssetStorage<Wave>::s_Asset = DefaultAssetImporter::Import<Wave>();
 }
 
 std::unordered_map<UUID, AssetMetadata> &AssetManager::GetMetadataMap()
@@ -80,14 +84,16 @@ void AssetManager::SetWorkingDirectory(const Path &path)
 
 void AssetManager::Clear()
 {
-    AssetStorage<Audio>::s_Map.clear();
     AssetStorage<Font>::s_Map.clear();
     AssetStorage<Image>::s_Map.clear();
     AssetStorage<Material>::s_Map.clear();
     AssetStorage<Mesh>::s_Map.clear();
     AssetStorage<Model>::s_Map.clear();
+    AssetStorage<Music>::s_Map.clear();
     AssetStorage<Shader>::s_Map.clear();
+    AssetStorage<Sound>::s_Map.clear();
     AssetStorage<Texture2D>::s_Map.clear();
+    AssetStorage<Wave>::s_Map.clear();
 
     s_AssetMetadataMap.clear();
 }
