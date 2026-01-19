@@ -97,6 +97,18 @@ constexpr float Vector3::DistanceSqr(const Vector3 &v1, const Vector3 &v2)
     return (v2 - v1).LengthSqr();
 }
 
+constexpr Vector3 Vector3::Forward(const Vector3 &rotationEuler)
+{
+    float pitch = Math::Deg2Rad * rotationEuler.x;
+    float yaw = Math::Deg2Rad * rotationEuler.y;
+
+    return {
+        cosf(pitch) * sinf(yaw),
+        -sinf(pitch),
+        cosf(pitch) * cosf(yaw),
+    };
+}
+
 constexpr Vector3 Vector3::Lerp(const Vector3 &v1, const Vector3 &v2, float amount)
 {
     return v1 + (v2 - v1) * Math::Clamp(amount, 0.0f, 1.0f);
@@ -136,6 +148,17 @@ constexpr Vector3 Vector3::Refract(const Vector3 &v, const Vector3 &n, float r)
 {
     float dot = Dot(v, n);
     return v - n * (dot * (1.0f + r) + r);
+}
+
+constexpr Vector3 Vector3::Right(const Vector3 &rotationEuler)
+{
+    float yaw = Math::Deg2Rad * rotationEuler.y - Math::Deg2Rad * 90.0f;
+
+    return {
+        sinf(yaw),
+        0.0f,
+        cosf(yaw),
+    };
 }
 
 constexpr Vector3 Vector3::RotateByAxisAngle(const Vector3 &v, const Vector3 &axis,
@@ -183,12 +206,26 @@ constexpr Vector3 Vector3::Transform(const Vector3 &v, const Matrix4 &mat)
     };
 }
 
+constexpr Vector3 Vector3::Up(const Vector3 &forward, const Vector3 &right)
+{
+    return Vector3::Cross(right, forward).Normalized();
+}
+
 constexpr Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs)
 {
     return {
         lhs.x + rhs.x,
         lhs.y + rhs.y,
         lhs.z + rhs.z,
+    };
+}
+
+constexpr Vector3 operator-(const Vector3 &vec)
+{
+    return {
+        -vec.x,
+        -vec.y,
+        -vec.z,
     };
 }
 

@@ -37,18 +37,22 @@ public:
     static constexpr float Dot(const Vector3 &v1, const Vector3 &v2);
     static constexpr float Distance(const Vector3 &v1, const Vector3 &v2);
     static constexpr float DistanceSqr(const Vector3 &v1, const Vector3 &v2);
+    static constexpr Vector3 Forward(const Vector3 &rotationEuler);
     static constexpr Vector3 Lerp(const Vector3 &v1, const Vector3 &v2, float amount);
     static constexpr Vector3 Max(const Vector3 &v1, const Vector3 &v2);
     static constexpr Vector3 Min(const Vector3 &v1, const Vector3 &v2);
     static constexpr void OrthoNormalize(Vector3 &v1, Vector3 &v2);
     static constexpr Vector3 Reflect(const Vector3 &v, const Vector3 &normal);
     static constexpr Vector3 Refract(const Vector3 &v, const Vector3 &n, float r);
+    static constexpr Vector3 Right(const Vector3 &rotationEuler);
     static constexpr Vector3 RotateByAxisAngle(const Vector3 &v, const Vector3 &axis,
                                                float angle);
     static constexpr Vector3 RotateByQuaternion(const Vector3 &v, const Quaternion &q);
     static constexpr Vector3 Transform(const Vector3 &v, const Matrix4 &mat);
+    static constexpr Vector3 Up(const Vector3 &forward, const Vector3 &right);
 
     friend constexpr Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs);
+    friend constexpr Vector3 operator-(const Vector3 &vec);
     friend constexpr Vector3 operator-(const Vector3 &lhs, const Vector3 &rhs);
     friend constexpr Vector3 operator*(const Vector3 &vec, float scalar);
     friend constexpr Vector3 operator*(float scalar, const Vector3 &vec);
