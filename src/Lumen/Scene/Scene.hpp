@@ -28,12 +28,11 @@ public:
 
     void SetID(UUID uuid);
     void SetName(const std::string &name);
-    void SetMainCamera(Entity camera);
     void SetPath(const Path &path);
     void SetState(SceneState state);
 
     void OnUpdate();
-    void OnDraw();
+    void OnDraw(bool withCamera = true);
 
 protected:
     void BindEvents();
@@ -47,7 +46,6 @@ protected:
     std::string m_Name;
     SceneState m_State;
     SceneType m_Type;
-    Entity m_MainCamera;
     World m_World;
 };
 
