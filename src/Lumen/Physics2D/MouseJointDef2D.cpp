@@ -25,8 +25,8 @@ MouseJointDef2D::operator b2MouseJointDef() const
 {
     b2MouseJointDef def = b2DefaultMouseJointDef();
 
-    def.bodyIdA = BodyA.GetBodyID();
-    def.bodyIdB = BodyB.GetBodyID();
+    def.bodyIdA = BodyA.GetID();
+    def.bodyIdB = BodyB.GetID();
     def.collideConnected = CollideConnected;
     def.dampingRatio = DampingRatio;
     def.hertz = Hertz;

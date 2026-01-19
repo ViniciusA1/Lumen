@@ -1,5 +1,6 @@
 #include "Lumen/Scene/SceneSerializer.hpp"
 #include "Lumen/File/Serializer/YamlSerializer.hpp"
+#include "Lumen/Log/Log.hpp"
 
 namespace Lumen
 {

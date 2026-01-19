@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Lumen/Core/Action.hpp"
 #include "Lumen/Scene/Component/UI/LabelComponent.hpp"
 #include "Lumen/Scene/Component/UI/UIComponentBase.hpp"
+#include "Lumen/System/Action.hpp"
 
 namespace Lumen
 {

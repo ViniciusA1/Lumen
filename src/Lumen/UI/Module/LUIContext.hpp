@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lumen/Core/Function.hpp"
+#include "Lumen/System/Function.hpp"
 #include "Lumen/UI/Module/LUIStructures.hpp"
 
 namespace Lumen::LUI

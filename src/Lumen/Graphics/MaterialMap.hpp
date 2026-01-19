@@ -40,7 +40,7 @@ public:
     [[nodiscard]] float GetValue() const;
 
     void SetColor(Color color);
-    void SetTexture(const Texture &texture);
+    void SetTexture(const Texture2D &texture);
     void SetValue(float value);
 
     operator ::MaterialMap() const;

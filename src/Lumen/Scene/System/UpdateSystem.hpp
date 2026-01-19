@@ -8,7 +8,7 @@ namespace Lumen
 class UpdateSystem : public System
 {
 public:
-    UpdateSystem(World &world);
+    UpdateSystem(World &world, std::string name = "UpdateSystem");
 
     virtual void OnUpdate() = 0;
 };

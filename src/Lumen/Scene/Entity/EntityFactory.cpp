@@ -3,45 +3,56 @@
 namespace Lumen
 {
 
-Entity EntityFactory::CreateEmpty(EntityManager &manager)
+std::unordered_map<std::string, EntityFactory::Creator> EntityFactory::s_Registry;
+
+void EntityFactory::Register(const std::string &name, const Creator &creator)
 {
-    Entity entity = manager.CreateEntity();
-    return entity;
+    s_Registry[name] = creator;
 }
 
-Entity EntityFactory::CreateCamera(EntityManager &manager)
+Entity EntityFactory::Create(const std::string &name, EntityManager &manager)
 {
-    Entity entity = manager.CreateEntity("Camera");
-    manager.AddComponent<CameraComponent>(entity);
-    return entity;
+    auto it = s_Registry.find(name);
+    if (it == s_Registry.end())
+        return {};
+
+    return it->second(manager)[0];
 }
 
-Entity EntityFactory::CreateSprite(EntityManager &manager)
+void EntityFactory::RegisterDefaultCreators()
 {
-    Entity entity = manager.CreateEntity("Sprite");
-    manager.AddComponent<SpriteRendererComponent>(entity);
-    return entity;
-}
+    Register("Empty",
+             [](EntityManager &manager) { return Entity(manager.CreateEntity()); });
 
-Entity EntityFactory::CreateButton(EntityManager &manager)
-{
-    Entity entity = manager.CreateEntity("Button");
-    manager.AddComponent<ButtonComponent>(entity);
-    return entity;
-}
+    Register("Camera", [](EntityManager &manager) {
+        Entity entity = manager.CreateEntity("Camera");
+        manager.AddComponent<CameraComponent>(entity);
+        return entity;
+    });
 
-Entity EntityFactory::CreateLabel(EntityManager &manager)
-{
-    Entity entity = manager.CreateEntity("Label");
-    manager.AddComponent<LabelComponent>(entity);
-    return entity;
-}
+    Register("Sprite", [](EntityManager &manager) {
+        Entity entity = manager.CreateEntity("Sprite");
+        manager.AddComponent<SpriteRendererComponent>(entity);
+        return entity;
+    });
 
-Entity EntityFactory::CreateAudioSource(EntityManager &manager)
-{
-    Entity entity = manager.CreateEntity("Audio Source");
-    manager.AddComponent<AudioSourceComponent>(entity);
-    return entity;
+    Register("Button", [](EntityManager &manager) {
+        Entity entity = manager.CreateEntity("Button");
+        manager.AddComponent<ButtonComponent>(entity);
+        return entity;
+    });
+
+    Register("Label", [](EntityManager &manager) {
+        Entity entity = manager.CreateEntity("Label");
+        manager.AddComponent<LabelComponent>(entity);
+        return entity;
+    });
+
+    Register("Audio Source", [](EntityManager &manager) {
+        Entity entity = manager.CreateEntity("Audio Source");
+        manager.AddComponent<AudioSourceComponent>(entity);
+        return entity;
+    });
 }
 
 } // namespace Lumen

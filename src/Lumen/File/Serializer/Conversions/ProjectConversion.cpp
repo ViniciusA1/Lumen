@@ -15,6 +15,7 @@ template <> Json Serialize(const Project &project)
     json["WorkingDirectory"] << project.WorkingDirectory;
     json["ConfigDirectory"] << project.ConfigDirectory;
     json["AssetDirectory"] << project.AssetDirectory;
+    json["SceneDirectory"] << project.SceneDirectory;
     json["StartScene"] << project.StartScene;
 
     return json;
@@ -27,6 +28,7 @@ template <> void Deserialize(const Json &json, Project &project)
     json["WorkingDirectory"] >> project.WorkingDirectory;
     json["ConfigDirectory"] >> project.ConfigDirectory;
     json["AssetDirectory"] >> project.AssetDirectory;
+    json["SceneDirectory"] >> project.SceneDirectory;
     json["StartScene"] >> project.StartScene;
 }
 
@@ -71,6 +73,7 @@ template <> Yaml Serialize(const Project &project)
     yaml["WorkingDirectory"] << project.WorkingDirectory;
     yaml["ConfigDirectory"] << project.ConfigDirectory;
     yaml["AssetDirectory"] << project.AssetDirectory;
+    yaml["SceneDirectory"] << project.SceneDirectory;
     yaml["StartScene"] << project.StartScene;
 
     return yaml;
@@ -84,6 +87,7 @@ template <> void Deserialize(const Yaml &yaml, Project &project)
     yaml["WorkingDirectory"] >> project.WorkingDirectory;
     yaml["ConfigDirectory"] >> project.ConfigDirectory;
     yaml["AssetDirectory"] >> project.AssetDirectory;
+    yaml["SceneDirectory"] >> project.SceneDirectory;
     yaml["StartScene"] >> project.StartScene;
 }
 

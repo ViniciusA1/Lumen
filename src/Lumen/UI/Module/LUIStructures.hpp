@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lumen/Core/Enum.hpp"
+#include "Lumen/Meta/Enum.hpp"
 
 namespace Lumen::LUI
 {

@@ -20,19 +20,13 @@ template <> void UpdateUIComponent(TransformComponent &transform, ButtonComponen
     if (button.State == UIComponentState::Disabled)
         return;
 
-    Rectangle bounds = transform;
-    Vector2 mousePosition = Input::GetMousePosition();
-    bool isMouseOver = bounds.Contains(mousePosition);
-
-    if (!isMouseOver)
+    if (!Rectangle(transform).Contains(Input::GetMousePosition()))
     {
         button.State = UIComponentState::Idle;
         return;
     }
 
-    bool isMousePressed = Input::IsMouseButtonDown(MouseCode::ButtonLeft);
-
-    if (isMousePressed)
+    if (Input::IsMouseButtonDown(MouseCode::ButtonLeft))
     {
         button.State = UIComponentState::Pressed;
     }

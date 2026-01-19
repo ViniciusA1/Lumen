@@ -33,8 +33,8 @@ DistanceJointDef2D::operator b2DistanceJointDef() const
 {
     b2DistanceJointDef def = b2DefaultDistanceJointDef();
 
-    def.bodyIdA = BodyA.GetBodyID();
-    def.bodyIdB = BodyB.GetBodyID();
+    def.bodyIdA = BodyA.GetID();
+    def.bodyIdB = BodyB.GetID();
     def.collideConnected = CollideConnected;
     def.dampingRatio = DampingRatio;
     def.enableLimit = EnableLimit;

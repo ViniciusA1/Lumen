@@ -11,6 +11,8 @@
 namespace Lumen
 {
 
+class Joint2D;
+
 class Body2D
 {
 public:
@@ -26,11 +28,11 @@ public:
     [[nodiscard]] float GetAngularDamping() const;
     [[nodiscard]] float GetAngularVelocity() const;
     [[nodiscard]] bool GetAutomaticMass() const;
-    [[nodiscard]] b2BodyId GetBodyID() const;
+    [[nodiscard]] b2BodyId GetID() const;
     [[nodiscard]] int32_t GetContactCapacity() const;
     [[nodiscard]] float GetGravityScale() const;
     [[nodiscard]] int32_t GetJointCount() const;
-    // [[nodiscard]] const b2JointEdge *GetJoints() const;
+    [[nodiscard]] std::vector<Joint2D> GetJoints(std::size_t count = 0) const;
     [[nodiscard]] float GetLinearDamping() const;
     [[nodiscard]] Vector2 GetLinearVelocity() const;
     [[nodiscard]] Vector2 GetLocalCenterOfMass() const;
@@ -41,7 +43,7 @@ public:
     [[nodiscard]] Vector2 GetPosition() const;
     [[nodiscard]] float GetRotation() const;
     [[nodiscard]] int32_t GetShapeCount() const;
-    [[nodiscard]] std::vector<Shape2D> GetShapes(std::size_t count) const;
+    [[nodiscard]] std::vector<Shape2D> GetShapes(std::size_t count = 0) const;
     [[nodiscard]] float GetSleepThreshold() const;
     [[nodiscard]] Transform2D GetTransform() const;
     [[nodiscard]] BodyType2D GetType() const;

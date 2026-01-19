@@ -5,16 +5,14 @@
 namespace Lumen
 {
 
-class SensorBeginTouch2DEvent
+struct SensorBeginTouch2DEvent
 {
-public:
     Shape2D SensorShape;
     Shape2D VisitorShape;
 };
 
-class SensorEndTouch2DEvent
+struct SensorEndTouch2DEvent
 {
-public:
     Shape2D SensorShape;
     Shape2D VisitorShape;
 };
@@ -25,23 +23,20 @@ struct Sensor2DEvents
     std::vector<SensorEndTouch2DEvent> EndEvents;
 };
 
-class ContactBeginTouch2DEvent
+struct ContactBeginTouch2DEvent
 {
-public:
     Shape2D ShapeA;
     Shape2D ShapeB;
 };
 
-class ContactEndTouch2DEvent
+struct ContactEndTouch2DEvent
 {
-public:
     Shape2D ShapeA;
     Shape2D ShapeB;
 };
 
-class ContactHit2DEvent
+struct ContactHit2DEvent
 {
-public:
     Shape2D ShapeA;
     Shape2D ShapeB;
     Vector2 Point;
@@ -56,9 +51,8 @@ struct Contact2DEvents
     std::vector<ContactHit2DEvent> HitEvents;
 };
 
-class BodyMove2DEvent
+struct BodyMove2DEvent
 {
-public:
     Transform2D Transform;
     Body2D Body;
     bool FellAsleep;

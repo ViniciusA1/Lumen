@@ -11,7 +11,7 @@ static Style s_Style;
 void InitStyle()
 {
     LUIStyleSerializer serializer;
-    if (serializer.Deserialize("assets/UI/Style/Dark.json", s_Style))
+    if (serializer.Deserialize("assets/LUI/Style/Dark.json", s_Style))
     {
         SetStyle(s_Style);
     }

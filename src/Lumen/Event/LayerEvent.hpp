@@ -1,34 +1,21 @@
 #pragma once
 
-#include "Lumen/Core/Layer.hpp"
-#include "Lumen/Core/Memory.hpp"
+#include "Lumen/Layer/Layer.hpp"
+#include "Lumen/Memory/Memory.hpp"
+
 #include <string>
 
 namespace Lumen
 {
 
-class LayerPushEvent
+struct LayerPushEvent
 {
-public:
-    LayerPushEvent(Ref<Layer> layer);
-
-    [[nodiscard]] Ref<Layer> GetLayer() const;
-    [[nodiscard]] std::string ToString() const;
-
-private:
-    Ref<Layer> m_Layer;
+    Ref<Layer> Layer;
 };
 
-class LayerPopEvent
+struct LayerPopEvent
 {
-public:
-    LayerPopEvent(std::string name);
-
-    [[nodiscard]] std::string GetLayerName() const;
-    [[nodiscard]] std::string ToString() const;
-
-private:
-    std::string m_LayerName;
+    std::string LayerName;
 };
 
 } // namespace Lumen

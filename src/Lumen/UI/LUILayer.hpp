@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lumen/Core/Layer.hpp"
+#include "Lumen/Layer/Layer.hpp"
 
 namespace Lumen
 {

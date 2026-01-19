@@ -18,7 +18,14 @@
 #include "Lumen/Scene/Component/Physics/VelocityComponent.hpp"
 
 #include "Lumen/Scene/Component/UI/ButtonComponent.hpp"
+#include "Lumen/Scene/Component/UI/CanvasComponent.hpp"
+#include "Lumen/Scene/Component/UI/CheckboxComponent.hpp"
+#include "Lumen/Scene/Component/UI/DropdownComponent.hpp"
+#include "Lumen/Scene/Component/UI/ImageComponent.hpp"
+#include "Lumen/Scene/Component/UI/InputFieldComponent.hpp"
 #include "Lumen/Scene/Component/UI/LabelComponent.hpp"
+#include "Lumen/Scene/Component/UI/ProgressBarComponent.hpp"
+#include "Lumen/Scene/Component/UI/SliderComponent.hpp"
 
 #define AUDIO_COMPONENTS AudioListenerComponent, AudioSourceComponent
 
@@ -35,7 +42,12 @@
 
 #define PHYSICS_COMPONENTS VelocityComponent
 
-#define UI_COMPONENTS ButtonComponent, LabelComponent
+#define SCRIPT_COMPONENTS LuaScriptComponent
+
+#define UI_COMPONENTS                                                                    \
+    ButtonComponent, CanvasComponent, CheckboxComponent, DropdownComponent,              \
+        ImageComponent, InputFieldComponent, LabelComponent, ProgressBarComponent,       \
+        SliderComponent
 
 #define ALL_COMPONENTS                                                                   \
     CORE_COMPONENTS, AUDIO_COMPONENTS, GRAPHICS_COMPONENTS, PHYSICS_COMPONENTS,          \

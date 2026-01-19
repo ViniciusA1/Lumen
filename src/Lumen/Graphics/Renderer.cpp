@@ -671,66 +671,67 @@ void DrawCylinderWire(const TransformComponent &transform, float radiusTop,
     ::rlPopMatrix();
 }
 
-void DrawGrid(Vector3 cameraPosition, float minorSpacing, int majorDivisions,
+void DrawGrid(Vector3 cameraPosition, float baseSpacing, int majorDivisions,
               int gridLines, Color minorColor, Color majorColor, bool xyPlane)
 {
-    float halfGridSize = minorSpacing * gridLines;
+    // Determine grid scale based on camera distance
+    // (similar to Unity: powers of 10 adjustment)
+    float distance = xyPlane ? fabsf(cameraPosition.z) : fabsf(cameraPosition.y);
+    float logScale = log10f(distance + 1.0f);
+    int scalePower = (int)floorf(logScale);
+    float spacing = baseSpacing * powf(10.0f, (float)scalePower);
 
-    minorSpacing = Math::Clamp((int)cameraPosition.y / 50, 1, majorDivisions);
-    majorDivisions += minorSpacing;
+    // The grid extends halfGridSize units around the camera
+    float halfGridSize = spacing * gridLines;
 
     float start1, end1, start2, end2;
-
     if (xyPlane)
     {
-        start1 =
-            Math::Floor((cameraPosition.x - halfGridSize) / minorSpacing) * minorSpacing;
-        end1 =
-            Math::Floor((cameraPosition.x + halfGridSize) / minorSpacing) * minorSpacing;
-        start2 =
-            Math::Floor((cameraPosition.y - halfGridSize) / minorSpacing) * minorSpacing;
-        end2 =
-            Math::Floor((cameraPosition.y + halfGridSize) / minorSpacing) * minorSpacing;
+        start1 = floorf((cameraPosition.x - halfGridSize) / spacing) * spacing;
+        end1 = floorf((cameraPosition.x + halfGridSize) / spacing) * spacing;
+        start2 = floorf((cameraPosition.y - halfGridSize) / spacing) * spacing;
+        end2 = floorf((cameraPosition.y + halfGridSize) / spacing) * spacing;
 
-        for (float x = start1; x <= end1; x += minorSpacing)
+        for (float x = start1; x <= end1; x += spacing)
         {
-            bool isMajor = ((int)(x / minorSpacing) % majorDivisions) == 0;
+            bool isMajor = fmodf(fabsf(x), spacing * majorDivisions) < 0.0001f;
             Color c = isMajor ? majorColor : minorColor;
-            DrawLine3D({x, start2, 0.0f}, {x, end2, 0.0f}, c);
+            DrawLine3D({x, start2, 0.001f}, {x, end2, 0.001f}, c);
         }
 
-        for (float y = start2; y <= end2; y += minorSpacing)
+        for (float y = start2; y <= end2; y += spacing)
         {
-            bool isMajor = ((int)(y / minorSpacing) % majorDivisions) == 0;
+            bool isMajor = fmodf(fabsf(y), spacing * majorDivisions) < 0.0001f;
             Color c = isMajor ? majorColor : minorColor;
-            DrawLine3D({start1, y, 0.0f}, {end1, y, 0.0f}, c);
+            DrawLine3D({start1, y, 0.001f}, {end1, y, 0.001f}, c);
         }
     }
-    else
+    else // XZ plane
     {
-        start1 =
-            Math::Floor((cameraPosition.x - halfGridSize) / minorSpacing) * minorSpacing;
-        end1 =
-            Math::Floor((cameraPosition.x + halfGridSize) / minorSpacing) * minorSpacing;
-        start2 =
-            Math::Floor((cameraPosition.z - halfGridSize) / minorSpacing) * minorSpacing;
-        end2 =
-            Math::Floor((cameraPosition.z + halfGridSize) / minorSpacing) * minorSpacing;
+        start1 = floorf((cameraPosition.x - halfGridSize) / spacing) * spacing;
+        end1 = floorf((cameraPosition.x + halfGridSize) / spacing) * spacing;
+        start2 = floorf((cameraPosition.z - halfGridSize) / spacing) * spacing;
+        end2 = floorf((cameraPosition.z + halfGridSize) / spacing) * spacing;
 
-        for (float x = start1; x <= end1; x += minorSpacing)
+        for (float x = start1; x <= end1; x += spacing)
         {
-            bool isMajor = ((int)(x / minorSpacing) % majorDivisions) == 0;
+            bool isMajor = fmodf(fabsf(x), spacing * majorDivisions) < 0.0001f;
             Color c = isMajor ? majorColor : minorColor;
-            DrawLine3D({x, 0, start2}, {x, 0, end2}, c);
+            DrawLine3D({x, 0.0f, start2}, {x, 0.0f, end2}, c);
         }
 
-        for (float z = start2; z <= end2; z += minorSpacing)
+        for (float z = start2; z <= end2; z += spacing)
         {
-            bool isMajor = ((int)(z / minorSpacing) % majorDivisions) == 0;
+            bool isMajor = fmodf(fabsf(z), spacing * majorDivisions) < 0.0001f;
             Color c = isMajor ? majorColor : minorColor;
-            DrawLine3D({start1, 0, z}, {end1, 0, z}, c);
+            DrawLine3D({start1, 0.0f, z}, {end1, 0.0f, z}, c);
         }
     }
+
+    // Optionally, draw world axes for orientation
+    DrawLine3D({0, 0, 0}, {1, 0, 0}, {255, 0, 0, 255}); // X axis - red
+    DrawLine3D({0, 0, 0}, {0, 1, 0}, {0, 255, 0, 255}); // Y axis - green
+    DrawLine3D({0, 0, 0}, {0, 0, 1}, {0, 0, 255, 255}); // Z axis - blue
 }
 
 void DrawMesh(const TransformComponent &transform, const Mesh &mesh,

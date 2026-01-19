@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Lumen/Core/Memory.hpp"
 #include "Lumen/File/Serializer/YamlSerializer.hpp"
+#include "Lumen/Memory/Memory.hpp"
 #include "Lumen/Scene/Scene.hpp"
 
 namespace Lumen::YamlSerializer
@@ -64,16 +64,34 @@ template <> void Deserialize(const Yaml &yaml, SpriteRendererComponent &sprite);
 template <> Yaml Serialize(const VelocityComponent &velocity);
 template <> void Deserialize(const Yaml &yaml, VelocityComponent &velocity);
 
-template <> Yaml Serialize(const UIComponentState &state);
-template <> void Deserialize(const Yaml &yaml, UIComponentState &state);
-
-template <> Yaml Serialize(const std::array<Lumen::Color, 4> &colors);
-template <> void Deserialize(const Yaml &yaml, std::array<Lumen::Color, 4> &colors);
+template <> Yaml Serialize(const UIComponentBase &base);
+template <> void Deserialize(const Yaml &yaml, UIComponentBase &base);
 
 template <> Yaml Serialize(const ButtonComponent &button);
 template <> void Deserialize(const Yaml &yaml, ButtonComponent &button);
 
+template <> Yaml Serialize(const CanvasComponent &canvas);
+template <> void Deserialize(const Yaml &yaml, CanvasComponent &canvas);
+
+template <> Yaml Serialize(const CheckboxComponent &checkbox);
+template <> void Deserialize(const Yaml &yaml, CheckboxComponent &checkbox);
+
+template <> Yaml Serialize(const DropdownComponent &dropdown);
+template <> void Deserialize(const Yaml &yaml, DropdownComponent &dropdown);
+
+template <> Yaml Serialize(const ImageComponent &image);
+template <> void Deserialize(const Yaml &yaml, ImageComponent &image);
+
+template <> Yaml Serialize(const InputFieldComponent &inputField);
+template <> void Deserialize(const Yaml &yaml, InputFieldComponent &inputField);
+
 template <> Yaml Serialize(const LabelComponent &label);
 template <> void Deserialize(const Yaml &yaml, LabelComponent &label);
+
+template <> Yaml Serialize(const ProgressBarComponent &progressBar);
+template <> void Deserialize(const Yaml &yaml, ProgressBarComponent &progressBar);
+
+template <> Yaml Serialize(const SliderComponent &slider);
+template <> void Deserialize(const Yaml &yaml, SliderComponent &slider);
 
 } // namespace Lumen::YamlSerializer

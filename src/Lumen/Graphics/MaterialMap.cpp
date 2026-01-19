@@ -34,7 +34,7 @@ void MaterialMap::SetColor(Color color)
     m_MaterialMap->color = color;
 }
 
-void MaterialMap::SetTexture(const Texture &texture)
+void MaterialMap::SetTexture(const Texture2D &texture)
 {
     m_MaterialMap->texture = texture;
 }

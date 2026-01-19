@@ -4,7 +4,8 @@
 namespace Lumen
 {
 
-System::System(World &world) : m_ParentWorld(world)
+System::System(World &world, std::string name)
+    : m_Name(std::move(name)), m_ParentWorld(world)
 {
 }
 

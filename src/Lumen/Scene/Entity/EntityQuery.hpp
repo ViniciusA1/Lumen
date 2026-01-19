@@ -8,21 +8,25 @@ namespace Lumen
 template <typename... Components> class EntityQuery
 {
 public:
-    explicit EntityQuery(entt::registry &registry)
-        : m_Registry(registry), m_View(registry.view<Components...>())
-    {
-    }
+    using ViewType = decltype(std::declval<entt::registry>().view<Components...>());
 
-    auto Each() const { return m_View.each(); }
+public:
+    explicit EntityQuery(entt::registry &registry);
 
-    template <typename... ExcludeComponents> auto WithNone() const
-    {
-        return m_Registry.view<Components...>(entt::exclude<ExcludeComponents...>);
-    }
+    template <typename Func> void ForEach(Func &&func) const;
+
+    template <typename... ExcludeComponents, typename Func>
+    void ForEachExcluding(Func &&func) const;
+
+    auto Each() const;
+
+    template <typename... ExcludeComponents> auto EachExcluding() const;
 
 private:
     entt::registry &m_Registry;
-    decltype(std::declval<entt::registry>().view<Components...>()) m_View;
+    ViewType m_View;
 };
 
 } // namespace Lumen
+
+#include "Lumen/Scene/Entity/EntityQuery.inl"
