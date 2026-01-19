@@ -33,6 +33,9 @@ public:
     [[nodiscard]] Entity GetEntity(UUID uuid) const;
     [[nodiscard]] Entity GetEntity(entt::entity entity) const;
     template <typename... Components> auto GetAllEntitiesWith();
+    template <typename... Components> [[nodiscard]] Entity GetEntityWith() const;
+    template <typename Component, typename... Components>
+    Component &GetEntityComponentWith();
 
     template <typename T, typename... Args>
     T &AddComponent(Entity entity, Args &&...args);
@@ -56,6 +59,21 @@ private:
 template <typename... Components> auto EntityManager::GetAllEntitiesWith()
 {
     return m_Registry.view<Components...>();
+}
+
+template <typename... Components> Entity EntityManager::GetEntityWith() const
+{
+    auto view = m_Registry.view<Components...>();
+    if (view.begin() != view.end())
+        return *view.begin();
+
+    return {};
+}
+
+template <typename Component, typename... Components>
+Component &EntityManager::GetEntityComponentWith()
+{
+    return m_Registry.get<Component>(GetEntityWith<Components...>());
 }
 
 template <typename T, typename... Args>
