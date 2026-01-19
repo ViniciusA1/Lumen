@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(ImGuizmo LANGUAGES CXX)
 
-add_library(ImGuizmo SHARED
+add_library(ImGuizmo STATIC
    ImGuizmo.cpp
    ImGuizmo.h
 )

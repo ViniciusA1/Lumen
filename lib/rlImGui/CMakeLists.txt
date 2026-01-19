@@ -12,7 +12,7 @@ set(SOURCES
     rlImGuiColors.h
 )
 
-add_library(rlImGui SHARED ${SOURCES})
+add_library(rlImGui STATIC ${SOURCES})
 
 target_include_directories(rlImGui PUBLIC .)
 target_link_libraries(rlImGui PUBLIC raylib imgui)

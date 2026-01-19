@@ -6,10 +6,10 @@ project(enet C)
 # -----------------------------
 option(ENET_STATIC "Build enet as a static library" ON)
 option(ENET_SHARED "Build enet as a shared library" OFF)
-option(ENET_TEST  "Build enet tests" ON)
-option(ENET_USE_MORE_PEERS  "Build enet with up to 65k peers support" OFF)
+option(ENET_TEST "Build enet tests" OFF)
+option(ENET_USE_MORE_PEERS "Build enet with up to 65k peers support" OFF)
 
-if (ENET_USE_MORE_PEERS)
+if(ENET_USE_MORE_PEERS)
     add_definitions(-DENET_USE_MORE_PEERS)
 endif()
 
@@ -21,6 +21,7 @@ if(ENET_STATIC)
 
     if(WIN32)
         target_link_libraries(enet_static PUBLIC winmm ws2_32)
+
         if(MSVC)
             target_compile_options(enet_static PRIVATE /W3)
         endif()
@@ -45,6 +46,7 @@ if(ENET_SHARED)
 
     if(WIN32)
         target_link_libraries(enet_shared PUBLIC winmm ws2_32)
+
         if(MSVC)
             target_compile_options(enet_shared PRIVATE /W3)
         endif()
@@ -66,7 +68,7 @@ endif()
 if(ENET_TEST)
     add_library(enet_test_interface INTERFACE)
 
-    target_include_directories(enet_test_interface INTERFACE 
+    target_include_directories(enet_test_interface INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
 
@@ -83,7 +85,7 @@ if(ENET_TEST)
     # Default test
     add_executable(enet_test test/build.c)
     target_link_libraries(enet_test PRIVATE enet_test_interface)
-    
+
     # Test with more peers
     add_executable(enet_test_extra_peers test/build.c)
     target_link_libraries(enet_test_extra_peers PRIVATE enet_test_interface)
@@ -137,4 +139,3 @@ if(_enet_targets_to_install)
         DESTINATION lib/cmake/enet
     )
 endif()
-
