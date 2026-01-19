@@ -9,7 +9,7 @@ enum class UIComponentState
     Hovered,
     Pressed,
     Disabled,
-    COUNT
+    Count
 };
 
 } // namespace Lumen

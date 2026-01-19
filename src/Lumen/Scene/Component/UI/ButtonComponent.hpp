@@ -11,6 +11,7 @@ struct ButtonComponent : public UIComponentBase
 {
     LabelComponent Label;
     AssetHandle Texture;
+    Action OnHover;
     Action OnClick;
 };
 
