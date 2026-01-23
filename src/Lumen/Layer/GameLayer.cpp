@@ -1,5 +1,5 @@
 #include "Lumen/Layer/GameLayer.hpp"
-#include "Lumen/Scene/SceneManager.hpp"
+#include "Lumen/World/SceneManager.hpp"
 
 namespace Lumen
 {

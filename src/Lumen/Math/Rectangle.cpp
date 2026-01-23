@@ -1,5 +1,5 @@
 #include "Lumen/Math/Rectangle.hpp"
-#include "Lumen/Scene/Component/Core/TransformComponent.hpp"
+#include "Lumen/World/Component/Core/TransformComponent.hpp"
 
 #include "raylib.h"
 

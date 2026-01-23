@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Lumen/File/Path.hpp"
-#include "Lumen/Scene/SceneType.hpp"
+#include "Lumen/World/SceneType.hpp"
 
 namespace Lumen
 {

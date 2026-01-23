@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Lumen/Scene/Entity/Entity.hpp"
 #include "Lumen/System/UUID.hpp"
-
+#include "Lumen/World/Entity/Entity.hpp"
 
 namespace Lumen
 {

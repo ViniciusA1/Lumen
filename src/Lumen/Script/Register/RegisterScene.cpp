@@ -1,7 +1,8 @@
-#include "Lumen/Scene/Entity/Entity.hpp"
-#include "Lumen/Scene/Scene.hpp"
 #include "Lumen/Script/Register/RegisterAPI.hpp"
 #include "Lumen/Script/ScriptEngine.hpp"
+#include "Lumen/World/Entity/Entity.hpp"
+#include "Lumen/World/Scene.hpp"
+
 
 namespace Lumen
 {

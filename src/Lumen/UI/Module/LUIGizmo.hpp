@@ -3,8 +3,8 @@
 #include "Lumen/Graphics/Color.hpp"
 #include "Lumen/Math/Rectangle.hpp"
 #include "Lumen/Math/Vector2.hpp"
-#include "Lumen/Scene/Component/Core/TransformComponent.hpp"
-#include "Lumen/Scene/Component/Graphics/CameraComponent.hpp"
+#include "Lumen/World/Component/Core/TransformComponent.hpp"
+#include "Lumen/World/Component/Graphics/CameraComponent.hpp"
 
 namespace Lumen::LUI::Gizmo
 {
