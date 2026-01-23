@@ -27,7 +27,6 @@ add_subdirectory(lib/raylib)
 add_subdirectory(lib/rlImGui)
 add_subdirectory(lib/sol2)
 add_subdirectory(lib/spdlog)
-add_subdirectory(lib/yaml)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
@@ -51,5 +50,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 	rlImGui
 	sol2
 	spdlog::spdlog
-	yaml-cpp::yaml-cpp
 )
