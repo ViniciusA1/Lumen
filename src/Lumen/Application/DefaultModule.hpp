@@ -1,16 +1,17 @@
 #pragma once
 
 #include "Lumen/Application/Application.hpp"
+#include "Lumen/Application/EngineModule.hpp"
 
 namespace Lumen
 {
 
-class EngineInitializer
+class DefaultModule : public EngineModule
 {
 public:
-    EngineInitializer(Application &app);
+    DefaultModule(Application &app, ApplicationArgs args = {});
 
-    virtual void Run();
+    void Build() override;
 
 protected:
     virtual void InitArgs();
@@ -21,11 +22,10 @@ protected:
     virtual void InitScenes();
     virtual void InitComponents();
     virtual void InitSystems();
-    virtual void InitPrefabs();
-    virtual void InitLayers();
+    virtual void InitLUI();
 
 protected:
-    Application &m_App;
+    ApplicationArgs m_ExternalArgs;
 };
 
 } // namespace Lumen

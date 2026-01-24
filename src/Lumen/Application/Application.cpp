@@ -1,5 +1,4 @@
 #include "Lumen/Application/Application.hpp"
-#include "Lumen/Application/EngineInitializer.hpp"
 #include "Lumen/Event/EventBus.hpp"
 #include "Lumen/Graphics/Renderer.hpp"
 #include "Lumen/Input/Input.hpp"
@@ -9,18 +8,13 @@ namespace Lumen
 
 Application *Application::s_Instance = nullptr;
 
-Application::Application(const Ref<EngineInitializer> &initializer)
+Application::Application()
 {
     s_Instance = this;
     EventBus::Subscribe<WindowResizeEvent>(BIND_EVENT(OnWindowResize));
     EventBus::Subscribe<WindowCloseEvent>(BIND_EVENT(OnWindowClose));
     EventBus::Subscribe<LayerPushEvent>(BIND_EVENT(OnLayerPush));
     EventBus::Subscribe<LayerPopEvent>(BIND_EVENT(OnLayerPop));
-
-    if (initializer != nullptr)
-        initializer->Run();
-    else
-        EngineInitializer(*this).Run();
 }
 
 Application::~Application()
@@ -33,7 +27,12 @@ Application &Application::Get()
     return *s_Instance;
 }
 
-ApplicationArgs Application::GetArgs() const
+const ApplicationArgs &Application::GetArgs() const
+{
+    return m_Args;
+}
+
+ApplicationArgs &Application::GetArgs()
 {
     return m_Args;
 }

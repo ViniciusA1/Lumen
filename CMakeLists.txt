@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(Lumen)
+project(lumen)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -10,9 +10,9 @@ set(BUILD_SHARED_LIBS OFF)
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(BUILD_GAMES OFF CACHE BOOL "" FORCE)
 
-include_directories(
-	"${CMAKE_CURRENT_SOURCE_DIR}/src"
-)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 add_subdirectory(lib/box2d)
 add_subdirectory(lib/enet)
@@ -30,11 +30,9 @@ add_subdirectory(lib/spdlog)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
-add_library(${PROJECT_NAME} SHARED ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-	${CMAKE_CURRENT_SOURCE_DIR}/src
-)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
 	box2d

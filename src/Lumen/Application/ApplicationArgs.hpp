@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ApplicationMode.hpp"
 #include "Lumen/Application/WindowFlags.hpp"
 #include "Lumen/Asset/AssetHandle.hpp"
 #include "Lumen/File/Path.hpp"
@@ -17,11 +18,15 @@ struct ApplicationArgs
     AssetHandle Icon;
     WindowFlags Flags = WindowFlags::Resizable;
     int TargetFPS = 60;
+    ApplicationMode Mode = ApplicationMode::None;
     Path RootDirectory;
-    Path WorkingDirectory;
     Path AssetDirectory;
-    Path SceneDirectory;
     Path StartScene;
+
+    [[nodiscard]] bool IsValid() const
+    {
+        return Mode != ApplicationMode::None && !RootDirectory.IsEmpty();
+    }
 };
 
 } // namespace Lumen

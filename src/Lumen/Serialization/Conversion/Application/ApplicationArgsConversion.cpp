@@ -12,9 +12,7 @@ template <> Json Serialize(const ApplicationArgs &args)
     json["Icon"] << args.Icon;
     json["Flags"] << args.Flags;
     json["TargetFPS"] << args.TargetFPS;
-    json["WorkingDirectory"] << args.WorkingDirectory;
     json["AssetDirectory"] << args.AssetDirectory;
-    json["SceneDirectory"] << args.SceneDirectory;
     json["StartScene"] << args.StartScene;
 
     return json;
@@ -27,9 +25,7 @@ template <> void Deserialize(const Json &json, ApplicationArgs &args)
     json["Icon"] >> args.Icon;
     json["Flags"] >> args.Flags;
     json["TargetFPS"] >> args.TargetFPS;
-    json["WorkingDirectory"] >> args.WorkingDirectory;
     json["AssetDirectory"] >> args.AssetDirectory;
-    json["SceneDirectory"] >> args.SceneDirectory;
     json["StartScene"] >> args.StartScene;
 }
 

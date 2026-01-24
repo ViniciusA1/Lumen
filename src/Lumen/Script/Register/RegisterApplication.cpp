@@ -38,9 +38,7 @@ static void RegisterApplicationArgs()
         .Property("flags", &ApplicationArgs::Flags)
         .Property("target_fps", &ApplicationArgs::TargetFPS)
         .Property("root_directory", &ApplicationArgs::RootDirectory)
-        .Property("working_directory", &ApplicationArgs::WorkingDirectory)
         .Property("asset_directory", &ApplicationArgs::AssetDirectory)
-        .Property("scene_directory", &ApplicationArgs::SceneDirectory)
         .Property("start_scene", &ApplicationArgs::StartScene);
 }
 

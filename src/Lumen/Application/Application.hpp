@@ -5,25 +5,25 @@
 #include "Lumen/Event/LayerEvent.hpp"
 #include "Lumen/Event/WindowEvent.hpp"
 #include "Lumen/Layer/LayerStack.hpp"
-#include "Lumen/Memory/Memory.hpp"
 
 namespace Lumen
 {
 
-class EngineInitializer;
-
 class Application
 {
 public:
-    Application(const Ref<EngineInitializer> &initializer = nullptr);
+    Application();
     virtual ~Application();
 
     [[nodiscard]] bool IsRunning() const;
 
-    static Application &Get();
-    [[nodiscard]] ApplicationArgs GetArgs() const;
+    [[nodiscard]] static Application &Get();
+    [[nodiscard]] const ApplicationArgs &GetArgs() const;
+    [[nodiscard]] ApplicationArgs &GetArgs();
     [[nodiscard]] const Window &GetWindow() const;
-    Window &GetWindow();
+    [[nodiscard]] Window &GetWindow();
+
+    template <typename T, typename... Args> inline Application &AddModule(Args &&...args);
 
     virtual void Run();
 
@@ -41,10 +41,13 @@ protected:
     bool m_IsRunning = true;
     Window m_Window;
     LayerStack m_LayerStack;
-
-    friend class EngineInitializer;
 };
 
-Ref<Application> CreateApplication();
+template <typename T, typename... Args>
+Application &Application::AddModule(Args &&...args)
+{
+    T(*this, std::forward<Args>(args)...).Build();
+    return *this;
+}
 
 } // namespace Lumen
