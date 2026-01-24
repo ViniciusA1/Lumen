@@ -1,5 +1,4 @@
 #include "Lumen/UI/Module/LUIStyle.hpp"
-#include "Lumen/UI/LUIStyleSerializer.hpp"
 
 #include "imgui.h"
 
@@ -7,15 +6,6 @@ namespace Lumen::LUI
 {
 
 static Style s_Style;
-
-void InitStyle()
-{
-    LUIStyleSerializer serializer;
-    if (serializer.Deserialize("assets/LUI/Style/Dark.json", s_Style))
-    {
-        SetStyle(s_Style);
-    }
-}
 
 Style GetStyle()
 {

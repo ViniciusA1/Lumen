@@ -13,8 +13,6 @@ namespace Lumen::LUI
 
 class Style;
 
-void InitStyle();
-
 Style GetStyle();
 void SetStyle(const Style &style);
 

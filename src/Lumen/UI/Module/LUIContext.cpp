@@ -20,7 +20,6 @@ void Init()
 
     rlImGuiSetup(true);
     InitFont();
-    InitStyle();
     s_IsInitialized = true;
 }
 
