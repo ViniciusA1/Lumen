@@ -458,8 +458,9 @@ void ObjectField(const std::string &label, AssetHandle &asset, AssetType type,
 
     std::string typeStr = AssetTypeToString(type);
     auto metadata = AssetManager::GetMetadata(asset);
-    std::string displayText =
-        metadata.Name.empty() ? " None (" + typeStr + ")" : metadata.Name;
+    std::string displayText = metadata.Path.Filename().IsEmpty()
+                                  ? " None (" + typeStr + ")"
+                                  : metadata.Path.Filename().String();
 
     ImVec2 cursorPos = ImGui::GetCursorScreenPos();
     ImVec2 fieldSize = ImVec2(fieldWidth, fieldHeight);
