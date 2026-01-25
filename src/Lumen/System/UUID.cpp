@@ -1,22 +1,51 @@
 #include "Lumen/System/UUID.hpp"
+
+#include <chrono>
 #include <random>
 
 namespace Lumen
 {
 
-static std::random_device s_RandomDevice;
-static std::mt19937_64 s_Generator(s_RandomDevice());
-static std::uniform_int_distribution<uint64_t> s_Distribution;
+static uint64_t GetTimestampMs()
+{
+    using namespace std::chrono;
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+}
 
 UUID::UUID()
 {
-    m_UUID = s_Distribution(s_Generator);
-    m_UUID = (m_UUID & 0xFFFFFFFFFFFF0FFFULL) | 0x0000000000004000ULL;
-    m_UUID = (m_UUID & 0x3FFFFFFFFFFFFFFFULL) | 0x8000000000000000ULL;
+    static std::mt19937_64 rng([] {
+        std::random_device rd;
+        std::seed_seq seed{rd(), rd(), rd(), rd(), rd(), rd(), rd(), rd()};
+        return std::mt19937_64(seed);
+    }());
+
+    static std::uniform_int_distribution<uint32_t> randomDist(0, (1u << 22) - 1);
+
+    const uint64_t timestamp = GetTimestampMs() & ((1ULL << 42) - 1);
+    const uint64_t random = randomDist(rng);
+
+    m_UUID = (timestamp << 22) | random;
 }
 
-UUID::UUID(uint64_t uuid) : m_UUID(uuid)
+bool UUID::operator==(const UUID &other) const
 {
+    return m_UUID == other.m_UUID;
+}
+
+bool UUID::operator!=(const UUID &other) const
+{
+    return m_UUID != other.m_UUID;
+}
+
+bool UUID::operator<(const UUID &other) const
+{
+    return m_UUID < other.m_UUID;
+}
+
+UUID::operator uint64_t() const
+{
+    return m_UUID;
 }
 
 } // namespace Lumen

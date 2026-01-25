@@ -8,14 +8,27 @@ namespace Lumen
 class UUID
 {
 public:
-    UUID();
-    UUID(uint64_t uuid);
+    static const UUID Null;
 
-    operator uint64_t() const { return (uint64_t)m_UUID; }
+public:
+    UUID();
+    constexpr UUID(uint64_t uuid) : m_UUID(uuid) {}
+
+    bool operator==(const UUID &other) const;
+    bool operator!=(const UUID &other) const;
+    bool operator<(const UUID &other) const;
+    operator uint64_t() const;
 
 private:
     uint64_t m_UUID;
 };
+
+} // namespace Lumen
+
+namespace Lumen
+{
+
+inline constexpr UUID UUID::Null{0};
 
 } // namespace Lumen
 
