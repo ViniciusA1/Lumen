@@ -11,28 +11,42 @@
 namespace Lumen
 {
 
+using FileWatcherCallback = Function<void(const FileEvent &event)>;
+
 enum class FileWatcherMode
 {
     Sync,
     Async
 };
 
+struct WatchDirectorySpec
+{
+    Lumen::Path Path;
+    FileWatcherCallback Callback;
+    bool Recursive = false;
+    bool RunCallbackOnStartup = false;
+};
+
+struct WatchFileSpec
+{
+    Lumen::Path Path;
+    FileWatcherCallback Callback;
+};
+
 class FileWatcher
 {
 public:
-    using Callback = Function<void(const FileEvent &event)>;
-
-public:
-    FileWatcher(FileWatcherMode mode = FileWatcherMode::Async, int intervalMs = 500);
+    FileWatcher(FileWatcherMode mode = FileWatcherMode::Async, unsigned intervalMs = 500);
     ~FileWatcher();
 
     [[nodiscard]] int GetInterval() const;
     [[nodiscard]] FileWatcherMode GetMode() const;
 
+    void WatchDirectory(const WatchDirectorySpec &spec);
+    void WatchFile(const WatchFileSpec &spec);
+
     void UnwatchDirectory(const Path &dir);
     void UnwatchFile(const Path &path);
-    void WatchDirectory(const Path &dir, const Callback &callback, bool recursive = true);
-    void WatchFile(const Path &path, const Callback &callback);
 
     void Update();
 
@@ -42,7 +56,7 @@ private:
     struct FileInfo
     {
         std::filesystem::file_time_type LastWriteTime;
-        Callback Callback;
+        FileWatcherCallback Callback;
         bool Exists = true;
     };
 
@@ -55,10 +69,10 @@ private:
 private:
     std::unordered_map<Path, FileInfo> m_Files;
     std::unordered_map<Path, std::unordered_set<Path>> m_DirectoryMap;
-    std::unordered_map<Path, Callback> m_DirectoryCallbacks;
+    std::unordered_map<Path, FileWatcherCallback> m_DirectoryCallbacks;
 
     FileWatcherMode m_Mode;
-    int m_Interval;
+    unsigned m_Interval;
     std::thread m_Thread;
     std::atomic<bool> m_Running{false};
     std::mutex m_Mutex;

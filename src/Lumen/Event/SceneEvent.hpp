@@ -6,6 +6,15 @@
 namespace Lumen
 {
 
+struct CreateEntityEvent
+{
+};
+
+struct DestroyEntityEvent
+{
+    UUID EntityID;
+};
+
 template <typename T> struct ComponentAddEvent
 {
     Entity Entity;

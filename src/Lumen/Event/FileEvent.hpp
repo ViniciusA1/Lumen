@@ -13,8 +13,8 @@ enum class FileEventType
 
 struct FileEvent
 {
-    class Path Path;
     FileEventType Type;
+    Lumen::Path Path;
 };
 
 } // namespace Lumen

@@ -3,7 +3,7 @@
 namespace Lumen
 {
 
-FileWatcher::FileWatcher(FileWatcherMode mode, int intervalMs)
+FileWatcher::FileWatcher(FileWatcherMode mode, unsigned intervalMs)
     : m_Mode(mode), m_Interval(intervalMs)
 {
     if (mode == FileWatcherMode::Async)
@@ -52,47 +52,50 @@ void FileWatcher::UnwatchFile(const Path &path)
         files.erase(path);
 }
 
-void FileWatcher::WatchDirectory(const Path &dir, const Callback &callback,
-                                 bool recursive)
+void FileWatcher::WatchDirectory(const WatchDirectorySpec &spec)
 {
     std::scoped_lock lock(m_Mutex);
 
-    if (recursive)
+    if (spec.Recursive == false)
     {
-        for (auto &entry : std::filesystem::recursive_directory_iterator(dir))
+        for (auto &entry : std::filesystem::directory_iterator(spec.Path))
         {
             if (entry.is_regular_file())
             {
-                WatchFile(entry.path(), callback);
-                m_DirectoryMap[dir].insert(entry.path());
+                WatchFile({entry.path(), spec.Callback});
+                m_DirectoryMap[spec.Path].insert(entry.path());
+                if (spec.RunCallbackOnStartup)
+                    spec.Callback(FileEvent{FileEventType::Created, entry.path()});
             }
         }
     }
     else
     {
-        for (auto &entry : std::filesystem::directory_iterator(dir))
+        for (auto &entry : std::filesystem::recursive_directory_iterator(spec.Path))
         {
             if (entry.is_regular_file())
             {
-                WatchFile(entry.path(), callback);
-                m_DirectoryMap[dir].insert(entry.path());
+                WatchFile({entry.path(), spec.Callback});
+                m_DirectoryMap[spec.Path].insert(entry.path());
+                if (spec.RunCallbackOnStartup)
+                    spec.Callback(FileEvent{FileEventType::Created, entry.path()});
             }
         }
     }
 
-    m_DirectoryCallbacks[dir] = callback;
+    m_DirectoryCallbacks[spec.Path] = spec.Callback;
 }
 
-void FileWatcher::WatchFile(const Path &path, const Callback &callback)
+void FileWatcher::WatchFile(const WatchFileSpec &spec)
 {
     std::scoped_lock lock(m_Mutex);
 
     std::filesystem::file_time_type writeTime;
-    bool exists = std::filesystem::exists(path);
+    bool exists = std::filesystem::exists(spec.Path);
     if (exists)
-        writeTime = std::filesystem::last_write_time(path);
+        writeTime = std::filesystem::last_write_time(spec.Path);
 
-    m_Files[path] = {writeTime, callback, exists};
+    m_Files[spec.Path] = {writeTime, spec.Callback, exists};
 }
 
 void FileWatcher::Update()
@@ -140,8 +143,8 @@ void FileWatcher::CheckDirectories()
 
             if (m_DirectoryMap[dir].find(filePath) == m_DirectoryMap[dir].end())
             {
-                WatchFile(filePath, callback);
-                callback({filePath, FileEventType::Created});
+                WatchFile({filePath, callback});
+                callback({FileEventType::Created, filePath});
             }
         }
 
@@ -153,7 +156,8 @@ void FileWatcher::CheckDirectories()
                 if (fileIt != m_Files.end())
                 {
                     if (fileIt->second.Exists)
-                        fileIt->second.Callback({*it, FileEventType::Deleted});
+                        fileIt->second.Callback({FileEventType::Deleted, *it});
+
                     m_Files.erase(fileIt);
                 }
                 it = m_DirectoryMap[dir].erase(it);
@@ -181,12 +185,12 @@ void FileWatcher::CheckFiles()
         {
             info.Exists = true;
             info.LastWriteTime = std::filesystem::last_write_time(path);
-            info.Callback({path, FileEventType::Created});
+            info.Callback({FileEventType::Created, path});
         }
         else if (info.Exists && !exists)
         {
             info.Exists = false;
-            info.Callback({path, FileEventType::Deleted});
+            info.Callback({FileEventType::Deleted, path});
         }
         else if (exists)
         {
@@ -194,7 +198,7 @@ void FileWatcher::CheckFiles()
             if (newTime != info.LastWriteTime)
             {
                 info.LastWriteTime = newTime;
-                info.Callback({path, FileEventType::Modified});
+                info.Callback({FileEventType::Modified, path});
             }
         }
     }

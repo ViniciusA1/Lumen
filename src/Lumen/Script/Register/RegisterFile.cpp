@@ -112,22 +112,33 @@ static void RegisterFileSystem()
 static void RegisterFileWatcher()
 {
     ScriptEngine::GetInstance()
+        ->RegisterEnum<FileWatcherMode>("FileWatcherMode")
+        .Value("Sync", FileWatcherMode::Sync)
+        .Value("Async", FileWatcherMode::Async);
+
+    ScriptEngine::GetInstance()
+        ->RegisterType<WatchDirectorySpec>("WatchDirectorySpec")
+        .Property("path", &WatchDirectorySpec::Path)
+        .Property("callback", &WatchDirectorySpec::Callback)
+        .Property("recursive", &WatchDirectorySpec::Recursive)
+        .Property("run_callback_on_startup", &WatchDirectorySpec::RunCallbackOnStartup);
+
+    ScriptEngine::GetInstance()
+        ->RegisterType<WatchFileSpec>("WatchDirectorySpec")
+        .Property("path", &WatchFileSpec::Path)
+        .Property("callback", &WatchFileSpec::Callback);
+
+    ScriptEngine::GetInstance()
         ->RegisterType<FileWatcher>("FileWatcher")
         .Constructors<FileWatcher(), FileWatcher(FileWatcherMode, int)>()
         .Property("mode", &FileWatcher::GetMode)
         .Property("interval", &FileWatcher::GetInterval)
         .Method("watch_directory",
-                [](FileWatcher &self, const Path &dir, const sol::function &callback,
-                   bool recursive) {
-                    self.WatchDirectory(
-                        dir, [callback](const FileEvent &event) { callback(event); },
-                        recursive);
+                [](FileWatcher &self, const WatchDirectorySpec &spec) {
+                    self.WatchDirectory(spec);
                 })
-        .Method("watch_file",
-                [](FileWatcher &self, const Path &path, const sol::function &callback) {
-                    self.WatchFile(
-                        path, [callback](const FileEvent &event) { callback(event); });
-                })
+        .Method("watch_file", [](FileWatcher &self,
+                                 const WatchFileSpec &spec) { self.WatchFile(spec); })
         .Method("unwatch_directory", &FileWatcher::UnwatchDirectory)
         .Method("unwatch_file", &FileWatcher::UnwatchFile)
         .Method("update", &FileWatcher::Update)
