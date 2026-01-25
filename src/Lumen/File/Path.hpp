@@ -49,6 +49,7 @@ public:
     bool operator==(const Path &other) const;
     bool operator!=(const Path &other) const;
     Path operator/(const Path &other) const;
+    Path operator+(const std::string &str) const;
     Path &operator/=(const std::string &other);
     Path &operator/=(const Path &other);
     Path &operator+=(const std::string &str);

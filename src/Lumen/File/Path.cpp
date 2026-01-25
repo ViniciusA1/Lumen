@@ -171,6 +171,11 @@ Path Path::operator/(const Path &other) const
     return {m_Path / other.m_Path};
 }
 
+Path Path::operator+(const std::string &str) const
+{
+    return {m_Path.string() + str};
+}
+
 Path &Path::operator/=(const std::string &other)
 {
     m_Path /= other;
