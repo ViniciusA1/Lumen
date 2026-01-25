@@ -64,8 +64,7 @@ void DefaultModule::InitWindow()
 
 void DefaultModule::InitAssets()
 {
-    AssetManager::SetWorkingDirectory(m_App.GetArgs().AssetDirectory);
-    AssetManager::LoadDefaultAssets();
+    AssetManager::Init(m_App.GetArgs().RootDirectory / m_App.GetArgs().AssetDirectory);
 }
 
 void DefaultModule::InitScript()

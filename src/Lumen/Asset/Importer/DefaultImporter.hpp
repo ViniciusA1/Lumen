@@ -1,32 +1,68 @@
 #pragma once
 
-#include "Lumen/Audio/Audio.hpp"
-#include "Lumen/Audio/Music.hpp"
-#include "Lumen/Audio/Sound.hpp"
-#include "Lumen/Audio/Wave.hpp"
-#include "Lumen/Graphics/Font.hpp"
-#include "Lumen/Graphics/Image.hpp"
-#include "Lumen/Graphics/Material.hpp"
-#include "Lumen/Graphics/Mesh.hpp"
-#include "Lumen/Graphics/Shader.hpp"
-#include "Lumen/Graphics/Texture.hpp"
+#include "Lumen/Asset/AssetImporter.hpp"
 
-namespace Lumen::DefaultAssetImporter
+namespace Lumen
 {
 
-template <typename T> T Import()
+class DefaultAudioImporter : public DefaultAssetImporter
 {
-    return {};
-}
+public:
+    Scope<Asset> Import() override;
+};
 
-template <> Font Import();
-template <> Image Import();
-template <> Material Import();
-template <> Mesh Import();
-template <> Music Import();
-template <> Shader Import();
-template <> Sound Import();
-template <> Texture2D Import();
-template <> Wave Import();
+class DefaultFontImporter : public DefaultAssetImporter
+{
+public:
+    Scope<Asset> Import() override;
+};
 
-} // namespace Lumen::DefaultAssetImporter
+class DefaultMaterialImporter : public DefaultAssetImporter
+{
+public:
+    Scope<Asset> Import() override;
+};
+
+class DefaultMeshImporter : public DefaultAssetImporter
+{
+public:
+    Scope<Asset> Import() override;
+};
+
+class DefaultModelImporter : public DefaultAssetImporter
+{
+public:
+    Scope<Asset> Import() override;
+};
+
+class DefaultPrefabImporter : public DefaultAssetImporter
+{
+public:
+    Scope<Asset> Import() override;
+};
+
+class DefaultSceneImporter : public DefaultAssetImporter
+{
+public:
+    Scope<Asset> Import() override;
+};
+
+class DefaultScriptImporter : public DefaultAssetImporter
+{
+public:
+    Scope<Asset> Import() override;
+};
+
+class DefaultShaderImporter : public DefaultAssetImporter
+{
+public:
+    Scope<Asset> Import() override;
+};
+
+class DefaultTexture2DImporter : public DefaultAssetImporter
+{
+public:
+    Scope<Asset> Import() override;
+};
+
+} // namespace Lumen

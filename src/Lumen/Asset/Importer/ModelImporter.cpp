@@ -1,11 +1,12 @@
 #include "Lumen/Asset/Importer/ModelImporter.hpp"
+#include "Lumen/Graphics/Model.hpp"
 
 #include "raylib.h"
 
-namespace Lumen::AssetImporter
+namespace Lumen
 {
 
-template <> Model Import(const AssetHandle &handle, const AssetMetadata &metadata)
+Scope<Asset> ModelImporter::Import(const AssetMetadata &metadata)
 {
     int animationCount = 0;
 
@@ -13,19 +14,25 @@ template <> Model Import(const AssetHandle &handle, const AssetMetadata &metadat
     ::ModelAnimation *animations =
         ::LoadModelAnimations(metadata.Path.String().c_str(), &animationCount);
 
-    Model model = {handle, rayModel, animations, animationCount};
-    return model;
+    Model model = {
+        metadata.Handle,
+        rayModel,
+        animations,
+        animationCount,
+    };
+
+    return CreateScope<Model>(model);
 }
 
-template <> bool Export(const Model &model)
+void ModelImporter::Export(AssetEntry &entry)
 {
-    if (!model.IsValid())
-        return false;
+    auto *model = entry.GetAsset<Model>();
+    if (!model->IsValid())
+        return;
 
-    ::Model *rayModel = model;
+    ::Model *rayModel = *model;
     ::UnloadModel(*rayModel);
     delete rayModel;
-    return true;
 }
 
-} // namespace Lumen::AssetImporter
+} // namespace Lumen

@@ -1,24 +1,25 @@
 #include "Lumen/Asset/Importer/MeshImporter.hpp"
+#include "Lumen/Graphics/Mesh.hpp"
 
 #include "raylib.h"
 
-namespace Lumen::AssetImporter
+namespace Lumen
 {
 
-template <> Mesh Import(const AssetHandle &handle, const AssetMetadata &metadata)
+Scope<Asset> MeshImporter::Import(const AssetMetadata &metadata)
 {
     return nullptr;
 }
 
-template <> bool Export(const Mesh &mesh)
+void MeshImporter::Export(AssetEntry &entry)
 {
-    if (!mesh.IsValid())
-        return false;
+    auto *mesh = entry.GetAsset<Mesh>();
+    if (!mesh->IsValid())
+        return;
 
-    ::Mesh *rayMesh = mesh;
+    ::Mesh *rayMesh = *mesh;
     ::UnloadMesh(*rayMesh);
     delete rayMesh;
-    return true;
 }
 
-} // namespace Lumen::AssetImporter
+} // namespace Lumen

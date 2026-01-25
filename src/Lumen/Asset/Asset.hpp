@@ -11,6 +11,7 @@ class Asset
 public:
     Asset() = default;
     Asset(const AssetHandle &handle);
+    virtual ~Asset() = default;
 
     [[nodiscard]] virtual bool IsValid() const = 0;
 

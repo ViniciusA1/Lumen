@@ -1,20 +1,23 @@
 #pragma once
 
-#include "Lumen/Asset/AssetHandle.hpp"
+#include "Lumen/Asset/Asset.hpp"
+#include "Lumen/Asset/AssetEntry.hpp"
 #include "Lumen/Asset/AssetMetadata.hpp"
 
-namespace Lumen::AssetImporter
+namespace Lumen
 {
 
-template <typename T> T Import(const AssetHandle &uuid, const AssetMetadata &metadata);
-template <typename T> bool Export(const T &asset);
+class AssetImporter
+{
+public:
+    virtual Scope<Asset> Import(const AssetMetadata &metadata) = 0;
+    virtual void Export(AssetEntry &entry) = 0;
+};
 
-} // namespace Lumen::AssetImporter
+class DefaultAssetImporter
+{
+public:
+    virtual Scope<Asset> Import() = 0;
+};
 
-#include "Lumen/Asset/Importer/AudioImporter.hpp"
-#include "Lumen/Asset/Importer/FontImporter.hpp"
-#include "Lumen/Asset/Importer/ImageImporter.hpp"
-#include "Lumen/Asset/Importer/MeshImporter.hpp"
-#include "Lumen/Asset/Importer/ModelImporter.hpp"
-#include "Lumen/Asset/Importer/ShaderImporter.hpp"
-#include "Lumen/Asset/Importer/TextureImporter.hpp"
+} // namespace Lumen

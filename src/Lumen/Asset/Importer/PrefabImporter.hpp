@@ -5,7 +5,7 @@
 namespace Lumen
 {
 
-class ModelImporter : public AssetImporter
+class PrefabImporter : public AssetImporter
 {
 public:
     Scope<Asset> Import(const AssetMetadata &metadata) override;

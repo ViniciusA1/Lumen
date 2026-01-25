@@ -7,4 +7,4 @@ namespace Lumen
 
 using AssetHandle = UUID;
 
-}
+} // namespace Lumen

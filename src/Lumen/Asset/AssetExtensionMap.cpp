@@ -28,7 +28,7 @@ std::unordered_map<std::string, AssetType> AssetExtensionMap::s_Extensions = {
     {".obj", AssetType::Model},
 
     // Prefab
-    {".prefab", AssetType::Prefab},
+    {".lprefab", AssetType::Prefab},
 
     // Scene
     {".lscene", AssetType::Scene},

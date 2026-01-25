@@ -1,33 +1,34 @@
 #include "Lumen/Asset/Importer/ShaderImporter.hpp"
+#include "Lumen/Graphics/Shader.hpp"
 
 #include "raylib.h"
 
-namespace Lumen::AssetImporter
+namespace Lumen
 {
 
-template <> Shader Import(const AssetHandle &handle, const AssetMetadata &metadata)
+Scope<Asset> ShaderImporter::Import(const AssetMetadata &metadata)
 {
     const std::string shaderName = metadata.Path.Stem().String();
     const Path vertPath = metadata.Path / (shaderName + ".vert").c_str();
     const Path fragPath = metadata.Path / (shaderName + ".frag").c_str();
 
     Shader shader = {
-        handle,
+        metadata.Handle,
         LoadShader(vertPath.String().c_str(), fragPath.String().c_str()),
     };
 
-    return shader;
+    return CreateScope<Shader>(shader);
 }
 
-template <> bool Export(const Shader &shader)
+void ShaderImporter::Export(AssetEntry &entry)
 {
-    if (!shader.IsValid())
-        return false;
+    auto *shader = entry.GetAsset<Shader>();
+    if (!shader->IsValid())
+        return;
 
-    ::Shader *rayShader = shader;
+    ::Shader *rayShader = *shader;
     ::UnloadShader(*rayShader);
     delete rayShader;
-    return true;
 }
 
-} // namespace Lumen::AssetImporter
+} // namespace Lumen

@@ -36,8 +36,10 @@ static void RegisterAssetMetadata()
 {
     ScriptEngine::GetInstance()
         ->RegisterType<AssetMetadata>("AssetMetadata")
+        .Property("handle", &AssetMetadata::Handle)
         .Property("path", &AssetMetadata::Path)
-        .Property("name", &AssetMetadata::Name)
+        .Property("type", &AssetMetadata::Type)
+        .Property("status", &AssetMetadata::Status)
         .OperatorEq([](const AssetMetadata &self, const AssetMetadata &other) {
             return self == other;
         });

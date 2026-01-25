@@ -6,15 +6,15 @@ namespace Lumen::JsonSerializer
 template <> Json Serialize(const AssetMetadata &metadata)
 {
     Json json;
-    json["Path"] << metadata.Path;
-    json["Name"] << metadata.Name;
+    json["Handle"] << metadata.Handle;
+    json["Type"] << metadata.Type;
     return json;
 }
 
 template <> void Deserialize(const Json &json, AssetMetadata &metadata)
 {
-    json["Path"] >> metadata.Path;
-    json["Name"] >> metadata.Name;
+    json["Handle"] >> metadata.Handle;
+    json["Type"] >> metadata.Type;
 }
 
 } // namespace Lumen::JsonSerializer

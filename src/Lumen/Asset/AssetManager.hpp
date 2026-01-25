@@ -1,67 +1,65 @@
 #pragma once
 
-#include "Lumen/Asset/AssetImporter.hpp"
+#include "Lumen/Asset/AssetEntry.hpp"
+#include "Lumen/Event/FileEvent.hpp"
+#include "Lumen/File/FileWatcher.hpp"
 
 #include <unordered_map>
+#include <vector>
 
 namespace Lumen
 {
 
-enum class AssetManagerMode
-{
-    Editor,
-    Runtime
-};
-
-template <typename T> struct AssetStorage
-{
-    static std::unordered_map<AssetHandle, T> s_Map;
-};
-
-template <typename T> struct DefaultAssetStorage
-{
-    static T s_Asset;
-};
+using AssetMap = std::unordered_map<AssetHandle, AssetEntry>;
+using DefaultAssetMap = std::unordered_map<AssetType, Scope<Asset>>;
+using AssetPathMap = std::unordered_map<Path, AssetHandle>;
 
 class AssetManager
 {
 public:
     AssetManager() = delete;
 
-public:
-    static void LoadDefaultAssets();
+    static void Init(const Path &workingDirectory);
 
 public:
-    template <typename T> static inline bool IsLoaded(const AssetHandle &handle);
-    template <typename T> static inline bool IsValid(const AssetHandle &handle);
+    static bool IsImported(const AssetHandle &handle);
+    static bool IsLoading(const AssetHandle &handle);
+    static bool IsLoaded(const AssetHandle &handle);
+    static bool IsFailed(const AssetHandle &handle);
 
-    static std::unordered_map<AssetHandle, AssetMetadata> &GetMetadataMap();
-    static AssetMetadata GetMetadata(const AssetHandle &handle);
-    static AssetManagerMode GetMode();
+    static AssetEntry &GetEntry(const AssetHandle &handle);
+    static AssetHandle GetHandle(const Path &path);
+    static AssetMetadata &GetMetadata(const AssetHandle &handle);
+    static AssetMap &GetMap();
     static Path GetWorkingDirectory();
 
-    template <typename T> static std::unordered_map<AssetHandle, T> GetMap();
-
-    static void SetMetadata(const AssetHandle &handle, const AssetMetadata &metadata);
-    static void SetMode(AssetManagerMode mode);
     static void SetWorkingDirectory(const Path &path);
 
     static void Clear();
 
-    template <typename T> static inline T Get(const AssetHandle &handle);
-    template <typename T> static inline T Get(const AssetMetadata &metadata);
-    template <typename T> static inline T GetDefault();
+    template <typename T> static inline T &GetDefault();
+    template <typename T> static inline std::vector<T &> Get();
+    template <typename T> static inline T &Get(const AssetHandle &handle);
+    template <typename T> static inline T &Get(const Path &path);
 
-    template <typename T>
-    static inline void Load(const AssetHandle &handle, const AssetMetadata &metadata);
-
-    template <typename T> static inline bool Unload(const AssetHandle &handle);
-    template <typename T> static inline bool Unload(const T &asset);
+    static void Unload(const AssetHandle &handle);
+    static void Unload(AssetEntry &entry);
 
 private:
-    static std::unordered_map<AssetHandle, AssetMetadata> s_AssetMetadataMap;
+    static void LoadDefaultAssets();
+    static void Load(AssetEntry &entry);
+    static void Reload(AssetEntry &entry);
+    static void OnFileEvent(const FileEvent &event);
+    static void OnFileEventModified(const Path &path, const std::string &extension);
+    static void OnFileEventCreated(const Path &path, const std::string &extension);
+    static void OnFileEventDeleted(const Path &path);
+
+private:
     static Path s_WorkingDirectory;
-    static AssetManagerMode s_Mode;
+    static AssetMap s_AssetMap;
+    static DefaultAssetMap s_DefaultAssetMap;
+    static AssetPathMap s_AssetPathMap;
+    static FileWatcher s_FileWatcher;
 };
 
 } // namespace Lumen

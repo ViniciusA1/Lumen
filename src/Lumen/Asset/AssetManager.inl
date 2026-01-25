@@ -5,80 +5,57 @@
 namespace Lumen
 {
 
-template <typename T> bool AssetManager::IsLoaded(const AssetHandle &handle)
+template <typename T> inline T &AssetManager::GetDefault()
 {
-    auto &map = AssetStorage<T>::s_Map;
-    return map.contains(handle);
+    return *static_cast<T *>(s_DefaultAssetMap.find(T().GetType())->second.get());
 }
 
-template <typename T> bool AssetManager::IsValid(const AssetHandle &handle)
+template <typename T> inline std::vector<T &> AssetManager::Get()
 {
-    auto &map = AssetStorage<T>::s_Map;
-    auto it = map.find(handle);
-    if (it == map.end())
-        return false;
-    return it->second.IsValid();
-}
+    std::vector<T &> assets;
+    assets.reserve(s_AssetMap.size());
 
-template <typename T> std::unordered_map<AssetHandle, T> AssetManager::GetMap()
-{
-    return AssetStorage<T>::s_Map;
-}
-
-template <typename T> T AssetManager::Get(const AssetHandle &handle)
-{
-    auto it = AssetStorage<T>::s_Map.find(handle);
-    if (it != AssetStorage<T>::s_Map.end())
-        return it->second;
-    auto itMeta = s_AssetMetadataMap.find(handle);
-    if (itMeta == s_AssetMetadataMap.end())
-        return GetDefault<T>();
-    Load<T>(handle, itMeta->second);
-    return GetDefault<T>();
-}
-
-template <typename T> T AssetManager::Get(const AssetMetadata &metadata)
-{
-    for (const auto &[handle, meta] : s_AssetMetadataMap)
+    AssetType type = T().GetType();
+    for (auto &[handle, scope] : s_AssetMap)
     {
-        if (metadata == meta)
-            return Get<T>(handle);
+        if (scope.Asset->GetType() == type)
+            assets.push_back(*static_cast<T *>(scope.Asset.get()));
     }
-    AssetHandle newHandle;
-    s_AssetMetadataMap[newHandle] = metadata;
-    Load<T>(newHandle, metadata);
-    return GetDefault<T>();
+
+    return assets;
 }
 
-template <typename T> T AssetManager::GetDefault()
+template <typename T> inline T &AssetManager::Get(const AssetHandle &handle)
 {
-    return DefaultAssetStorage<T>::s_Asset;
+    auto it = s_AssetMap.find(handle);
+    if (it == s_AssetMap.end())
+        return GetDefault<T>();
+
+    AssetEntry &entry = it->second;
+
+    switch (entry.Metadata.Status)
+    {
+    case AssetStatus::Loaded:
+        return *static_cast<T *>(entry.Asset.get());
+    case AssetStatus::Imported:
+        entry.Metadata.Status = AssetStatus::Loading;
+        Load(entry);
+        return *static_cast<T *>(entry.Asset.get());
+    case AssetStatus::NotImported:
+    case AssetStatus::Loading:
+    case AssetStatus::Failed:
+    default:
+        return GetDefault<T>();
+    }
 }
 
-template <typename T>
-void AssetManager::Load(const AssetHandle &handle, const AssetMetadata &metadata)
+template <typename T> inline T &AssetManager::Get(const Path &path)
 {
-    T asset = AssetImporter::Import<T>(handle, metadata);
-    if (asset.IsValid())
-        AssetStorage<T>::s_Map[handle] = asset;
-}
+    auto it = s_AssetPathMap.find(path);
+    if (it == s_AssetPathMap.end())
+        return GetDefault<T>();
 
-template <typename T> bool AssetManager::Unload(const AssetHandle &handle)
-{
-    auto it = AssetStorage<T>::s_Map.find(handle);
-    if (it == AssetStorage<T>::s_Map.end())
-        return false;
-    bool isExported = AssetImporter::Export(it->second);
-    if (isExported)
-        AssetStorage<T>::s_Map.erase(it);
-    return isExported;
-}
-
-template <typename T> bool AssetManager::Unload(const T &asset)
-{
-    if (Unload<T>(asset.GetHandle()))
-        return true;
-    return AssetImporter::Export(asset);
+    return Get<T>(it->second);
 }
 
 } // namespace Lumen

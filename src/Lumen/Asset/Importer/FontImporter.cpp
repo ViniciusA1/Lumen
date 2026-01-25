@@ -1,25 +1,30 @@
 #include "Lumen/Asset/Importer/FontImporter.hpp"
+#include "Lumen/Graphics/Font.hpp"
 
 #include "raylib.h"
 
-namespace Lumen::AssetImporter
+namespace Lumen
 {
 
-template <> Font Import(const AssetHandle &handle, const AssetMetadata &metadata)
+Scope<Asset> FontImporter::Import(const AssetMetadata &metadata)
 {
-    Font font = {handle, LoadFont(metadata.Path.String().c_str())};
-    return font;
+    Font font = {
+        metadata.Handle,
+        LoadFont(metadata.Path.String().c_str()),
+    };
+
+    return CreateScope<Font>(font);
 }
 
-template <> bool Export(const Font &font)
+void FontImporter::Export(AssetEntry &entry)
 {
-    if (!font.IsValid())
-        return false;
+    Font *font = entry.GetAsset<Font>();
+    if (!font->IsValid())
+        return;
 
-    ::Font *rayFont = font;
+    ::Font *rayFont = *font;
     ::UnloadFont(*rayFont);
     delete rayFont;
-    return true;
 }
 
-} // namespace Lumen::AssetImporter
+} // namespace Lumen

@@ -13,8 +13,4 @@ template <> void Deserialize(const Json &json, AssetType &assetType);
 template <> Json Serialize(const AssetMetadata &metadata);
 template <> void Deserialize(const Json &json, AssetMetadata &metadata);
 
-template <> Json Serialize(const std::unordered_map<AssetHandle, AssetMetadata> &map);
-template <>
-void Deserialize(const Json &json, std::unordered_map<AssetHandle, AssetMetadata> &map);
-
 } // namespace Lumen::JsonSerializer

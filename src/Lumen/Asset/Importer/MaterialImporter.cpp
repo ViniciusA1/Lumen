@@ -1,31 +1,33 @@
 #include "Lumen/Asset/Importer/MaterialImporter.hpp"
+#include "Lumen/Graphics/Material.hpp"
 
 #include "raylib.h"
 
-namespace Lumen::AssetImporter
+namespace Lumen
 {
 
-template <> Material Import(const AssetHandle &handle, const AssetMetadata &metadata)
+Scope<Asset> MaterialImporter::Import(const AssetMetadata &metadata)
 {
-    int materialCount = 0;
-    ::Material *materialList =
-        ::LoadMaterials(metadata.Path.String().c_str(), &materialCount);
+    int count = 0;
+    ::Material *matList = ::LoadMaterials(metadata.Path.String().c_str(), &count);
 
-    if (materialCount == 0)
-        return nullptr;
+    Material material = {
+        metadata.Handle,
+        matList,
+    };
 
-    return {materialList};
+    return CreateScope<Material>(material);
 }
 
-template <> bool Export(const Material &material)
+void MaterialImporter::Export(AssetEntry &entry)
 {
-    if (!material.IsValid())
-        return false;
+    auto *material = entry.GetAsset<Material>();
+    if (!material->IsValid())
+        return;
 
-    ::Material *rayMaterial = material;
+    ::Material *rayMaterial = *material;
     ::UnloadMaterial(*rayMaterial);
     delete rayMaterial;
-    return true;
 }
 
-} // namespace Lumen::AssetImporter
+} // namespace Lumen
