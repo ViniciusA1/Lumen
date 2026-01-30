@@ -1,3 +1,5 @@
+#if false
+
 #include "Lumen/Application/Application.hpp"
 #include "Lumen/Application/CLIParser.hpp"
 #include "Lumen/Application/DefaultModule.hpp"
@@ -12,3 +14,5 @@ int main(int argc, const char **argv)
 
     return 0;
 }
+
+#endif
